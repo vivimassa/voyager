@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth-provider'
+import { useBrand } from '@/hooks/use-brand'
 
 const LOGIN_CSS = `
 @keyframes login-card{0%{opacity:0;transform:translateY(24px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
@@ -24,6 +25,7 @@ const inputStyle: React.CSSProperties = {
 
 export default function LoginPage() {
   const { login } = useAuth()
+  const brand = useBrand()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -58,11 +60,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: '#0a0a12' }}>
+    <div className="fixed inset-0 overflow-hidden" style={{ background: '#080b14' }}>
       <style dangerouslySetInnerHTML={{ __html: LOGIN_CSS }} />
-      
 
-      {/* ── Content ── */}
+      {/* Subtle background gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 80% 60% at 20% 80%, rgba(29,78,216,0.12) 0%, transparent 70%)',
+        }}
+      />
+
       <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
         {/* Left branding (desktop) */}
         <div
@@ -71,32 +79,35 @@ export default function LoginPage() {
         >
           <div />
           <div className="max-w-md">
-            <img
-              src="/skyhub-logo.png"
-              alt="SkyHub"
-              className="mb-6"
-              style={{
-                height: 120,
-                filter: 'brightness(0) invert(1) drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
-              }}
-            />
-            <div className="h-px w-16 bg-white/20" />
-            <p className="mt-6 text-[14px] text-white/45 leading-relaxed max-w-sm">
-              Network planning, movement control, crew operations, and ground handling — unified in one intelligent
-              system.
+            <div className="flex items-center gap-3 mb-8">
+              <div className="grid place-items-center w-12 h-12 rounded-[12px] bg-vg-accent text-white font-display font-bold text-2xl">
+                {brand.mark}
+              </div>
+              <span className="font-display font-semibold text-3xl tracking-tight text-white">
+                {brand.name}
+              </span>
+            </div>
+            <div className="h-px w-16 bg-white/20 mb-6" />
+            <p className="text-[15px] text-white/50 leading-relaxed max-w-sm">
+              {brand.tagline}
             </p>
           </div>
+          <div />
         </div>
 
         {/* Right: Login card */}
         <div className="flex flex-1 items-center justify-center p-6 lg:p-16">
           <div className="w-full max-w-[400px]" style={{ animation: 'login-card 0.8s ease-out 0.4s both' }}>
             {/* Mobile branding */}
-            <div className="lg:hidden flex justify-center mb-10">
-              <img src="/skyhub-logo.png" alt="SkyHub" style={{ height: 56, filter: 'brightness(0) invert(1)' }} />
+            <div className="lg:hidden flex items-center justify-center gap-3 mb-10">
+              <div className="grid place-items-center w-10 h-10 rounded-[10px] bg-vg-accent text-white font-display font-bold text-xl">
+                {brand.mark}
+              </div>
+              <span className="font-display font-semibold text-2xl tracking-tight text-white">
+                {brand.name}
+              </span>
             </div>
 
-            {/* Glass card */}
             <form
               onSubmit={handleSubmit}
               className="rounded-2xl p-8 space-y-5"
@@ -119,7 +130,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@airline.aero"
+                  placeholder="you@example.com"
                   autoComplete="email"
                   disabled={submitting}
                   style={{ ...inputStyle, opacity: submitting ? 0.5 : 1 }}
