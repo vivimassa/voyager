@@ -1,16 +1,18 @@
 'use client'
 
 import { SERVICE_ORDER, type Destination, type ServiceKey } from '@/data/destinations'
+import type { ServiceType } from '@/stores/cart-store'
 import { useCurrencyStore } from '@/stores/currency-store'
 import { useT } from '@/i18n/use-t'
 import { useDestLocale } from '@/hooks/use-dest-locale'
 import { AddToCartButton } from './add-to-cart-button'
 
-const SERVICE_TYPE_MAP: Record<ServiceKey, 'pickup' | 'fastTrack' | 'hotel' | 'tour'> = {
+const SERVICE_TYPE_MAP: Record<ServiceKey, ServiceType> = {
   pickup: 'pickup',
   fastTrack: 'fastTrack',
   hotels: 'hotel',
   tours: 'tour',
+  luggageConcierge: 'luggageConcierge',
 }
 
 export function DestinationServices({ dest }: { dest: Destination }) {
@@ -81,5 +83,6 @@ function serviceBlurb(key: ServiceKey, t: { destination: { pickupBlurb: string; 
     case 'fastTrack': return t.destination.fastTrackBlurb
     case 'hotels': return t.destination.hotelsBlurb
     case 'tours': return t.destination.toursBlurb
+    case 'luggageConcierge': return t.destination.pickupBlurb
   }
 }

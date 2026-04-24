@@ -9,7 +9,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type ServiceType = 'pickup' | 'fastTrack' | 'hotel' | 'tour'
+export type ServiceType = 'pickup' | 'fastTrack' | 'hotel' | 'tour' | 'luggageConcierge'
 
 export type CartItem = {
   /** Stable id so we can update/remove — combine productId + travelDate + pax hash */

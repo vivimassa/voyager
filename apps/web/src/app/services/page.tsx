@@ -21,8 +21,8 @@ const SERVICES: ServiceMeta[] = [
 
 type SubKey = 'pickupSub' | 'fastTrackSub' | 'hotelsSub' | 'toursSub'
 type BulletsKey = 'pickupBullets' | 'fastTrackBullets' | 'hotelsBullets' | 'toursBullets'
-const SUB_KEY: Record<ServiceKey, SubKey> = { pickup: 'pickupSub', fastTrack: 'fastTrackSub', hotels: 'hotelsSub', tours: 'toursSub' }
-const BULLETS_KEY: Record<ServiceKey, BulletsKey> = { pickup: 'pickupBullets', fastTrack: 'fastTrackBullets', hotels: 'hotelsBullets', tours: 'toursBullets' }
+const SUB_KEY: Record<ServiceKey, SubKey> = { pickup: 'pickupSub', fastTrack: 'fastTrackSub', hotels: 'hotelsSub', tours: 'toursSub', luggageConcierge: 'pickupSub' }
+const BULLETS_KEY: Record<ServiceKey, BulletsKey> = { pickup: 'pickupBullets', fastTrack: 'fastTrackBullets', hotels: 'hotelsBullets', tours: 'toursBullets', luggageConcierge: 'pickupBullets' }
 
 export default function ServicesPage() {
   const t = useT()
@@ -37,7 +37,7 @@ export default function ServicesPage() {
   }, [])
 
   const labelByKey: Record<ServiceKey, string> = {
-    pickup: t.service.pickup, fastTrack: t.service.fastTrack, hotels: t.service.hotel, tours: t.service.tour,
+    pickup: t.service.pickup, fastTrack: t.service.fastTrack, hotels: t.service.hotel, tours: t.service.tour, luggageConcierge: t.service.pickup,
   }
 
   return (

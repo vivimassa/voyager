@@ -3,7 +3,7 @@
  * Prices in VND. `nameVi` / `descriptionVi` render when locale === 'vi'.
  */
 
-export type ServiceKey = 'pickup' | 'fastTrack' | 'hotels' | 'tours'
+export type ServiceKey = 'pickup' | 'fastTrack' | 'hotels' | 'tours' | 'luggageConcierge'
 
 export type DestinationService = {
   icon: string
@@ -63,6 +63,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at HAN',      labelVi: 'Fast-track tại HAN',        priceVnd: 380_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Ha Long hotels',         labelVi: 'Khách sạn Hạ Long',          priceVnd: 1_200_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Day tours',              labelVi: 'Tour trong ngày',           priceVnd: 1_850_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -90,6 +91,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at HAN',      labelVi: 'Fast-track tại HAN',         priceVnd: 380_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Sapa homestays',         labelVi: 'Homestay Sa Pa',             priceVnd: 620_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Trekking tours',         labelVi: 'Tour trekking',              priceVnd: 1_420_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -117,6 +119,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at HAN',      labelVi: 'Fast-track tại HAN',         priceVnd: 380_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Tam Coc stays',          labelVi: 'Chỗ nghỉ Tam Cốc',           priceVnd: 720_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Sampan & temple tours',  labelVi: 'Tour thuyền & đền',          priceVnd: 890_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -144,6 +147,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at DAD',      labelVi: 'Fast-track tại DAD',         priceVnd: 340_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Riverside hotels',       labelVi: 'Khách sạn bên sông',         priceVnd: 880_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Citadel & tomb tours',   labelVi: 'Tour Kinh thành & lăng',     priceVnd: 1_060_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -171,6 +175,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at DAD',      labelVi: 'Fast-track tại DAD',         priceVnd: 340_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Old Town hotels',        labelVi: 'Khách sạn phố cổ',           priceVnd: 980_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Lantern & food tours',   labelVi: 'Tour lồng đèn & ẩm thực',    priceVnd: 1_100_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -198,6 +203,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at DAD',      labelVi: 'Fast-track tại DAD',         priceVnd: 340_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Beachfront hotels',      labelVi: 'Khách sạn view biển',        priceVnd: 860_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Ba Na & Marble tours',   labelVi: 'Tour Bà Nà & Ngũ Hành Sơn',  priceVnd: 940_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -225,6 +231,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at SGN',      labelVi: 'Fast-track tại SGN',         priceVnd: 420_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Riverside stays',        labelVi: 'Chỗ nghỉ bên sông',          priceVnd: 780_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Delta day cruises',      labelVi: 'Tour du thuyền đồng bằng',   priceVnd: 980_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -252,6 +259,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at CXR',      labelVi: 'Fast-track tại CXR',         priceVnd: 300_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Oceanfront hotels',      labelVi: 'Khách sạn mặt biển',         priceVnd: 940_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Island-hop & dive tours', labelVi: 'Tour đảo & lặn biển',       priceVnd: 1_180_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -279,6 +287,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at CXR',      labelVi: 'Fast-track tại CXR',         priceVnd: 300_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Pine-view hotels',       labelVi: 'Khách sạn view rừng thông',  priceVnd: 680_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Highland & coffee tours', labelVi: 'Tour cao nguyên & cà phê',  priceVnd: 1_020_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
   {
@@ -306,6 +315,7 @@ export const DESTINATIONS: Destination[] = [
       fastTrack: { icon: '⚡',    label: 'Fast-track at PQC',      labelVi: 'Fast-track tại PQC',         priceVnd: 280_000 },
       hotels:    { icon: '\u{1F3E8}', label: 'Beachfront resorts',     labelVi: 'Resort mặt biển',            priceVnd: 1_800_000 },
       tours:     { icon: '\u{1F5FA}', label: 'Island-hop boat tours',  labelVi: 'Tour thuyền vòng đảo',       priceVnd: 1_400_000 },
+      luggageConcierge: { icon: '\u{1F9F3}', label: 'Luggage concierge',  labelVi: 'Hành lý tận nơi',      priceVnd: 650_000 },
     },
   },
 ]
@@ -317,3 +327,5 @@ export function getDestinationBySlug(slug: string): Destination | undefined {
 }
 
 export const SERVICE_ORDER: ServiceKey[] = ['pickup', 'fastTrack', 'hotels', 'tours']
+/** Full service order including the optional luggage-concierge add-on used by bundles / journey map. */
+export const SERVICE_ORDER_FULL: ServiceKey[] = ['luggageConcierge', 'pickup', 'fastTrack', 'hotels', 'tours']

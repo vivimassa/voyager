@@ -105,14 +105,17 @@ export function HomeSearchHero() {
       />
 
       <div className="relative z-10 pt-24 md:pt-32 pb-14 md:pb-20 px-6 md:px-10 max-w-[1200px] mx-auto">
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-[11px] tracking-[0.22em] uppercase font-semibold text-white/95 mb-5">
+          {t.seamless.eyebrow}
+        </div>
         <h1
-          className="font-display font-bold text-white leading-[1.05] tracking-[-0.02em] max-w-[880px]"
-          style={{ fontSize: 'clamp(32px, 5.2vw, 58px)', textShadow: '0 2px 16px rgba(0,0,0,0.3)' }}
+          className="font-display font-bold text-white leading-[1.02] tracking-[-0.025em] max-w-[880px]"
+          style={{ fontSize: 'clamp(34px, 5.6vw, 64px)', textShadow: '0 2px 16px rgba(0,0,0,0.3)' }}
         >
-          {t.search.heroHeading}
+          {t.seamless.headline}
         </h1>
         <p className="mt-4 text-[15px] md:text-[17px] text-white/90 max-w-[640px] leading-relaxed">
-          {t.search.heroSub}
+          {t.seamless.sub}
         </p>
 
         {/* Tabs */}
@@ -139,7 +142,19 @@ export function HomeSearchHero() {
 
         {/* Search bar */}
         <div className="bg-white rounded-xl rounded-tl-none shadow-[0_10px_40px_rgba(0,0,0,0.18)] border border-white p-2 flex flex-col md:flex-row gap-2">
-          <SearchField label={t.search.destination} icon={<DestIcon />} className="md:flex-[1.4]">
+          <SearchField
+            label={
+              tab === 'fastTrack'
+                ? (locale === 'vi' ? 'Sân bay' : 'Airport')
+                : tab === 'transfers'
+                  ? (locale === 'vi' ? 'Điểm đón' : 'Pickup point')
+                  : tab === 'tours'
+                    ? (locale === 'vi' ? 'Điểm khám phá' : 'Where to explore')
+                    : t.search.destination
+            }
+            icon={<DestIcon />}
+            className="md:flex-[1.4]"
+          >
             <select
               value={dest}
               onChange={(e) => setDest(e.target.value)}
@@ -154,7 +169,11 @@ export function HomeSearchHero() {
             </select>
           </SearchField>
 
-          <SearchField label={t.search.dates} icon={<CalIcon />} className="md:flex-[1.4]">
+          <SearchField
+            label={tab === 'hotels' ? t.search.dates : t.checkout.travelDate}
+            icon={<CalIcon />}
+            className="md:flex-[1.4]"
+          >
             <div className="flex items-center gap-2 w-full">
               <input
                 type="date"
@@ -162,13 +181,17 @@ export function HomeSearchHero() {
                 onChange={(e) => setCheckIn(e.target.value)}
                 className="w-full bg-transparent text-[14px] font-semibold text-vg-text focus:outline-none"
               />
-              <span className="text-vg-text-subtle">→</span>
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                className="w-full bg-transparent text-[14px] font-semibold text-vg-text focus:outline-none"
-              />
+              {tab === 'hotels' && (
+                <>
+                  <span className="text-vg-text-subtle">→</span>
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    className="w-full bg-transparent text-[14px] font-semibold text-vg-text focus:outline-none"
+                  />
+                </>
+              )}
             </div>
           </SearchField>
 
