@@ -91,7 +91,7 @@ export function BrandSettingsModal() {
       {/* Panel */}
       <form
         onSubmit={handleSave}
-        className="relative w-full max-w-md rounded-[20px] bg-vg-surface border border-vg-border shadow-[0_30px_80px_rgba(0,0,0,0.55)] overflow-hidden"
+        className="relative w-full max-w-md rounded-[20px] bg-white border border-vg-border shadow-[0_30px_80px_rgba(0,0,0,0.35)] overflow-hidden"
       >
         {/* Header */}
         <div className="px-7 pt-7 pb-5 border-b border-vg-border flex items-start justify-between">
@@ -100,17 +100,17 @@ export function BrandSettingsModal() {
               <span className="grid place-items-center w-8 h-8 rounded-[8px] bg-vg-accent text-white font-display font-bold">
                 {mark || BRAND_DEFAULTS.mark}
               </span>
-              <span className="text-xs font-medium tracking-[0.14em] text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-[0.14em] text-vg-text-muted uppercase">
                 {name || BRAND_DEFAULTS.name}
               </span>
             </div>
             <h2
               id="brand-settings-title"
-              className="font-display text-2xl font-semibold text-white"
+              className="font-display text-2xl font-semibold text-vg-text"
             >
               Brand settings
             </h2>
-            <p className="text-sm text-white/55 mt-1">
+            <p className="text-sm text-vg-text-muted mt-1 leading-relaxed">
               Rename the product, swap the logo mark, or tweak the tagline.
               Saved only on this browser.
             </p>
@@ -119,7 +119,7 @@ export function BrandSettingsModal() {
             type="button"
             onClick={closeSettings}
             aria-label="Close"
-            className="w-9 h-9 grid place-items-center rounded-full text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+            className="w-9 h-9 grid place-items-center rounded-full text-vg-text-muted hover:text-vg-text hover:bg-vg-surface-muted transition-colors"
           >
             <svg
               width="18"
@@ -169,11 +169,11 @@ export function BrandSettingsModal() {
         </div>
 
         {/* Actions */}
-        <div className="px-7 py-4 bg-black/20 border-t border-vg-border flex items-center justify-between gap-3">
+        <div className="px-7 py-4 bg-vg-surface-muted border-t border-vg-border flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={handleResetToDefaults}
-            className="text-sm text-white/55 hover:text-white transition-colors"
+            className="text-sm text-vg-text-muted hover:text-vg-text transition-colors"
           >
             Reset to defaults
           </button>
@@ -181,7 +181,7 @@ export function BrandSettingsModal() {
             <button
               type="button"
               onClick={closeSettings}
-              className="px-4 py-2 rounded-full text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 transition-colors"
+              className="px-4 py-2 rounded-full text-sm font-medium text-vg-text-muted hover:text-vg-text hover:bg-white transition-colors"
             >
               Cancel
             </button>
@@ -221,7 +221,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="block text-xs font-medium tracking-[0.08em] text-white/65 uppercase mb-1.5">
+      <span className="block text-[11px] font-semibold tracking-[0.12em] text-vg-text-muted uppercase mb-1.5">
         {label}
       </span>
       <input
@@ -231,9 +231,9 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         maxLength={maxLength}
-        className={`${widthClass ?? 'w-full'} px-3.5 py-2.5 rounded-[10px] bg-black/30 border border-vg-border text-white placeholder:text-white/30 focus:outline-none focus:border-vg-accent focus:ring-1 focus:ring-vg-accent transition-colors`}
+        className={`${widthClass ?? 'w-full'} px-3.5 py-2.5 rounded-[10px] bg-vg-surface-muted border border-vg-border text-vg-text placeholder:text-vg-text-subtle focus:outline-none focus:border-vg-accent focus:ring-2 focus:ring-vg-accent/30 focus:bg-white transition-colors`}
       />
-      {hint && <span className="block text-xs text-white/40 mt-1.5">{hint}</span>}
+      {hint && <span className="block text-xs text-vg-text-subtle mt-1.5">{hint}</span>}
     </label>
   )
 }
