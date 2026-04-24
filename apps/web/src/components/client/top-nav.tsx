@@ -71,19 +71,19 @@ export function TopNav({ variant = 'solid' }: { variant?: Variant }) {
         />
         <Link
           href="/checkout"
-          className={`relative inline-flex items-center gap-2 px-3.5 h-9 rounded-full text-sm font-semibold transition-colors ${
+          className={`relative grid place-items-center w-9 h-9 rounded-full transition-all hover:scale-105 active:scale-95 ${
             onDark
-              ? 'bg-white/15 hover:bg-white/25 text-white border border-white/20'
-              : 'bg-vg-surface-muted hover:bg-vg-border text-vg-text border border-vg-border'
+              ? 'bg-white/15 hover:bg-white/25 text-white border border-white/25 backdrop-blur-sm'
+              : 'bg-vg-surface-muted hover:bg-white text-vg-text border border-vg-border hover:border-vg-border-strong'
           }`}
           aria-label={`View cart (${cartCount} item${cartCount === 1 ? '' : 's'})`}
+          title={t.common.cart}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
-          <span className="hidden sm:inline">{t.common.cart}</span>
           {cartCount > 0 && (
-            <span className="grid place-items-center min-w-[18px] h-[18px] px-1 rounded-full bg-vg-cta text-white text-[10px] font-bold leading-none">
+            <span className="absolute -top-1 -right-1 grid place-items-center min-w-[18px] h-[18px] px-1 rounded-full bg-vg-cta text-white text-[10px] font-bold leading-none ring-2 ring-white">
               {cartCount}
             </span>
           )}
@@ -117,20 +117,21 @@ function CurrencyPill({
   onChange: (c: Currency) => void
   onDark: boolean
 }) {
+  const symbol = currency === 'VND' ? '₫' : '$'
+  const next = currency === 'VND' ? 'USD' : 'VND'
   return (
     <button
       type="button"
-      onClick={() => onChange(currency === 'VND' ? 'USD' : 'VND')}
-      className={`px-3 h-9 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+      onClick={() => onChange(next)}
+      className={`grid place-items-center w-9 h-9 rounded-full font-display text-[15px] font-bold leading-none transition-all hover:scale-105 active:scale-95 ${
         onDark
-          ? 'bg-white/15 hover:bg-white/25 text-white border border-white/20'
-          : 'bg-vg-surface-muted hover:bg-vg-border text-vg-text border border-vg-border'
+          ? 'bg-white/15 hover:bg-white/25 text-white border border-white/25 backdrop-blur-sm'
+          : 'bg-vg-surface-muted hover:bg-white text-vg-text border border-vg-border hover:border-vg-border-strong'
       }`}
-      aria-label="Switch currency"
+      aria-label={`Currency: ${currency}. Switch to ${next}`}
+      title={`${currency} — click for ${next}`}
     >
-      <span className={currency === 'VND' ? 'opacity-100' : 'opacity-45'}>₫ VND</span>
-      <span className="opacity-35">/</span>
-      <span className={currency === 'USD' ? 'opacity-100' : 'opacity-45'}>$ USD</span>
+      <span className="pointer-events-none select-none translate-y-[1px]">{symbol}</span>
     </button>
   )
 }
@@ -144,20 +145,29 @@ function LocalePill({
   onToggle: () => void
   onDark: boolean
 }) {
+  const iso = locale === 'vi' ? 'vn' : 'us'
+  const nextLabel = locale === 'vi' ? 'English' : 'Tiếng Việt'
   return (
     <button
       type="button"
       onClick={onToggle}
-      className={`px-3 h-9 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+      className={`grid place-items-center w-9 h-9 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 ${
         onDark
-          ? 'bg-white/15 hover:bg-white/25 text-white border border-white/20'
-          : 'bg-vg-surface-muted hover:bg-vg-border text-vg-text border border-vg-border'
+          ? 'ring-1 ring-white/30 hover:ring-white/60'
+          : 'ring-1 ring-vg-border hover:ring-vg-border-strong'
       }`}
-      aria-label="Switch language"
+      aria-label={`Language: ${locale.toUpperCase()}. Switch to ${nextLabel}`}
+      title={`${locale.toUpperCase()} — click for ${nextLabel}`}
     >
-      <span className={locale === 'en' ? 'opacity-100' : 'opacity-45'}>EN</span>
-      <span className="opacity-35">/</span>
-      <span className={locale === 'vi' ? 'opacity-100' : 'opacity-45'}>VI</span>
+      <img
+        src={`https://flagcdn.com/${iso}.svg`}
+        alt=""
+        aria-hidden
+        width={36}
+        height={36}
+        draggable={false}
+        className="w-full h-full object-cover"
+      />
     </button>
   )
 }
