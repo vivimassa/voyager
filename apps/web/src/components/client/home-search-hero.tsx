@@ -33,34 +33,6 @@ export function HomeSearchHero() {
   const [children, setChildren] = useState(0)
   const [paxOpen, setPaxOpen] = useState(false)
   const paxRef = useRef<HTMLDivElement | null>(null)
-  const stripRef = useRef<HTMLDivElement | null>(null)
-  const [canLeft, setCanLeft] = useState(false)
-  const [canRight, setCanRight] = useState(true)
-
-  const updateArrows = () => {
-    const el = stripRef.current
-    if (!el) return
-    setCanLeft(el.scrollLeft > 4)
-    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
-  }
-
-  useEffect(() => {
-    const el = stripRef.current
-    if (!el) return
-    updateArrows()
-    el.addEventListener('scroll', updateArrows, { passive: true })
-    window.addEventListener('resize', updateArrows)
-    return () => {
-      el.removeEventListener('scroll', updateArrows)
-      window.removeEventListener('resize', updateArrows)
-    }
-  }, [])
-
-  const scrollStrip = (dir: 1 | -1) => {
-    const el = stripRef.current
-    if (!el) return
-    el.scrollBy({ left: dir * (el.clientWidth * 0.85), behavior: 'smooth' })
-  }
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
@@ -269,77 +241,50 @@ export function HomeSearchHero() {
           <div className="text-[11px] uppercase tracking-[0.2em] font-semibold text-white/90 mb-3">
             {t.search.exploreStrip}
           </div>
-          <div className="relative group/carousel">
-            <div
-              ref={stripRef}
-              className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 snap-x scroll-smooth scrollbar-none"
-              style={{ scrollbarWidth: 'none' }}
-            >
-              {DESTINATIONS.map((d) => {
+          <div className="marquee-track relative overflow-hidden">
+            {/* Edge fade masks */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-vg-bg to-transparent" aria-hidden />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-vg-bg to-transparent" aria-hidden />
+
+            <div className="flex gap-3 w-max animate-marquee">
+              {[...DESTINATIONS, ...DESTINATIONS].map((d, i) => {
                 const selected = dest === d.slug
                 return (
-                <button
-                  key={d.slug}
-                  type="button"
-                  onClick={() => {
-                    setDest(d.slug)
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }}
-                  aria-pressed={selected}
-                  className={`group relative snap-start shrink-0 w-[240px] h-[170px] rounded-2xl overflow-hidden transition-all bg-cover bg-center hover:-translate-y-0.5 ${
-                    selected
-                      ? 'border-[3px] border-vg-accent shadow-[0_14px_36px_rgba(14,165,95,0.45)] ring-2 ring-vg-accent/30'
-                      : 'border-2 border-white/60 hover:border-white shadow-[0_10px_28px_rgba(0,0,0,0.25)]'
-                  }`}
-                  style={{ backgroundImage: `url('${d.photo}')` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-                  {selected && (
-                    <span
-                      className="absolute top-3 right-3 grid place-items-center w-8 h-8 rounded-full bg-vg-accent text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] animate-[tickIn_0.25s_ease-out]"
-                      aria-hidden
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    </span>
-                  )}
-                  <div className="absolute bottom-3 left-4 right-4 text-left">
-                    <div className="font-display font-bold text-white text-xl leading-tight tracking-tight">{L.name(d)}</div>
-                    <div className="text-[11px] text-white/85 tracking-wide mt-0.5">{airportCity(d.airportCode, locale)}</div>
-                  </div>
-                </button>
+                  <button
+                    key={`${d.slug}-${i}`}
+                    type="button"
+                    onClick={() => {
+                      setDest(d.slug)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    aria-pressed={selected}
+                    aria-label={L.name(d)}
+                    className={`group relative shrink-0 w-[240px] h-[170px] rounded-2xl overflow-hidden transition-all bg-cover bg-center hover:-translate-y-0.5 ${
+                      selected
+                        ? 'border-[3px] border-vg-accent shadow-[0_14px_36px_rgba(14,165,95,0.45)] ring-2 ring-vg-accent/30'
+                        : 'border-2 border-white/60 hover:border-white shadow-[0_10px_28px_rgba(0,0,0,0.25)]'
+                    }`}
+                    style={{ backgroundImage: `url('${d.photo}')` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                    {selected && (
+                      <span
+                        className="absolute top-3 right-3 grid place-items-center w-8 h-8 rounded-full bg-vg-accent text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] animate-[tickIn_0.25s_ease-out]"
+                        aria-hidden
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </span>
+                    )}
+                    <div className="absolute bottom-3 left-4 right-4 text-left">
+                      <div className="font-display font-bold text-white text-xl leading-tight tracking-tight">{L.name(d)}</div>
+                      <div className="text-[11px] text-white/85 tracking-wide mt-0.5">{airportCity(d.airportCode, locale)}</div>
+                    </div>
+                  </button>
                 )
               })}
             </div>
-
-            {/* Arrow buttons — both always visible; disabled state when at edge */}
-            <button
-              type="button"
-              onClick={() => scrollStrip(-1)}
-              disabled={!canLeft}
-              aria-label="Previous"
-              className={`hidden md:grid absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all hover:scale-105 ${
-                canLeft ? 'opacity-100' : 'opacity-40 cursor-not-allowed hover:scale-100'
-              }`}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollStrip(1)}
-              disabled={!canRight}
-              aria-label="Next"
-              className={`hidden md:grid absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all hover:scale-105 ${
-                canRight ? 'opacity-100' : 'opacity-40 cursor-not-allowed hover:scale-100'
-              }`}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>

@@ -15,6 +15,16 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
+@keyframes vg-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: vg-marquee 80s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover .animate-marquee { animation-play-state: paused; }
+
 @theme {
   --color-vg-surface: #ffffff;
   --color-vg-surface-muted: #e6e9ef;

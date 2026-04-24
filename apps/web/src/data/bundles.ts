@@ -53,7 +53,7 @@ export const BUNDLES: Bundle[] = [
     serviceKeys: ['pickup', 'luggageConcierge', 'hotels', 'tours'],
     inclusionKeys: ['svcVan', 'svcLuggage', 'svcChildSeat', 'svcPorter', 'svcItinerary'],
     heroPhoto:
-      'https://images.unsplash.com/photo-1551838291-dd9a8ba43a0b?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=1600&q=80',
     accent: {
       ring: 'ring-emerald-700/15',
       chip: 'bg-emerald-700 text-white',
@@ -65,7 +65,7 @@ export const BUNDLES: Bundle[] = [
     nameKey: 'firstName',
     taglineKey: 'firstTagline',
     serviceKeys: ['pickup', 'fastTrack', 'luggageConcierge', 'hotels'],
-    inclusionKeys: ['svcSedan', 'svcFastTrack', 'svcLounge', 'svcLuggage', 'svcWhiteGlove'],
+    inclusionKeys: ['svcSedan', 'svcFastTrackFirst', 'svcLoungeFirst', 'svcLuggageFirst', 'svcWhiteGlove'],
     heroPhoto:
       'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=80',
     accent: {

@@ -10,12 +10,12 @@ import { useT } from '@/i18n/use-t'
 const PHOTOS = [
   // 1 — greeter at arrivals
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
-  // 2 — concierge on phone (one contact)
-  'https://images.unsplash.com/photo-1573497161161-c3e73707e25c?auto=format&fit=crop&w=1200&q=80',
+  // 2 — Asian concierge on call (one contact) — local asset
+  '/assets/peace/concierge-call.png',
   // 3 — hands-free airport walk
   'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
   // 4 — porter with luggage
-  'https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
 ]
 
 export function PeaceOfMind() {
