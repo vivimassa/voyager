@@ -14,8 +14,8 @@ const PHOTOS = [
   '/assets/peace/concierge-call.png',
   // 3 — hands-free airport walk
   'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
-  // 4 — porter with luggage
-  'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
+  // 4 — luggage handoff at car — local asset
+  '/assets/peace/luggage-handoff.png',
 ]
 
 export function PeaceOfMind() {
