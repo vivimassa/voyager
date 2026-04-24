@@ -1125,7 +1125,7 @@ export const dictionary: Record<Locale, Dict> = {
     },
     seamless: {
       eyebrow: 'Từ cửa nhà đến điểm đến',
-      headline: 'Trọn hành trình, vẹn tâm ý.',
+      headline: 'Hành trình của bạn, tâm giao của Voyager.',
       sub: 'Từ lúc bạn rời nhà đến khi mở vali tại khách sạn, mọi khâu đã có Voyager chuẩn bị. Bạn chỉ việc tận hưởng chuyến đi.',
       ctaPrimary: 'Đặt gói trọn chuyến →',
       ctaSecondary: 'Xem cách Voyager đồng hành',
