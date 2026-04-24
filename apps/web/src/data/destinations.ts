@@ -135,12 +135,12 @@ export const DESTINATIONS: Destination[] = [
       'Cố đô triều Nguyễn, Kinh thành uy nghi bên sông Hương. Lăng tẩm hoàng gia, thuyền rồng, chợ nón lá và ẩm thực từng chỉ dành cho vua chúa.',
     headlinePriceVnd: 1_060_000,
     stars: 5,
-    photo: 'https://images.unsplash.com/photo-1599708153386-62bf3b950662?auto=format&fit=crop&w=2400&q=80',
+    photo: 'https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=2400&q=80',
     photos: [
-      U('1574236170901-b3b7f8c32d66'), // citadel gate
-      U('1540541338287-41700207dee6'), // royal tomb
-      U('1557750255-c76072a7fdf0'),    // perfume river / boat
-      U('1559847844-5315695dadae'),    // imperial cuisine
+      U('1528909514045-2fa4ac7a08ba'),
+      U('1528127269322-539801943592'),
+      U('1557750255-c76072a7fdf0'),
+      U('1509030450996-dd1a26dda07a'),
     ],
     services: {
       pickup:    { icon: '\u{1F697}', label: 'DAD → Hue pickup',       labelVi: 'DAD → Huế đón sân bay',      priceVnd: 780_000 },
