@@ -33,6 +33,34 @@ export function HomeSearchHero() {
   const [children, setChildren] = useState(0)
   const [paxOpen, setPaxOpen] = useState(false)
   const paxRef = useRef<HTMLDivElement | null>(null)
+  const stripRef = useRef<HTMLDivElement | null>(null)
+  const [canLeft, setCanLeft] = useState(false)
+  const [canRight, setCanRight] = useState(true)
+
+  const updateArrows = () => {
+    const el = stripRef.current
+    if (!el) return
+    setCanLeft(el.scrollLeft > 4)
+    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
+  }
+
+  useEffect(() => {
+    const el = stripRef.current
+    if (!el) return
+    updateArrows()
+    el.addEventListener('scroll', updateArrows, { passive: true })
+    window.addEventListener('resize', updateArrows)
+    return () => {
+      el.removeEventListener('scroll', updateArrows)
+      window.removeEventListener('resize', updateArrows)
+    }
+  }, [])
+
+  const scrollStrip = (dir: 1 | -1) => {
+    const el = stripRef.current
+    if (!el) return
+    el.scrollBy({ left: dir * (el.clientWidth * 0.85), behavior: 'smooth' })
+  }
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
@@ -127,10 +155,10 @@ export function HomeSearchHero() {
                 key={tb.key}
                 type="button"
                 onClick={() => setTab(tb.key)}
-                className={`inline-flex items-center gap-2 px-4 h-10 rounded-t-lg rounded-b-none text-sm font-semibold border-b-0 transition-colors ${
+                className={`inline-flex items-center gap-2 px-4 h-11 rounded-xl text-sm font-semibold border backdrop-blur-sm transition-all ${
                   active
-                    ? 'bg-white text-vg-text border border-white'
-                    : 'bg-black/30 text-white border border-white/25 hover:bg-black/40'
+                    ? 'bg-white text-vg-text border-white shadow-[0_8px_22px_rgba(0,0,0,0.2)]'
+                    : 'bg-black/30 text-white border-white/30 hover:bg-black/45 hover:border-white/45'
                 }`}
               >
                 {tb.icon}
@@ -141,15 +169,15 @@ export function HomeSearchHero() {
         </div>
 
         {/* Search bar */}
-        <div className="bg-white rounded-xl rounded-tl-none shadow-[0_10px_40px_rgba(0,0,0,0.18)] border border-white p-2 flex flex-col md:flex-row gap-2">
+        <div className="bg-white/96 backdrop-blur-sm rounded-2xl shadow-[0_18px_44px_rgba(0,0,0,0.22)] border border-white/85 p-2.5 md:p-3 flex flex-col md:flex-row gap-2.5">
           <SearchField
             label={
               tab === 'fastTrack'
-                ? (locale === 'vi' ? 'Sân bay' : 'Airport')
+                ? (locale === 'vi' ? 'Sân bay đến' : 'Airport')
                 : tab === 'transfers'
                   ? (locale === 'vi' ? 'Điểm đón' : 'Pickup point')
                   : tab === 'tours'
-                    ? (locale === 'vi' ? 'Điểm khám phá' : 'Where to explore')
+                    ? (locale === 'vi' ? 'Nơi muốn khám phá' : 'Where to explore')
                     : t.search.destination
             }
             icon={<DestIcon />}
@@ -225,39 +253,72 @@ export function HomeSearchHero() {
           <button
             type="button"
             onClick={handleSearch}
-            className="md:flex-[0.7] h-[64px] px-8 rounded-lg bg-vg-warm hover:bg-vg-warm-hover text-vg-text font-display font-bold text-base transition-colors shadow-[0_4px_14px_rgba(245,158,11,0.4)]"
+            className="md:flex-[0.72] h-[62px] px-8 rounded-xl bg-vg-warm hover:bg-vg-warm-hover text-vg-text font-display font-bold text-base transition-all shadow-[0_8px_22px_rgba(245,158,11,0.42)] hover:shadow-[0_12px_28px_rgba(245,158,11,0.5)]"
           >
             {t.search.search}
           </button>
         </div>
       </div>
 
-      {/* Photo strip below hero */}
-      <div className="relative z-10 bg-gradient-to-b from-transparent to-white pt-4">
-        <div className="max-w-[1200px] mx-auto px-6 md:px-10 pb-4">
+      {/* Photo carousel below hero */}
+      <div className="relative z-10 bg-gradient-to-b from-transparent to-vg-bg pt-4">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-6">
           <div className="text-[11px] uppercase tracking-[0.2em] font-semibold text-white/90 mb-3">
             {t.search.exploreStrip}
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 snap-x">
-            {DESTINATIONS.map((d) => (
-              <button
-                key={d.slug}
-                type="button"
-                onClick={() => {
-                  setDest(d.slug)
-                  // scroll up to search — just focus visually; no redirect
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
-                }}
-                className="group relative snap-start flex-shrink-0 w-[180px] h-[120px] rounded-xl overflow-hidden border-2 border-white/60 hover:border-white transition-all bg-cover bg-center shadow-md"
-                style={{ backgroundImage: `url('${d.photo}')` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-2 left-3 right-3 text-left">
-                  <div className="font-display font-bold text-white text-base leading-tight">{L.name(d)}</div>
-                  <div className="text-[10px] text-white/80 tracking-wide">{airportCity(d.airportCode, locale)}</div>
-                </div>
-              </button>
-            ))}
+          <div className="relative group/carousel">
+            <div
+              ref={stripRef}
+              className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 snap-x scroll-smooth scrollbar-none"
+              style={{ scrollbarWidth: 'none' }}
+            >
+              {DESTINATIONS.map((d) => (
+                <button
+                  key={d.slug}
+                  type="button"
+                  onClick={() => {
+                    setDest(d.slug)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                  className="group relative snap-start shrink-0 w-[240px] h-[170px] rounded-2xl overflow-hidden border-2 border-white/60 hover:border-white transition-all bg-cover bg-center shadow-[0_10px_28px_rgba(0,0,0,0.25)] hover:-translate-y-0.5"
+                  style={{ backgroundImage: `url('${d.photo}')` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  <div className="absolute bottom-3 left-4 right-4 text-left">
+                    <div className="font-display font-bold text-white text-xl leading-tight tracking-tight">{L.name(d)}</div>
+                    <div className="text-[11px] text-white/85 tracking-wide mt-0.5">{airportCity(d.airportCode, locale)}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Arrow buttons */}
+            <button
+              type="button"
+              onClick={() => scrollStrip(-1)}
+              disabled={!canLeft}
+              aria-label="Previous"
+              className={`hidden md:grid absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all ${
+                canLeft ? 'opacity-100 hover:scale-105' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollStrip(1)}
+              disabled={!canRight}
+              aria-label="Next"
+              className={`hidden md:grid absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all ${
+                canRight ? 'opacity-100 hover:scale-105' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -278,11 +339,11 @@ function SearchField({
 }) {
   return (
     <div
-      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 border-vg-warm/0 hover:border-vg-warm/30 bg-vg-surface-muted transition-colors ${className}`}
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl border border-vg-border/70 hover:border-vg-warm/45 bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)] transition-colors ${className}`}
     >
-      <div className="text-vg-text-muted flex-shrink-0">{icon}</div>
+      <div className="text-vg-text-muted/90 shrink-0">{icon}</div>
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] uppercase tracking-[0.1em] text-vg-text-subtle font-semibold">{label}</div>
+        <div className="text-[10px] uppercase tracking-[0.14em] text-vg-text-subtle font-semibold">{label}</div>
         {children}
       </div>
     </div>

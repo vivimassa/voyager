@@ -15,7 +15,7 @@ export function DestinationHeader({ dest }: { dest: Destination }) {
   const fromPrice = Math.min(...Object.values(dest.services).map((s) => s.priceVnd))
 
   return (
-    <section className="bg-white border-b border-vg-border">
+    <section className="bg-vg-bg border-b border-vg-border">
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 py-6">
         <nav className="text-xs text-vg-text-muted mb-3">
           <Link href="/" className="hover:underline">{t.destination.home}</Link>

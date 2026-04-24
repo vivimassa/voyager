@@ -3,9 +3,15 @@
 
 @theme {
   /* ═══ VOYAGER CLIENT PORTAL TOKENS (LIGHT — Agoda/Booking inspired) ═══ */
-  --color-vg-bg: #ffffff;
+  --color-vg-bg: #f1f3f7;
+}
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
+
+@theme {
   --color-vg-surface: #ffffff;
-  --color-vg-surface-muted: #f5f7fb;
+  --color-vg-surface-muted: #e6e9ef;
   --color-vg-surface-raised: #ffffff;
   --color-vg-border: #e4e7ec;
   --color-vg-border-strong: #cbd2d9;

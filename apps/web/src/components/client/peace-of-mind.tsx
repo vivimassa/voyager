@@ -29,7 +29,7 @@ export function PeaceOfMind() {
 
   return (
     <section
-      className="relative px-6 md:px-10 py-14 md:py-20 bg-white"
+      className="relative px-6 md:px-10 py-14 md:py-20 bg-vg-bg"
       aria-labelledby="peace-heading"
     >
       <div className="max-w-[1280px] mx-auto">
