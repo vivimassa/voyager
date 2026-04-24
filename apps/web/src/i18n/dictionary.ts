@@ -265,6 +265,7 @@ type Dict = {
     contactUs: string
     rights: string
     tagline: string
+    agentLogin: string
   }
   summary: {
     title: string
@@ -399,6 +400,109 @@ type Dict = {
     driverStatus: string
     bagsStatus: string
     messageZalo: string
+  }
+  agent: {
+    brand: string
+    brandSub: string
+    nav: {
+      dashboard: string
+      bookings: string
+      bookingsAll: string
+      bookingsPickup: string
+      bookingsFastTrack: string
+      bookingsHotel: string
+      bookingsTour: string
+      customers: string
+      products: string
+      destinations: string
+      reports: string
+      support: string
+      settings: string
+      logOut: string
+    }
+    totalRevenue: string
+    seeAllTransactions: string
+    searchPlaceholder: string
+    bookings: {
+      title: string
+      count: (n: number) => string
+      countFiltered: (filtered: number, total: number) => string
+      newBooking: string
+      export: string
+      import: string
+      comingSoon: string
+      loading: string
+      loadError: string
+      empty: string
+      emptyHint: string
+      pageSize: string
+      rowsShown: (shown: number, total: number) => string
+      prev: string
+      next: string
+      page: (n: number) => string
+      filterStatus: {
+        all: string
+        pending: string
+        confirmed: string
+        fulfilled: string
+        cancelled: string
+        closed: string
+      }
+      filterService: {
+        all: string
+        pickup: string
+        fastTrack: string
+        hotel: string
+        tour: string
+      }
+      col: {
+        booking: string
+        status: string
+        customer: string
+        service: string
+        travel: string
+        pax: string
+        total: string
+        created: string
+        payment: string
+      }
+      paymentStatus: {
+        unpaid: string
+        paid: string
+        refunded: string
+        partial_refund: string
+      }
+      detail: {
+        heading: string
+        contact: string
+        name: string
+        phone: string
+        items: string
+        totals: string
+        subtotal: string
+        discount: string
+        total: string
+        notes: string
+        noNotes: string
+        payment: string
+        method: string
+        paymentStatus: string
+        createdAt: string
+        updatedAt: string
+        travelDate: string
+        travelTime: string
+        adults: string
+        children: string
+        flight: string
+        qty: string
+        unitPrice: string
+        lineTotal: string
+        selectPrompt: string
+        selectHint: string
+        close: string
+        open: string
+      }
+    }
   }
 }
 
@@ -663,6 +767,7 @@ export const dictionary: Record<Locale, Dict> = {
       contactUs: 'Contact us',
       rights: 'All rights reserved.',
       tagline: 'Built for travellers to Vietnam.',
+      agentLogin: 'Agent sign in',
     },
     summary: {
       title: 'Your selection',
@@ -797,6 +902,109 @@ export const dictionary: Record<Locale, Dict> = {
       driverStatus: 'Your driver is at Column 5',
       bagsStatus: 'Bags collected — next stop, your room',
       messageZalo: 'Message us on Zalo / WhatsApp',
+    },
+    agent: {
+      brand: 'Voyager Agent',
+      brandSub: 'Concierge operations',
+      nav: {
+        dashboard: 'Dashboard',
+        bookings: 'Bookings',
+        bookingsAll: 'All bookings',
+        bookingsPickup: 'Airport pickup',
+        bookingsFastTrack: 'Fast-track',
+        bookingsHotel: 'Hotels',
+        bookingsTour: 'Tours',
+        customers: 'Customers',
+        products: 'Products',
+        destinations: 'Destinations',
+        reports: 'Reports',
+        support: 'Support',
+        settings: 'Settings',
+        logOut: 'Log out',
+      },
+      totalRevenue: 'Total revenue',
+      seeAllTransactions: 'See all transactions',
+      searchPlaceholder: 'ex. Booking No / Name / Phone',
+      bookings: {
+        title: 'Bookings',
+        count: (n) => `${n} bookings`,
+        countFiltered: (f, t) => `${f} of ${t} bookings`,
+        newBooking: 'New booking',
+        export: 'Export',
+        import: 'Import',
+        comingSoon: 'Coming soon',
+        loading: 'Loading bookings…',
+        loadError: 'Could not load bookings.',
+        empty: 'No bookings yet',
+        emptyHint: 'Customer bookings appear here as soon as they come in.',
+        pageSize: 'Rows',
+        rowsShown: (s, t) => `${s} of ${t}`,
+        prev: 'Previous',
+        next: 'Next',
+        page: (n) => `Page ${n}`,
+        filterStatus: {
+          all: 'All',
+          pending: 'Pending',
+          confirmed: 'Confirmed',
+          fulfilled: 'Fulfilled',
+          cancelled: 'Cancelled',
+          closed: 'Closed',
+        },
+        filterService: {
+          all: 'Any service',
+          pickup: 'Pickup',
+          fastTrack: 'Fast-track',
+          hotel: 'Hotel',
+          tour: 'Tour',
+        },
+        col: {
+          booking: 'Booking',
+          status: 'Status',
+          customer: 'Customer',
+          service: 'Service',
+          travel: 'Travel date',
+          pax: 'Pax',
+          total: 'Total',
+          created: 'Created',
+          payment: 'Payment',
+        },
+        paymentStatus: {
+          unpaid: 'Unpaid',
+          paid: 'Paid',
+          refunded: 'Refunded',
+          partial_refund: 'Partial refund',
+        },
+        detail: {
+          heading: 'Booking details',
+          contact: 'Contact',
+          name: 'Name',
+          phone: 'Phone',
+          items: 'Items',
+          totals: 'Totals',
+          subtotal: 'Subtotal',
+          discount: 'Discount',
+          total: 'Total',
+          notes: 'Notes',
+          noNotes: 'No notes from customer.',
+          payment: 'Payment',
+          method: 'Method',
+          paymentStatus: 'Status',
+          createdAt: 'Created',
+          updatedAt: 'Updated',
+          travelDate: 'Travel date',
+          travelTime: 'Time',
+          adults: 'Adults',
+          children: 'Children',
+          flight: 'Flight',
+          qty: 'Qty',
+          unitPrice: 'Unit price',
+          lineTotal: 'Line total',
+          selectPrompt: 'Select a booking',
+          selectHint: 'Click a row on the left to see details here.',
+          close: 'Close',
+          open: 'Open',
+        },
+      },
     },
   },
   vi: {
@@ -1059,6 +1267,7 @@ export const dictionary: Record<Locale, Dict> = {
       contactUs: 'Liên hệ',
       rights: 'Đã đăng ký bản quyền.',
       tagline: 'Đồng hành cùng bạn khám phá Việt Nam.',
+      agentLogin: 'Đăng nhập nhân viên',
     },
     summary: {
       title: 'Lựa chọn của bạn',
@@ -1193,6 +1402,109 @@ export const dictionary: Record<Locale, Dict> = {
       driverStatus: 'Tài xế đang đợi tại Cột số 5',
       bagsStatus: 'Đã nhận hành lý - điểm đến tiếp theo: phòng của bạn',
       messageZalo: 'Nhắn Zalo / WhatsApp',
+    },
+    agent: {
+      brand: 'Voyager Agent',
+      brandSub: 'Vận hành concierge',
+      nav: {
+        dashboard: 'Bảng điều khiển',
+        bookings: 'Đơn đặt',
+        bookingsAll: 'Tất cả đơn',
+        bookingsPickup: 'Đón sân bay',
+        bookingsFastTrack: 'Fast-track',
+        bookingsHotel: 'Khách sạn',
+        bookingsTour: 'Tour',
+        customers: 'Khách hàng',
+        products: 'Dịch vụ',
+        destinations: 'Điểm đến',
+        reports: 'Báo cáo',
+        support: 'Hỗ trợ',
+        settings: 'Cài đặt',
+        logOut: 'Đăng xuất',
+      },
+      totalRevenue: 'Tổng doanh thu',
+      seeAllTransactions: 'Xem tất cả giao dịch',
+      searchPlaceholder: 'vd. Mã đơn / Tên / SĐT',
+      bookings: {
+        title: 'Đơn đặt',
+        count: (n) => `${n} đơn`,
+        countFiltered: (f, t) => `${f} trên ${t} đơn`,
+        newBooking: 'Tạo đơn mới',
+        export: 'Xuất',
+        import: 'Nhập',
+        comingSoon: 'Sắp ra mắt',
+        loading: 'Đang tải đơn…',
+        loadError: 'Không tải được đơn.',
+        empty: 'Chưa có đơn nào',
+        emptyHint: 'Đơn khách đặt sẽ hiện ở đây ngay khi được gửi.',
+        pageSize: 'Số dòng',
+        rowsShown: (s, t) => `${s}/${t}`,
+        prev: 'Trước',
+        next: 'Tiếp',
+        page: (n) => `Trang ${n}`,
+        filterStatus: {
+          all: 'Tất cả',
+          pending: 'Chờ xử lý',
+          confirmed: 'Đã xác nhận',
+          fulfilled: 'Đã hoàn thành',
+          cancelled: 'Đã hủy',
+          closed: 'Đã đóng',
+        },
+        filterService: {
+          all: 'Tất cả dịch vụ',
+          pickup: 'Đón sân bay',
+          fastTrack: 'Fast-track',
+          hotel: 'Khách sạn',
+          tour: 'Tour',
+        },
+        col: {
+          booking: 'Mã đơn',
+          status: 'Trạng thái',
+          customer: 'Khách hàng',
+          service: 'Dịch vụ',
+          travel: 'Ngày đi',
+          pax: 'Khách',
+          total: 'Tổng',
+          created: 'Ngày tạo',
+          payment: 'Thanh toán',
+        },
+        paymentStatus: {
+          unpaid: 'Chưa thanh toán',
+          paid: 'Đã thanh toán',
+          refunded: 'Đã hoàn tiền',
+          partial_refund: 'Hoàn một phần',
+        },
+        detail: {
+          heading: 'Chi tiết đơn',
+          contact: 'Liên hệ',
+          name: 'Họ tên',
+          phone: 'Số điện thoại',
+          items: 'Dịch vụ đã đặt',
+          totals: 'Tổng cộng',
+          subtotal: 'Tạm tính',
+          discount: 'Giảm giá',
+          total: 'Tổng',
+          notes: 'Ghi chú',
+          noNotes: 'Khách không để lại ghi chú.',
+          payment: 'Thanh toán',
+          method: 'Phương thức',
+          paymentStatus: 'Trạng thái',
+          createdAt: 'Tạo lúc',
+          updatedAt: 'Cập nhật',
+          travelDate: 'Ngày đi',
+          travelTime: 'Giờ',
+          adults: 'Người lớn',
+          children: 'Trẻ em',
+          flight: 'Chuyến bay',
+          qty: 'SL',
+          unitPrice: 'Đơn giá',
+          lineTotal: 'Thành tiền',
+          selectPrompt: 'Chọn một đơn',
+          selectHint: 'Nhấn vào đơn bên trái để xem chi tiết tại đây.',
+          close: 'Đóng',
+          open: 'Mở',
+        },
+      },
     },
   },
 }

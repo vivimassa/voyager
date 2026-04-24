@@ -37,9 +37,18 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
-      <div className="max-w-[1200px] mx-auto mt-10 pt-6 border-t border-white/15 text-xs text-white/50 flex flex-wrap justify-between gap-3">
+      <div className="max-w-[1200px] mx-auto mt-10 pt-6 border-t border-white/15 text-xs text-white/50 flex flex-wrap items-center justify-between gap-3">
         <span>© {new Date().getFullYear()} {brand.name}. {t.footer.rights}</span>
-        <span>{t.footer.tagline}</span>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/agent/login"
+            className="text-white/30 hover:text-white/70 transition-colors"
+          >
+            {t.footer.agentLogin}
+          </Link>
+          <span className="text-white/20">·</span>
+          <span>{t.footer.tagline}</span>
+        </div>
       </div>
     </footer>
   )

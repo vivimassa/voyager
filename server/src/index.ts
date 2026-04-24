@@ -15,6 +15,7 @@ import { authRoutes } from './routes/auth.js'
 import { userRoutes } from './routes/users.js'
 import { clientAuthRoutes } from './routes/client-auth.js'
 import { clientBookingsRoutes } from './routes/client-bookings.js'
+import { operatorBookingsRoutes } from './routes/operator-bookings.js'
 
 const port = env.PORT
 
@@ -44,6 +45,7 @@ async function main(): Promise<void> {
   await app.register(userRoutes)
   await app.register(clientAuthRoutes)
   await app.register(clientBookingsRoutes)
+  await app.register(operatorBookingsRoutes)
 
   await app.listen({ port, host: '0.0.0.0' })
   console.log(`\u2713 Server listening on port ${port}`)
