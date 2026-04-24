@@ -28,7 +28,7 @@ export function LifestyleBundles() {
       className="relative px-6 md:px-10 py-14 md:py-20 bg-white"
       aria-labelledby="bundles-heading"
     >
-      <div className="max-w-[1100px] mx-auto">
+      <div className="max-w-[1280px] mx-auto">
         <div className="max-w-[720px] mb-8 md:mb-10">
           <div className="text-[11px] tracking-[0.22em] uppercase font-semibold text-vg-accent mb-2">
             {t.bundles.eyebrow}

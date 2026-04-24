@@ -13,7 +13,8 @@ export function BrowseDestinations() {
   useCurrencyStore((s) => s.currency)
 
   return (
-    <section className="px-6 md:px-10 py-16 md:py-20 max-w-[1200px] mx-auto">
+    <section className="bg-vg-surface-muted py-16 md:py-20">
+      <div className="px-6 md:px-10 max-w-[1280px] mx-auto">
       <div className="mb-8 flex items-end justify-between flex-wrap gap-4">
         <div>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-vg-text tracking-tight">
@@ -50,6 +51,7 @@ export function BrowseDestinations() {
             </Link>
           )
         })}
+      </div>
       </div>
     </section>
   )
