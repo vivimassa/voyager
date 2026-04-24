@@ -35,7 +35,7 @@ export function LifestyleBundles() {
           </div>
           <h2
             id="bundles-heading"
-            className="font-display text-2xl md:text-4xl font-bold text-vg-text tracking-[-0.015em]"
+            className="font-sans text-2xl md:text-[34px] font-extrabold text-vg-text tracking-tight leading-[1.15]"
           >
             {t.bundles.heading}
           </h2>
@@ -123,10 +123,10 @@ function BundleCard({
       </div>
 
       <div className="flex flex-col flex-1 p-6">
-        <h3 className="font-display text-xl md:text-[22px] font-bold text-vg-text tracking-[-0.01em]">
+        <h3 className="font-sans text-[19px] md:text-[20px] font-bold text-vg-text tracking-tight">
           {t.bundles[bundle.nameKey]}
         </h3>
-        <p className="mt-2 text-[14px] text-vg-text-muted leading-relaxed">
+        <p className="mt-2 text-[14px] text-vg-text leading-relaxed">
           {t.bundles[bundle.taglineKey]}
         </p>
 

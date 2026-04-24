@@ -51,7 +51,7 @@ export function JourneyMap() {
   return (
     <section
       ref={sectionRef}
-      className="relative px-6 md:px-10 py-12 md:py-16 bg-gradient-to-b from-white via-[#FAF6EF] to-white"
+      className="relative px-6 md:px-10 py-12 md:py-16 bg-white"
       aria-labelledby="journey-map-heading"
     >
       <div className="max-w-[1100px] mx-auto">
@@ -61,7 +61,7 @@ export function JourneyMap() {
           </div>
           <h2
             id="journey-map-heading"
-            className="font-display text-2xl md:text-4xl font-bold text-vg-text tracking-[-0.015em] max-w-[720px] mx-auto"
+            className="font-sans text-2xl md:text-[34px] font-extrabold text-vg-text tracking-tight max-w-[720px] mx-auto leading-[1.15]"
           >
             {t.journeyMap.heading}
           </h2>
@@ -138,10 +138,10 @@ export function JourneyMap() {
             <div className="text-[11px] tracking-[0.2em] uppercase font-semibold text-vg-accent">
               {t.journeyMap[active.labelKey]}
             </div>
-            <div className="mt-1 font-display text-lg md:text-xl font-bold text-vg-text">
+            <div className="mt-1 font-sans text-lg md:text-xl font-extrabold text-vg-text tracking-tight">
               {t.journeyMap[active.titleKey]}
             </div>
-            <p className="mt-2 text-[14px] text-vg-text-muted leading-relaxed">
+            <p className="mt-2 text-[14px] text-vg-text leading-relaxed">
               {t.journeyMap[active.bodyKey]}
             </p>
             {active.ctaKey && active.ctaHref && (

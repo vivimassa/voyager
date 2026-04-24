@@ -29,7 +29,7 @@ export function PeaceOfMind() {
 
   return (
     <section
-      className="relative px-6 md:px-10 py-14 md:py-20 bg-gradient-to-b from-white via-[#FAF6EF] to-white"
+      className="relative px-6 md:px-10 py-14 md:py-20 bg-vg-surface-muted"
       aria-labelledby="peace-heading"
     >
       <div className="max-w-[1100px] mx-auto">
@@ -39,7 +39,7 @@ export function PeaceOfMind() {
           </div>
           <h2
             id="peace-heading"
-            className="font-display text-2xl md:text-4xl font-bold text-vg-text tracking-[-0.015em]"
+            className="font-sans text-2xl md:text-[34px] font-extrabold text-vg-text tracking-tight leading-[1.15]"
           >
             {t.home.whyHeading}
           </h2>
@@ -60,10 +60,10 @@ export function PeaceOfMind() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10 md:to-transparent" />
                 </div>
                 <div className="flex-1 p-6 md:p-7 flex flex-col justify-center">
-                  <h3 className="font-display text-xl md:text-[22px] font-bold text-vg-text tracking-[-0.01em]">
+                  <h3 className="font-sans text-lg md:text-[19px] font-extrabold text-vg-text tracking-tight">
                     {it.title}
                   </h3>
-                  <p className="mt-2.5 text-[14.5px] text-vg-text-muted leading-relaxed">
+                  <p className="mt-2 text-[14px] text-vg-text leading-relaxed">
                     {it.body}
                   </p>
                 </div>
