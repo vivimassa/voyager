@@ -51,7 +51,7 @@ export function JourneyMap() {
   return (
     <section
       ref={sectionRef}
-      className="relative px-6 md:px-10 py-12 md:py-16 bg-vg-surface-muted"
+      className="relative px-6 md:px-10 py-12 md:py-16 bg-vg-bg"
       aria-labelledby="journey-map-heading"
     >
       <div className="max-w-[1280px] mx-auto">

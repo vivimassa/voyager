@@ -6,7 +6,7 @@ import { useT } from '@/i18n/use-t'
 export function OffersTeaser() {
   const t = useT()
   return (
-    <section className="bg-vg-surface-muted px-6 md:px-10 py-16">
+    <section className="bg-vg-bg px-6 md:px-10 py-16">
       <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-6">
         <div>
           <div className="text-xs uppercase tracking-[0.2em] font-bold text-vg-warm mb-2">
