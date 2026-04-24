@@ -9,6 +9,12 @@
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { scrollbar-width: none; }
 
+@keyframes tickIn {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 @theme {
   --color-vg-surface: #ffffff;
   --color-vg-surface-muted: #e6e9ef;
@@ -297,6 +303,16 @@ body {
 }
 .animate-kenburns {
   animation: vg-kenburns 16s ease-in-out forwards;
+}
+
+@keyframes vg-kenburns-slow {
+  0%   { transform: scale(1.02); }
+  100% { transform: scale(1.18); }
+}
+.animate-kenburns-slow {
+  animation: vg-kenburns-slow 28s ease-in-out infinite alternate;
+  transform-origin: 50% 55%;
+  will-change: transform;
 }
 
 @keyframes vg-bob {

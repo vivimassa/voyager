@@ -121,11 +121,14 @@ export function HomeSearchHero() {
     },
   ]
 
+  const activeHeroPhoto = DESTINATIONS.find((d) => d.slug === dest)?.photo ?? HERO_PHOTO
+
   return (
-    <section className="relative w-full">
+    <section className="relative w-full overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url('${HERO_PHOTO}')` }}
+        key={activeHeroPhoto}
+        className="absolute inset-0 bg-cover bg-center animate-kenburns-slow"
+        style={{ backgroundImage: `url('${activeHeroPhoto}')` }}
       />
       <div
         className="absolute inset-0"
@@ -272,7 +275,9 @@ export function HomeSearchHero() {
               className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 snap-x scroll-smooth scrollbar-none"
               style={{ scrollbarWidth: 'none' }}
             >
-              {DESTINATIONS.map((d) => (
+              {DESTINATIONS.map((d) => {
+                const selected = dest === d.slug
+                return (
                 <button
                   key={d.slug}
                   type="button"
@@ -280,26 +285,42 @@ export function HomeSearchHero() {
                     setDest(d.slug)
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
-                  className="group relative snap-start shrink-0 w-[240px] h-[170px] rounded-2xl overflow-hidden border-2 border-white/60 hover:border-white transition-all bg-cover bg-center shadow-[0_10px_28px_rgba(0,0,0,0.25)] hover:-translate-y-0.5"
+                  aria-pressed={selected}
+                  className={`group relative snap-start shrink-0 w-[240px] h-[170px] rounded-2xl overflow-hidden transition-all bg-cover bg-center hover:-translate-y-0.5 ${
+                    selected
+                      ? 'border-[3px] border-vg-accent shadow-[0_14px_36px_rgba(14,165,95,0.45)] ring-2 ring-vg-accent/30'
+                      : 'border-2 border-white/60 hover:border-white shadow-[0_10px_28px_rgba(0,0,0,0.25)]'
+                  }`}
                   style={{ backgroundImage: `url('${d.photo}')` }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  {selected && (
+                    <span
+                      className="absolute top-3 right-3 grid place-items-center w-8 h-8 rounded-full bg-vg-accent text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] animate-[tickIn_0.25s_ease-out]"
+                      aria-hidden
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </span>
+                  )}
                   <div className="absolute bottom-3 left-4 right-4 text-left">
                     <div className="font-display font-bold text-white text-xl leading-tight tracking-tight">{L.name(d)}</div>
                     <div className="text-[11px] text-white/85 tracking-wide mt-0.5">{airportCity(d.airportCode, locale)}</div>
                   </div>
                 </button>
-              ))}
+                )
+              })}
             </div>
 
-            {/* Arrow buttons */}
+            {/* Arrow buttons — both always visible; disabled state when at edge */}
             <button
               type="button"
               onClick={() => scrollStrip(-1)}
               disabled={!canLeft}
               aria-label="Previous"
-              className={`hidden md:grid absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all ${
-                canLeft ? 'opacity-100 hover:scale-105' : 'opacity-0 pointer-events-none'
+              className={`hidden md:grid absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all hover:scale-105 ${
+                canLeft ? 'opacity-100' : 'opacity-40 cursor-not-allowed hover:scale-100'
               }`}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -311,8 +332,8 @@ export function HomeSearchHero() {
               onClick={() => scrollStrip(1)}
               disabled={!canRight}
               aria-label="Next"
-              className={`hidden md:grid absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all ${
-                canRight ? 'opacity-100 hover:scale-105' : 'opacity-0 pointer-events-none'
+              className={`hidden md:grid absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 place-items-center w-11 h-11 rounded-full bg-white text-vg-text shadow-[0_8px_22px_rgba(0,0,0,0.25)] transition-all hover:scale-105 ${
+                canRight ? 'opacity-100' : 'opacity-40 cursor-not-allowed hover:scale-100'
               }`}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
