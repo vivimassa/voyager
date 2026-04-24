@@ -35,14 +35,11 @@ export const useCurrencyStore = create<CurrencyState>()(
             maximumFractionDigits: usd < 10 ? 2 : 0,
           }).format(usd)
         }
-        // VND — charm pricing: round down to nearest 10k step below actual price
-        // e.g. 600,000 → 590,000, 950,000 → 940,000 (marketing convention)
-        const charmed = Math.max(0, Math.floor(amountVnd / 10000) * 10000 - 10000)
         return new Intl.NumberFormat('vi-VN', {
           style: 'currency',
           currency: 'VND',
           maximumFractionDigits: 0,
-        }).format(charmed)
+        }).format(amountVnd)
       },
     }),
     {

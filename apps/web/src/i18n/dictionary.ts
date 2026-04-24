@@ -155,6 +155,185 @@ type Dict = {
     errorName: string
     errorPhone: string
     errorDate: string
+    step1: string
+    step2: string
+    step3: string
+    priceDetails: string
+    yourPriceSummary: string
+    noPaymentTitle: string
+    noPaymentBody: string
+    freeCancel: string
+    noBookingFees: string
+    securePromise: string
+  }
+  search: {
+    tabHotels: string
+    tabTransfers: string
+    tabFastTrack: string
+    tabTours: string
+    destination: string
+    destinationPh: string
+    dates: string
+    datesPh: string
+    travelers: string
+    adults: string
+    children: string
+    search: string
+    heroHeading: string
+    heroSub: string
+    exploreStrip: string
+  }
+  filters: {
+    title: string
+    clearAll: string
+    serviceType: string
+    priceRange: string
+    starRating: string
+    airport: string
+    reviewScore: string
+    sortBy: string
+    sortRecommended: string
+    sortPriceAsc: string
+    sortPriceDesc: string
+    sortRating: string
+    resultsCount: (n: number) => string
+    viewServices: string
+    fromPrice: string
+    verified: string
+    freeCancel: string
+    noPrepayment: string
+  }
+  home: {
+    browseHeading: string
+    browseSub: string
+    whyHeading: string
+    why1Title: string
+    why1Body: string
+    why2Title: string
+    why2Body: string
+    why3Title: string
+    why3Body: string
+    why4Title: string
+    why4Body: string
+    howHeading: string
+    howStep1Title: string
+    howStep1Body: string
+    howStep2Title: string
+    howStep2Body: string
+    howStep3Title: string
+    howStep3Body: string
+    offersHeading: string
+    offersSub: string
+    offersSeeAll: string
+  }
+  success: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    reference: string
+    status: string
+    pending: string
+    whatsNext: string
+    next1: string
+    next2: string
+    next3: string
+    details: string
+    contactBlock: string
+    callBack: string
+    total: string
+    notes: string
+    keepBrowsing: string
+    backHome: string
+    errorTitle: string
+    errorBack: string
+    dateTbc: string
+    adult: string
+    adults: string
+    child: string
+    children: string
+    flight: string
+    loading: string
+  }
+  footer: {
+    exploreTitle: string
+    destinations: string
+    services: string
+    deals: string
+    supportTitle: string
+    helpCentre: string
+    faq: string
+    contactUs: string
+    rights: string
+    tagline: string
+  }
+  summary: {
+    title: string
+    hint: string
+    empty: string
+    remove: string
+    reserve: string
+  }
+  goodToKnow: {
+    title: string
+    b1: string
+    b2: string
+    b3: string
+    b4: string
+    b5: string
+    b6: string
+  }
+  offers: {
+    eyebrow: string
+    heading: string
+    sub: string
+    cta: string
+  }
+  listing: {
+    upTo: string
+    reviewsCount: (n: number) => string
+    noResults: string
+    clearFilters: string
+  }
+  login: {
+    title: string
+    sub: string
+    email: string
+    password: string
+    forgotLink: string
+    submit: string
+    submitting: string
+    guestPrompt: string
+    guestCta: string
+    errorMissing: string
+  }
+  forgot: {
+    title: string
+    sub: string
+    email: string
+    submit: string
+    submitting: string
+    sentTitle: string
+    sentBody: (email: string) => string
+    back: string
+    errorMissing: string
+  }
+  reset: {
+    title: string
+    sub: string
+    newPassword: string
+    confirmPassword: string
+    submit: string
+    submitting: string
+    doneTitle: string
+    doneBody: string
+    signIn: string
+    invalidTitle: string
+    invalidBody: string
+    requestNew: string
+    back: string
+    errorShort: string
+    errorMismatch: string
+    errorNoToken: string
   }
 }
 
@@ -309,6 +488,185 @@ export const dictionary: Record<Locale, Dict> = {
       errorName: 'Please enter your name so we know who to ask for.',
       errorPhone: 'Please enter a phone number we can call you back on.',
       errorDate: 'Please pick a travel date for every service in your cart.',
+      step1: 'Your selection',
+      step2: 'Your details',
+      step3: 'Finish',
+      priceDetails: 'Price details',
+      yourPriceSummary: 'Your price summary',
+      noPaymentTitle: 'No payment today',
+      noPaymentBody: 'A Voyager agent will call you within a few hours to confirm and arrange payment on arrival. No card required now.',
+      freeCancel: 'Free cancellation up to 24h before',
+      noBookingFees: 'No booking fees',
+      securePromise: 'Price confirmed before you pay',
+    },
+    search: {
+      tabHotels: 'Hotels',
+      tabTransfers: 'Transfers',
+      tabFastTrack: 'Fast-track',
+      tabTours: 'Tours',
+      destination: 'Destination',
+      destinationPh: 'Where are you going?',
+      dates: 'Check-in → Check-out',
+      datesPh: 'Select dates',
+      travelers: 'Travellers',
+      adults: 'Adults',
+      children: 'Children',
+      search: 'Search',
+      heroHeading: 'Find hotels, transfers & tours across Vietnam',
+      heroSub: 'From airport pickup to island-hopping — bundle everything in one booking. A real agent confirms before you pay.',
+      exploreStrip: 'Explore destinations',
+    },
+    filters: {
+      title: 'Filter by',
+      clearAll: 'Clear all',
+      serviceType: 'Service type',
+      priceRange: 'Price range',
+      starRating: 'Star rating',
+      airport: 'Airport',
+      reviewScore: 'Review score',
+      sortBy: 'Sort by',
+      sortRecommended: 'Our top picks',
+      sortPriceAsc: 'Price (lowest first)',
+      sortPriceDesc: 'Price (highest first)',
+      sortRating: 'Top reviewed',
+      resultsCount: (n) => `${n} destination${n === 1 ? '' : 's'} found`,
+      viewServices: 'View services',
+      fromPrice: 'From',
+      verified: 'Verified by Voyager',
+      freeCancel: 'Free cancellation',
+      noPrepayment: 'No prepayment',
+    },
+    home: {
+      browseHeading: 'Browse by destination',
+      browseSub: 'Five gateways, every corner of Vietnam.',
+      whyHeading: 'Why travellers choose Voyager',
+      why1Title: 'Real agent, real call',
+      why1Body: 'No bots. A local agent calls within a few hours to confirm every detail.',
+      why2Title: 'No card today',
+      why2Body: 'Request now, pay on arrival. Cancel free up to 24h before.',
+      why3Title: 'One cart, four services',
+      why3Body: 'Pickup, fast-track, hotel and tour — bundled and confirmed together.',
+      why4Title: 'English & Vietnamese',
+      why4Body: 'Our team speaks both fluently. Zalo, phone, email — whichever you prefer.',
+      howHeading: 'How booking works',
+      howStep1Title: 'Search & add to cart',
+      howStep1Body: 'Pick a destination, add the services you need.',
+      howStep2Title: 'Give us your details',
+      howStep2Body: 'Name, phone, travel dates. No card required.',
+      howStep3Title: 'Agent confirms, you travel',
+      howStep3Body: 'We call to finalise and quote. Pay on arrival.',
+      offersHeading: 'Deals of the week',
+      offersSub: 'Bundles, group rates and early-bird offers.',
+      offersSeeAll: 'See all deals →',
+    },
+    success: {
+      eyebrow: 'Booking confirmed',
+      title: "You're all set",
+      subtitle: "Thanks! Your request is with our team — we'll call to confirm the details shortly.",
+      reference: 'Reference',
+      status: 'Status',
+      pending: 'Pending confirmation',
+      whatsNext: 'What happens next',
+      next1: 'A Voyager agent calls within a few hours to confirm every detail.',
+      next2: "We lock your prices and send a confirmation summary to your phone.",
+      next3: 'Pay on arrival — cash or card, at the service point. No charge today.',
+      details: 'Booking details',
+      contactBlock: 'Contact',
+      callBack: "We'll call",
+      total: 'Total',
+      notes: 'Notes',
+      keepBrowsing: 'Keep browsing',
+      backHome: 'Back to home',
+      errorTitle: "We couldn't load this booking",
+      errorBack: 'Back to destinations',
+      dateTbc: 'Date TBC',
+      adult: 'adult',
+      adults: 'adults',
+      child: 'child',
+      children: 'children',
+      flight: 'Flight',
+      loading: 'Loading booking…',
+    },
+    footer: {
+      exploreTitle: 'Explore',
+      destinations: 'Destinations',
+      services: 'Services',
+      deals: 'Deals',
+      supportTitle: 'Support',
+      helpCentre: 'Help centre',
+      faq: 'FAQ',
+      contactUs: 'Contact us',
+      rights: 'All rights reserved.',
+      tagline: 'Built for travellers to Vietnam.',
+    },
+    summary: {
+      title: 'Your selection',
+      hint: 'Add the services you need. An agent calls to confirm.',
+      empty: 'Nothing added yet',
+      remove: 'Remove',
+      reserve: 'Reserve →',
+    },
+    goodToKnow: {
+      title: 'Good to know',
+      b1: 'Free cancellation up to 24h before your travel date',
+      b2: 'Pay on arrival — no card needed today',
+      b3: 'English- and Vietnamese-speaking agents',
+      b4: 'Flight tracking included for pickups',
+      b5: 'Child seats available on request',
+      b6: 'Zalo / WhatsApp support after booking',
+    },
+    offers: {
+      eyebrow: 'Deals of the week',
+      heading: 'Save on bundles, groups & early birds',
+      sub: 'Up to 30% off when you pair airport pickup with fast-track, or book a hotel 30 days ahead.',
+      cta: 'See all deals →',
+    },
+    listing: {
+      upTo: 'Up to',
+      reviewsCount: (n) => `${n} reviews`,
+      noResults: 'No destinations match your filters.',
+      clearFilters: 'Clear filters',
+    },
+    login: {
+      title: 'Sign in',
+      sub: 'Access your Voyager account',
+      email: 'Email',
+      password: 'Password',
+      forgotLink: 'Forgot password?',
+      submit: 'Sign in',
+      submitting: 'Signing in…',
+      guestPrompt: 'Just booking?',
+      guestCta: 'Browse as guest →',
+      errorMissing: 'Enter your email and password.',
+    },
+    forgot: {
+      title: 'Forgot password?',
+      sub: "Enter your email and we'll send a reset link.",
+      email: 'Email',
+      submit: 'Send reset link',
+      submitting: 'Sending…',
+      sentTitle: 'Check your email',
+      sentBody: (email) => `If an account exists for ${email}, we've sent a password reset link. It expires in 1 hour.`,
+      back: '← Back to sign in',
+      errorMissing: 'Enter your email address.',
+    },
+    reset: {
+      title: 'Set new password',
+      sub: 'Must be at least 8 characters.',
+      newPassword: 'New password',
+      confirmPassword: 'Confirm password',
+      submit: 'Reset password',
+      submitting: 'Resetting…',
+      doneTitle: 'Password reset',
+      doneBody: 'You can now sign in with your new password.',
+      signIn: 'Sign in',
+      invalidTitle: 'Invalid link',
+      invalidBody: 'This reset link is missing or malformed.',
+      requestNew: 'Request new link',
+      back: '← Back to sign in',
+      errorShort: 'Password must be at least 8 characters.',
+      errorMismatch: 'Passwords do not match.',
+      errorNoToken: 'Missing reset token.',
     },
   },
   vi: {
@@ -321,7 +679,7 @@ export const dictionary: Record<Locale, Dict> = {
     },
     hero: {
       eyebrow: 'Việt Nam, theo cách của bạn',
-      ctaPrimary: 'Lên kế hoạch',
+      ctaPrimary: 'Đặt chuyến đi',
       ctaSecondary: 'Khám phá dịch vụ',
       airportTag: (code) => `Bay đến ${code}`,
       scrollHint: 'Cuộn để xem tất cả dịch vụ sân bay ↓',
@@ -336,7 +694,7 @@ export const dictionary: Record<Locale, Dict> = {
     common: {
       vnd: 'VND',
       usd: 'USD',
-      planMyTrip: 'Lên kế hoạch',
+      planMyTrip: 'Đặt chuyến đi',
       saveForLater: 'Khám phá dịch vụ',
       addToCart: 'Thêm vào giỏ',
       added: 'Đã thêm ✓',
@@ -450,8 +808,8 @@ export const dictionary: Record<Locale, Dict> = {
       summary: 'Chi tiết đặt chỗ',
       subtotal: 'Tạm tính',
       total: 'Tổng cộng',
-      callNote: 'Đội ngũ hỗ trợ sẽ liên hệ trong vài giờ để xác nhận. Thanh toán khi đến — hoàn toàn miễn phí hôm nay.',
-      requestBooking: 'Xác nhận đặt chỗ',
+      callNote: 'Tư vấn viên sẽ gọi trong vài giờ để xác nhận. Thanh toán khi đến — hôm nay chưa mất phí.',
+      requestBooking: 'Gửi yêu cầu đặt chỗ',
       placingBooking: 'Đang gửi yêu cầu…',
       keepBrowsing: '← Tiếp tục khám phá',
       remove: 'Bỏ',
@@ -461,6 +819,185 @@ export const dictionary: Record<Locale, Dict> = {
       errorName: 'Vui lòng nhập tên để chúng tôi biết cần hỏi ai.',
       errorPhone: 'Vui lòng nhập số điện thoại để chúng tôi có thể liên hệ.',
       errorDate: 'Vui lòng chọn ngày khởi hành cho từng dịch vụ trong giỏ hàng.',
+      step1: 'Lựa chọn',
+      step2: 'Thông tin',
+      step3: 'Hoàn tất',
+      priceDetails: 'Chi tiết giá',
+      yourPriceSummary: 'Tổng kết giá',
+      noPaymentTitle: 'Hôm nay chưa cần thanh toán',
+      noPaymentBody: 'Tư vấn viên Voyager sẽ gọi trong vài giờ để xác nhận và sắp xếp thanh toán khi đến. Chưa cần thẻ hôm nay.',
+      freeCancel: 'Huỷ miễn phí trước 24h',
+      noBookingFees: 'Không phí đặt chỗ',
+      securePromise: 'Giá xác nhận trước khi thanh toán',
+    },
+    search: {
+      tabHotels: 'Khách sạn',
+      tabTransfers: 'Đưa đón',
+      tabFastTrack: 'Fast-track',
+      tabTours: 'Tour',
+      destination: 'Điểm đến',
+      destinationPh: 'Bạn muốn đi đâu?',
+      dates: 'Nhận phòng → Trả phòng',
+      datesPh: 'Chọn ngày',
+      travelers: 'Khách',
+      adults: 'Người lớn',
+      children: 'Trẻ em',
+      search: 'Tìm kiếm',
+      heroHeading: 'Đặt khách sạn, đưa đón & tour khắp Việt Nam',
+      heroSub: 'Từ đón sân bay đến khám phá đảo — đặt trọn gói trong một lần. Tư vấn viên xác nhận trước, bạn thanh toán khi đến.',
+      exploreStrip: 'Khám phá điểm đến',
+    },
+    filters: {
+      title: 'Lọc theo',
+      clearAll: 'Xoá tất cả',
+      serviceType: 'Loại dịch vụ',
+      priceRange: 'Khoảng giá',
+      starRating: 'Hạng sao',
+      airport: 'Sân bay',
+      reviewScore: 'Điểm đánh giá',
+      sortBy: 'Sắp xếp theo',
+      sortRecommended: 'Đề xuất',
+      sortPriceAsc: 'Giá thấp nhất',
+      sortPriceDesc: 'Giá cao nhất',
+      sortRating: 'Đánh giá cao nhất',
+      resultsCount: (n) => `Có ${n} điểm đến phù hợp`,
+      viewServices: 'Xem dịch vụ',
+      fromPrice: 'Chỉ từ',
+      verified: 'Voyager xác thực',
+      freeCancel: 'Huỷ miễn phí',
+      noPrepayment: 'Không cần trả trước',
+    },
+    home: {
+      browseHeading: 'Khám phá theo điểm đến',
+      browseSub: 'Năm cửa ngõ, khắp mọi miền Việt Nam.',
+      whyHeading: 'Vì sao chọn Voyager',
+      why1Title: 'Tư vấn viên gọi xác nhận',
+      why1Body: 'Không chatbot. Tư vấn viên địa phương gọi trong vài giờ để chốt từng chi tiết.',
+      why2Title: 'Chưa cần thanh toán',
+      why2Body: 'Đặt trước, thanh toán khi đến. Huỷ miễn phí trong vòng 24 giờ.',
+      why3Title: 'Một giỏ, bốn dịch vụ',
+      why3Body: 'Đón sân bay, fast-track, khách sạn và tour — gộp và xác nhận một lần.',
+      why4Title: 'Hỗ trợ tiếng Việt & Anh',
+      why4Body: 'Đội ngũ thông thạo hai ngôn ngữ. Zalo, điện thoại hay email — tuỳ bạn.',
+      howHeading: 'Quy trình đặt chỉ 3 bước',
+      howStep1Title: 'Chọn & thêm vào giỏ hàng',
+      howStep1Body: 'Chọn điểm đến, thêm các dịch vụ bạn cần.',
+      howStep2Title: 'Điền thông tin liên hệ',
+      howStep2Body: 'Tên, số điện thoại, ngày đi — chưa cần thẻ.',
+      howStep3Title: 'Tư vấn viên chốt, bạn lên đường',
+      howStep3Body: 'Chúng tôi gọi xác nhận và báo giá. Thanh toán khi đến nơi.',
+      offersHeading: 'Ưu đãi trong tuần',
+      offersSub: 'Gói kết hợp, giá nhóm và ưu đãi đặt sớm.',
+      offersSeeAll: 'Xem tất cả ưu đãi →',
+    },
+    success: {
+      eyebrow: 'Đã tiếp nhận',
+      title: 'Cảm ơn bạn đã đặt Voyager',
+      subtitle: 'Yêu cầu đã được gửi — tư vấn viên sẽ gọi xác nhận trong vài giờ tới.',
+      reference: 'Mã đặt chỗ',
+      status: 'Trạng thái',
+      pending: 'Chờ xác nhận',
+      whatsNext: 'Tiếp theo là gì',
+      next1: 'Tư vấn viên Voyager sẽ gọi trong vài giờ để xác nhận từng chi tiết.',
+      next2: 'Chúng tôi khoá giá và gửi bản tóm tắt qua tin nhắn.',
+      next3: 'Thanh toán khi đến — tiền mặt hoặc thẻ ngay tại dịch vụ. Chưa mất phí hôm nay.',
+      details: 'Chi tiết đặt chỗ',
+      contactBlock: 'Liên hệ',
+      callBack: 'Sẽ gọi số',
+      total: 'Tổng cộng',
+      notes: 'Ghi chú',
+      keepBrowsing: 'Tiếp tục khám phá',
+      backHome: 'Về trang chủ',
+      errorTitle: 'Không tải được đặt chỗ này',
+      errorBack: 'Quay lại điểm đến',
+      dateTbc: 'Chưa chọn ngày',
+      adult: 'người lớn',
+      adults: 'người lớn',
+      child: 'trẻ em',
+      children: 'trẻ em',
+      flight: 'Chuyến bay',
+      loading: 'Đang tải đặt chỗ…',
+    },
+    footer: {
+      exploreTitle: 'Khám phá',
+      destinations: 'Điểm đến',
+      services: 'Dịch vụ',
+      deals: 'Ưu đãi',
+      supportTitle: 'Hỗ trợ',
+      helpCentre: 'Trung tâm hỗ trợ',
+      faq: 'Câu hỏi thường gặp',
+      contactUs: 'Liên hệ',
+      rights: 'Bản quyền đã đăng ký.',
+      tagline: 'Dành cho người khám phá Việt Nam.',
+    },
+    summary: {
+      title: 'Giỏ hàng của bạn',
+      hint: 'Thêm dịch vụ bạn cần. Tư vấn viên sẽ gọi xác nhận.',
+      empty: 'Giỏ hàng trống',
+      remove: 'Bỏ',
+      reserve: 'Thanh toán →',
+    },
+    goodToKnow: {
+      title: 'Thông tin cần biết',
+      b1: 'Huỷ miễn phí trong vòng 24 giờ trước ngày đi',
+      b2: 'Thanh toán khi đến — chưa cần thẻ hôm nay',
+      b3: 'Tư vấn viên nói tiếng Việt & tiếng Anh',
+      b4: 'Theo dõi chuyến bay tự động cho dịch vụ đón sân bay',
+      b5: 'Ghế trẻ em miễn phí khi có yêu cầu',
+      b6: 'Hỗ trợ qua Zalo / WhatsApp sau khi đặt',
+    },
+    offers: {
+      eyebrow: 'Ưu đãi trong tuần',
+      heading: 'Giảm giá gói kết hợp, nhóm & đặt sớm',
+      sub: 'Tiết kiệm tới 30% khi kết hợp đón sân bay với fast-track, hoặc đặt khách sạn trước 30 ngày.',
+      cta: 'Xem tất cả ưu đãi →',
+    },
+    listing: {
+      upTo: 'Tối đa',
+      reviewsCount: (n) => `${n} đánh giá`,
+      noResults: 'Không có điểm đến nào phù hợp với bộ lọc.',
+      clearFilters: 'Xoá bộ lọc',
+    },
+    login: {
+      title: 'Đăng nhập',
+      sub: 'Truy cập tài khoản Voyager',
+      email: 'Email',
+      password: 'Mật khẩu',
+      forgotLink: 'Quên mật khẩu?',
+      submit: 'Đăng nhập',
+      submitting: 'Đang đăng nhập…',
+      guestPrompt: 'Chỉ muốn đặt chỗ?',
+      guestCta: 'Tiếp tục với tư cách khách →',
+      errorMissing: 'Vui lòng nhập email và mật khẩu.',
+    },
+    forgot: {
+      title: 'Quên mật khẩu?',
+      sub: 'Nhập email, chúng tôi sẽ gửi link đặt lại mật khẩu.',
+      email: 'Email',
+      submit: 'Gửi link đặt lại',
+      submitting: 'Đang gửi…',
+      sentTitle: 'Hãy kiểm tra email',
+      sentBody: (email) => `Nếu có tài khoản ứng với ${email}, chúng tôi đã gửi link đặt lại mật khẩu. Link hết hạn sau 1 giờ.`,
+      back: '← Quay lại đăng nhập',
+      errorMissing: 'Vui lòng nhập địa chỉ email.',
+    },
+    reset: {
+      title: 'Đặt mật khẩu mới',
+      sub: 'Mật khẩu cần ít nhất 8 ký tự.',
+      newPassword: 'Mật khẩu mới',
+      confirmPassword: 'Xác nhận mật khẩu',
+      submit: 'Đặt lại mật khẩu',
+      submitting: 'Đang xử lý…',
+      doneTitle: 'Đã đặt lại mật khẩu',
+      doneBody: 'Bây giờ bạn có thể đăng nhập bằng mật khẩu mới.',
+      signIn: 'Đăng nhập',
+      invalidTitle: 'Link không hợp lệ',
+      invalidBody: 'Link đặt lại mật khẩu này đã hỏng hoặc hết hạn.',
+      requestNew: 'Yêu cầu link mới',
+      back: '← Quay lại đăng nhập',
+      errorShort: 'Mật khẩu cần ít nhất 8 ký tự.',
+      errorMismatch: 'Mật khẩu nhập lại không khớp.',
+      errorNoToken: 'Thiếu mã đặt lại mật khẩu.',
     },
   },
 }

@@ -1,90 +1,73 @@
 'use client'
 
-/**
- * DestinationHeader — the top 70vh photo hero for a destination page.
- * Airport tag, serif display title, description, and the lowest "from" price.
- * Reads currency from the store so VND/USD toggle updates live.
- */
 import Link from 'next/link'
 import type { Destination } from '@/data/destinations'
 import { useCurrencyStore } from '@/stores/currency-store'
 import { useT } from '@/i18n/use-t'
+import { useDestLocale } from '@/hooks/use-dest-locale'
 
 export function DestinationHeader({ dest }: { dest: Destination }) {
   const t = useT()
+  const L = useDestLocale()
   const formatFromVnd = useCurrencyStore((s) => s.formatFromVnd)
-  useCurrencyStore((s) => s.currency) // subscribe for re-render
+  useCurrencyStore((s) => s.currency)
 
-  const fromPrice = Math.min(
-    ...Object.values(dest.services).map((s) => s.priceVnd),
-  )
+  const fromPrice = Math.min(...Object.values(dest.services).map((s) => s.priceVnd))
 
   return (
-    <section className="relative w-full h-[70vh] min-h-[520px] overflow-hidden bg-vg-bg">
-      <div
-        className="absolute inset-0 bg-cover bg-center animate-kenburns"
-        style={{ backgroundImage: `url('${dest.photo}')` }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'linear-gradient(105deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 75%), linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%)',
-        }}
-      />
-
-      <div className="relative z-[5] h-full flex flex-col justify-end px-6 md:px-12 pb-16 max-w-[900px]">
-        {/* Breadcrumbs */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-6 text-xs tracking-wide text-white/60 flex items-center gap-2"
-        >
-          <Link href="/" className="hover:text-white">
-            {t.destination.home}
-          </Link>
-          <span className="opacity-50">/</span>
-          <Link href="/destinations" className="hover:text-white">
-            {t.nav.destinations}
-          </Link>
-          <span className="opacity-50">/</span>
-          <span className="text-white/85">{dest.name}</span>
+    <section className="bg-white border-b border-vg-border">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-10 py-6">
+        <nav className="text-xs text-vg-text-muted mb-3">
+          <Link href="/" className="hover:underline">{t.destination.home}</Link>
+          <span className="mx-1.5">›</span>
+          <Link href="/destinations" className="hover:underline">{t.nav.destinations}</Link>
+          <span className="mx-1.5">›</span>
+          <span className="text-vg-text">{L.name(dest)}</span>
         </nav>
 
-        {/* Airport tag */}
-        <div className="inline-flex items-center gap-2 pl-2 pr-3 py-1.5 mb-5 rounded-full bg-white/12 backdrop-blur-md border border-white/20 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/95 w-fit">
-          <span className="px-2 py-0.5 rounded-full bg-vg-accent font-display text-[11px] tracking-[0.1em] text-white">
-            {dest.airportCode}
-          </span>
-          <span>{dest.airportName}</span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-yellow-500 text-base leading-none">
+                {'★'.repeat(dest.stars)}<span className="text-vg-border-strong">{'☆'.repeat(5 - dest.stars)}</span>
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-vg-accent bg-vg-accent/10 px-1.5 py-0.5 rounded">
+                ✓ {t.filters.verified}
+              </span>
+            </div>
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-vg-text tracking-tight leading-tight">
+              {L.name(dest)}
+            </h1>
+            <div className="mt-1.5 text-sm text-vg-text-muted">
+              <span className="underline">{L.airportName(dest)}</span>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-vg-text-muted">{t.filters.fromPrice}</div>
+            <div className="font-display text-2xl font-bold text-vg-text">{formatFromVnd(fromPrice)}</div>
+          </div>
         </div>
 
-        <h1
-          className="font-display font-bold uppercase leading-[0.9] tracking-[-0.03em] text-white"
-          style={{
-            fontSize: 'clamp(52px, 8vw, 112px)',
-            textShadow: '0 4px 28px rgba(0,0,0,0.4)',
-          }}
-        >
-          {dest.name}
-        </h1>
+        <div className="mt-4 grid grid-cols-4 grid-rows-2 gap-2 h-[280px] md:h-[420px]">
+          <div
+            className="col-span-4 md:col-span-2 row-span-2 rounded-xl bg-cover bg-center cursor-pointer hover:brightness-95 transition"
+            style={{ backgroundImage: `url('${dest.photo}')` }}
+          />
+          {[0, 1, 2, 3].map((i) => {
+            const src = dest.photos?.[i] ?? dest.photo
+            return (
+              <div
+                key={i}
+                className="col-span-2 md:col-span-1 row-span-1 rounded-xl bg-cover bg-center cursor-pointer hover:brightness-95 transition"
+                style={{ backgroundImage: `url('${src}')` }}
+              />
+            )
+          })}
+        </div>
 
-        <p className="mt-5 text-[15px] md:text-base leading-[1.65] text-white/90 max-w-[640px]">
-          {dest.description}
+        <p className="mt-5 text-[15px] leading-relaxed text-vg-text max-w-[800px]">
+          {L.description(dest)}
         </p>
-
-        <div className="mt-6 flex items-center gap-4 text-sm text-white/80">
-          <span className="text-yellow-400 tracking-[0.2em]">
-            {'★'.repeat(dest.stars)}
-            <span className="text-white/30">{'☆'.repeat(5 - dest.stars)}</span>
-          </span>
-          <span className="opacity-50">·</span>
-          <span>
-            <span className="text-white/60 mr-1">{t.destination.startingFrom}</span>
-            <span className="font-display text-white font-semibold">
-              {formatFromVnd(fromPrice)}
-            </span>
-          </span>
-        </div>
       </div>
     </section>
   )

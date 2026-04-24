@@ -2,70 +2,49 @@
 
 import Link from 'next/link'
 import { DESTINATIONS } from '@/data/destinations'
+import { useCurrencyStore } from '@/stores/currency-store'
 import { useT } from '@/i18n/use-t'
-
-const AIRPORT_CITY: Record<string, string> = {
-  HAN: 'Hanoi',
-  SGN: 'Saigon',
-  DAD: 'Da Nang',
-  CXR: 'Nha Trang',
-  PQC: 'Phu Quoc',
-}
+import { useDestLocale } from '@/hooks/use-dest-locale'
 
 export function OtherDestinations({ currentSlug }: { currentSlug: string }) {
   const t = useT()
+  const L = useDestLocale()
+  const formatFromVnd = useCurrencyStore((s) => s.formatFromVnd)
+  useCurrencyStore((s) => s.currency)
   const others = DESTINATIONS.filter((d) => d.slug !== currentSlug).slice(0, 4)
 
   return (
-    <section className="bg-vg-bg px-6 md:px-12 pt-20 pb-28 border-t border-white/[0.06]">
-      <div className="max-w-[1400px] mx-auto">
-        <div className="flex items-end justify-between gap-6 mb-10 flex-wrap">
-          <div>
-            <div className="text-xs tracking-[0.25em] uppercase text-vg-accent font-semibold mb-3">
-              {t.common.keepExploring}
-            </div>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-white">
-              {t.common.otherDestinations}
-            </h2>
-          </div>
-          <Link
-            href="/destinations"
-            className="text-sm text-white/70 hover:text-white underline underline-offset-4"
-          >
+    <section className="bg-vg-surface-muted border-t border-vg-border px-6 md:px-10 py-14">
+      <div className="max-w-[1280px] mx-auto">
+        <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-vg-text">
+            {t.common.otherDestinations}
+          </h2>
+          <Link href="/destinations" className="text-sm font-semibold text-vg-cta hover:underline">
             {t.common.viewAll}
           </Link>
         </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {others.map((d) => (
-            <Link
-              key={d.slug}
-              href={`/destinations/${d.slug}`}
-              className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-cover bg-center border border-white/10 hover:-translate-y-1 transition-transform"
-              style={{ backgroundImage: `url('${d.photo}')` }}
-            >
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 100%)',
-                }}
-              />
-              <div className="absolute top-4 left-4 right-4 z-[2]">
-                <span className="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm border border-white/15 text-[10px] font-medium tracking-wide text-white">
-                  {AIRPORT_CITY[d.airportCode] ?? d.airportCode}
-                </span>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4 z-[2]">
-                <div className="font-display text-xl font-semibold text-white">
-                  {d.name}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {others.map((d) => {
+            const fromPrice = Math.min(...Object.values(d.services).map((s) => s.priceVnd))
+            return (
+              <Link
+                key={d.slug}
+                href={`/destinations/${d.slug}`}
+                className="group bg-white rounded-xl overflow-hidden border border-vg-border hover:shadow-[0_8px_24px_rgba(16,24,40,0.1)] transition-shadow"
+              >
+                <div className="aspect-[4/3] bg-cover bg-center" style={{ backgroundImage: `url('${d.photo}')` }} />
+                <div className="p-4">
+                  <div className="font-sans font-bold text-lg text-vg-text">{L.name(d)}</div>
+                  <div className="text-xs text-vg-text-subtle">{L.airportName(d)}</div>
+                  <div className="mt-2 text-sm">
+                    <span className="text-vg-text-muted">{t.destination.from} </span>
+                    <span className="font-bold text-vg-text">{formatFromVnd(fromPrice)}</span>
+                  </div>
                 </div>
-                <div className="text-[11px] text-white/60 mt-0.5">
-                  {d.airportName}
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>

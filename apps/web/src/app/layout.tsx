@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Playfair_Display } from 'next/font/google'
+import { Be_Vietnam_Pro, Lora } from 'next/font/google'
 import '@/lib/env'
 import './globals.css'
 import { AppShell } from '@/components/app-shell'
@@ -12,17 +12,17 @@ import { AuthOverlay } from '@/components/client/auth-overlay'
 import { BrandSettingsModal } from '@/components/client/brand-settings-modal'
 import { BRAND_DEFAULTS } from '@/lib/brand'
 
-const dmSans = DM_Sans({
-  subsets: ['latin'],
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ['latin', 'vietnamese'],
   variable: '--font-inter',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700', '800'],
 })
-const playfair = Playfair_Display({
-  subsets: ['latin'],
+const lora = Lora({
+  subsets: ['latin', 'vietnamese'],
   variable: '--font-fraunces',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
 })
 
 // SSR-safe brand defaults (env-baked). Runtime browser overrides are layered on
@@ -41,10 +41,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${playfair.variable}`}
+      className={`${beVietnam.variable} ${lora.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex flex-col h-screen bg-hz-bg text-hz-text font-sans">
+      <body className="flex flex-col h-screen bg-vg-bg text-vg-text font-sans">
         <QueryProvider>
           <ThemeProvider>
             <DisplayProvider>

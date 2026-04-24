@@ -2,21 +2,23 @@
 @import 'tailwindcss';
 
 @theme {
-  /* ═══ VOYAGER CLIENT PORTAL TOKENS ═══ */
-  /* Editorial destination-first palette — distinct from Horizon glass/VisionOS */
-  --color-vg-bg: #08090c;
-  --color-vg-surface: #13151a;
-  --color-vg-surface-raised: #1b1e25;
-  --color-vg-border: rgba(255,255,255,0.08);
-  --color-vg-border-strong: rgba(255,255,255,0.16);
-  --color-vg-text: #f5f5f7;
-  --color-vg-text-muted: rgba(245,245,247,0.65);
-  --color-vg-text-subtle: rgba(245,245,247,0.45);
-  --color-vg-accent: #0ea55f;        /* emerald — brand mark, signup, success */
+  /* ═══ VOYAGER CLIENT PORTAL TOKENS (LIGHT — Agoda/Booking inspired) ═══ */
+  --color-vg-bg: #ffffff;
+  --color-vg-surface: #ffffff;
+  --color-vg-surface-muted: #f5f7fb;
+  --color-vg-surface-raised: #ffffff;
+  --color-vg-border: #e4e7ec;
+  --color-vg-border-strong: #cbd2d9;
+  --color-vg-text: #0f172a;
+  --color-vg-text-muted: #475467;
+  --color-vg-text-subtle: #667085;
+  --color-vg-accent: #0ea55f;        /* emerald — success, Add-to-cart, "Free cancel" */
   --color-vg-accent-hover: #0bb96a;
-  --color-vg-cta: #1d4ed8;           /* blue — primary "Plan my trip" CTA */
+  --color-vg-cta: #1d4ed8;           /* blue — primary buttons, links */
   --color-vg-cta-hover: #2563eb;
-  --color-vg-warm: #f59e0b;          /* amber — price highlights */
+  --color-vg-warm: #f59e0b;          /* amber — search button, price */
+  --color-vg-warm-hover: #fbbf24;
+  --color-vg-review: #003b95;        /* navy review-score badge */
 
   /* Font family tokens — wire next/font CSS variables into Tailwind */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -179,9 +181,8 @@ body.dock-collapsed main {
 }
 
 /* ═══ STATIC FALLBACK BACKGROUNDS ═══ */
-/* When dynamic theme is off, body has no .anim-bg class — these provide a clean base */
 body:not(.anim-bg) {
-  background: linear-gradient(160deg, #f0f2f5 0%, #e8eaef 50%, #f5f3f0 100%);
+  background: #ffffff;
 }
 html.dark body:not(.anim-bg) {
   background: linear-gradient(160deg, #111118 0%, #16161e 50%, #111118 100%);
