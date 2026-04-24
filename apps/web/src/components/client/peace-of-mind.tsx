@@ -29,17 +29,17 @@ export function PeaceOfMind() {
 
   return (
     <section
-      className="relative px-6 md:px-10 py-20 md:py-28 bg-gradient-to-b from-white via-[#FAF6EF] to-white"
+      className="relative px-6 md:px-10 py-14 md:py-20 bg-gradient-to-b from-white via-[#FAF6EF] to-white"
       aria-labelledby="peace-heading"
     >
-      <div className="max-w-[1200px] mx-auto">
-        <div className="max-w-[760px] mb-10 md:mb-14">
-          <div className="text-[11px] tracking-[0.22em] uppercase font-semibold text-vg-accent mb-3">
+      <div className="max-w-[1100px] mx-auto">
+        <div className="max-w-[720px] mb-8 md:mb-10">
+          <div className="text-[11px] tracking-[0.22em] uppercase font-semibold text-vg-accent mb-2">
             {t.seamless.eyebrow}
           </div>
           <h2
             id="peace-heading"
-            className="font-display text-3xl md:text-5xl font-bold text-vg-text tracking-[-0.015em]"
+            className="font-display text-2xl md:text-4xl font-bold text-vg-text tracking-[-0.015em]"
           >
             {t.home.whyHeading}
           </h2>

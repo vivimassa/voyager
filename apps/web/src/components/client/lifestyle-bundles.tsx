@@ -25,21 +25,21 @@ export function LifestyleBundles() {
   return (
     <section
       id="bundles"
-      className="relative px-6 md:px-10 py-20 md:py-28 bg-white"
+      className="relative px-6 md:px-10 py-14 md:py-20 bg-white"
       aria-labelledby="bundles-heading"
     >
-      <div className="max-w-[1200px] mx-auto">
-        <div className="max-w-[760px] mb-10 md:mb-14">
-          <div className="text-[11px] tracking-[0.22em] uppercase font-semibold text-vg-accent mb-3">
+      <div className="max-w-[1100px] mx-auto">
+        <div className="max-w-[720px] mb-8 md:mb-10">
+          <div className="text-[11px] tracking-[0.22em] uppercase font-semibold text-vg-accent mb-2">
             {t.bundles.eyebrow}
           </div>
           <h2
             id="bundles-heading"
-            className="font-display text-3xl md:text-5xl font-bold text-vg-text tracking-[-0.015em]"
+            className="font-display text-2xl md:text-4xl font-bold text-vg-text tracking-[-0.015em]"
           >
             {t.bundles.heading}
           </h2>
-          <p className="mt-4 text-[15px] md:text-base text-vg-text-muted leading-relaxed max-w-[620px]">
+          <p className="mt-3 text-sm md:text-[15px] text-vg-text-muted leading-relaxed max-w-[580px]">
             {t.bundles.sub}
           </p>
         </div>
