@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voyager — Airport services across Vietnam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #0ea55f;
+      --cta: #1d4ed8;
+      --bg-dark: #08090c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: var(--bg-dark); color: #fff; font-family: 'Inter', system-ui, sans-serif; scroll-behavior: smooth; }
+    body { min-height: 100vh; }
+
+    /* ==============================
+       HERO
+       ============================== */
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 720px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 0.9s ease;
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+    .hero-bg.active { opacity: 1; animation: kenburns 16s ease-in-out forwards; }
+    @keyframes kenburns {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+
+    .overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(105deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.1) 65%, rgba(0,0,0,0) 80%),
+        linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 48px;
+      z-index: 20;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .logo-mark {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--accent);
+      display: grid; place-items: center;
+      color: #fff; font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px;
+    }
+    .logo-text { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+
+    .nav-links { display: flex; gap: 36px; font-size: 14px; font-weight: 500; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-actions { display: flex; align-items: center; gap: 14px; }
+    .lang-pill {
+      padding: 8px 14px; border-radius: 100px;
+      background: rgba(255,255,255,0.14); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff; cursor: pointer; font-size: 13px; font-weight: 500;
+      font-family: inherit; display: flex; align-items: center; gap: 6px;
+    }
+    .lang-pill .sep { opacity: 0.35; }
+    .lang-pill .active { opacity: 1; }
+    .lang-pill .inactive { opacity: 0.55; }
+    .login-btn {
+      padding: 10px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.14); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff; font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: inherit;
+    }
+    .signup-btn {
+      padding: 10px 22px; border-radius: 100px;
+      background: var(--accent); border: none;
+      color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .signup-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(14,165,95,0.4); }
+
+    /* ===== HERO CONTENT (LEFT) ===== */
+    .hero-content {
+      position: absolute;
+      bottom: 0; left: 0;
+      padding: 0 48px 120px 48px;
+      max-width: 780px;
+      z-index: 5;
+    }
+    .airport-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px 6px 8px;
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 24px;
+    }
+    .airport-tag .code {
+      background: var(--accent); color: #fff;
+      padding: 3px 8px; border-radius: 100px;
+      font-family: 'Fraunces', serif; font-size: 11px; letter-spacing: 0.1em;
+    }
+    .counter-top {
+      font-family: 'Fraunces', serif;
+      font-size: 13px; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 22px;
+      border-top: 1px solid rgba(255,255,255,0.35);
+      padding-top: 14px;
+      width: 70px;
+    }
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(60px, 10.5vw, 150px);
+      font-weight: 700;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      text-shadow: 0 4px 28px rgba(0,0,0,0.4);
+    }
+    .hero-description {
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.88);
+      max-width: 500px;
+      margin-bottom: 28px;
+    }
+
+    /* Service chips row */
+    .service-chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 32px;
+      max-width: 620px;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 16px 10px 12px;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .chip:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
+    .chip-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: grid; place-items: center;
+      font-size: 14px;
+    }
+    .chip-body { display: flex; flex-direction: column; gap: 1px; }
+    .chip-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.78); letter-spacing: 0.02em; }
+    .chip-price { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: #fff; }
+
+    .hero-cta-row { display: flex; gap: 14px; align-items: center; }
+    .plan-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 18px 34px; border-radius: 100px;
+      background: var(--cta); border: none;
+      color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 12px 40px rgba(29,78,216,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .plan-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(29,78,216,0.6); }
+    .plan-btn .arrow { transition: transform 0.2s; display: inline-block; }
+    .plan-btn:hover .arrow { transform: translateX(4px); }
+
+    .ghost-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 24px; border-radius: 100px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.9);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .ghost-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); }
+
+    /* ===== CARDS (RIGHT) ===== */
+    .cards {
+      position: absolute;
+      right: 48px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; gap: 16px;
+      z-index: 5;
+    }
+    .card {
+      width: 190px; height: 260px;
+      border-radius: 18px;
+      background-size: cover; background-position: center;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.4s ease, box-shadow 0.4s;
+      flex-shrink: 0;
+      background-color: #222;
+    }
+    .card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .card-top {
+      position: absolute; top: 14px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 2;
+    }
+    .card-name { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: rgba(255,255,255,0.95); }
+    .card-save {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,0.22); backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: grid; place-items: center;
+      color: #fff; font-size: 12px;
+    }
+    .card-bottom { position: absolute; bottom: 14px; left: 14px; right: 14px; z-index: 2; }
+    .card-stars { font-size: 9px; letter-spacing: 0.3em; margin-bottom: 4px; color: rgba(255,255,255,0.9); }
+    .card-price { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: #fff; }
+    .card-price .from { font-size: 10px; font-weight: 400; font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.7); }
+
+    /* ===== CONTROLS / COUNTER ===== */
+    .controls {
+      position: absolute;
+      bottom: 48px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 12px;
+      z-index: 5;
+    }
+    .arrow-btn {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(255,255,255,0.14); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.22);
+      display: grid; place-items: center;
+      color: #fff; cursor: pointer; font-size: 18px;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .arrow-btn:hover { background: rgba(255,255,255,0.28); }
+
+    .counter {
+      position: absolute;
+      bottom: 50px; right: 48px;
+      font-family: 'Fraunces', serif;
+      color: rgba(255,255,255,0.9);
+      z-index: 5;
+      display: flex; align-items: baseline; gap: 2px;
+    }
+    .counter .current { font-size: 30px; font-weight: 700; line-height: 1; }
+    .counter .divider { font-size: 15px; opacity: 0.5; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px; left: 48px;
+      font-size: 11px; letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      z-index: 5;
+      display: flex; align-items: center; gap: 10px;
+      animation: bob 2.4s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* ==============================
+       SERVICES BAND (BELOW FOLD)
+       ============================== */
+    .services-band {
+      background: var(--bg-dark);
+      padding: 100px 48px 120px;
+      position: relative;
+    }
+    .band-intro { max-width: 1400px; margin: 0 auto 60px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+    .band-eyebrow { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
+    .band-title { font-family: 'Fraunces', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; max-width: 720px; }
+    .band-sub { font-size: 15px; color: rgba(255,255,255,0.7); max-width: 380px; line-height: 1.6; }
+
+    .services-grid {
+      max-width: 1400px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .service-tile {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      background-size: cover; background-position: center;
+      transition: transform 0.4s;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .service-tile:hover { transform: translateY(-6px); }
+    .service-tile::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%);
+    }
+    .service-tile .tile-top {
+      position: absolute; top: 20px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 2;
+    }
+    .tile-icon {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: grid; place-items: center;
+      font-size: 20px;
+    }
+    .tile-airports { font-size: 10px; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); font-weight: 500; }
+    .service-tile .tile-bottom {
+      position: absolute; bottom: 24px; left: 24px; right: 24px;
+      z-index: 2;
+    }
+    .tile-label { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin-bottom: 6px; }
+    .tile-sub { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 12px; line-height: 1.5; }
+    .tile-price { display: flex; align-items: center; justify-content: space-between; }
+    .tile-price .amt { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
+    .tile-price .amt .from { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 400; }
+    .tile-cta {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: grid; place-items: center;
+      font-size: 14px;
+    }
+
+    /* ==============================
+       TRUST BAND
+       ============================== */
+    .trust-band {
+      padding: 80px 48px;
+      background: #050607;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .trust-grid {
+      max-width: 1400px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 60px;
+    }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 56px; font-weight: 600; line-height: 1; color: #fff; letter-spacing: -0.02em; }
+    .stat-num .unit { font-size: 24px; color: var(--accent); margin-left: 4px; }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 12px; line-height: 1.5; }
+
+    /* ==============================
+       RESPONSIVE
+       ============================== */
+    @media (max-width: 1360px) {
+      .cards .card:nth-child(n+3) { display: none; }
+    }
+    @media (max-width: 1100px) {
+      .hero-content { padding-right: 260px; }
+      .hero-title { font-size: 84px; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: 60px; }
+      .hero-content { padding: 0 24px 140px 24px; }
+      .cards { display: none; }
+      .nav { padding: 18px 24px; }
+      .services-band, .trust-band { padding-left: 24px; padding-right: 24px; }
+      .band-intro { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="hero-bg" data-idx="0"></div>
+    <div class="hero-bg" data-idx="1"></div>
+    <div class="hero-bg" data-idx="2"></div>
+    <div class="hero-bg" data-idx="3"></div>
+    <div class="hero-bg" data-idx="4"></div>
+    <div class="overlay"></div>
+
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-mark">V</div>
+        <div class="logo-text">Voyager</div>
+      </div>
+      <div class="nav-links">
+        <a href="#services">Airport services</a>
+        <a href="#">Destinations</a>
+        <a href="#">Deals</a>
+        <a href="#">Help</a>
+      </div>
+      <div class="nav-actions">
+        <button class="lang-pill"><span class="active">EN</span><span class="sep">/</span><span class="inactive">VI</span></button>
+        <button class="login-btn">Log in</button>
+        <button class="signup-btn">Sign up</button>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="airport-tag"><span class="code" id="airport-code">HAN</span><span id="airport-name">Noi Bai, Hanoi</span></div>
+      <h1 class="hero-title" id="hero-title">HA LONG</h1>
+      <p class="hero-description" id="hero-desc"></p>
+
+      <div class="service-chips" id="chips"></div>
+
+      <div class="hero-cta-row">
+        <button class="plan-btn">Plan my trip <span class="arrow">&rarr;</span></button>
+        <button class="ghost-btn">Save for later</button>
+      </div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+
+    <div class="controls">
+      <button class="arrow-btn" id="prev-btn" aria-label="Previous">&lsaquo;</button>
+      <button class="arrow-btn" id="next-btn" aria-label="Next">&rsaquo;</button>
+    </div>
+
+    <div class="counter"><span class="current" id="counter-num">01</span><span class="divider">&nbsp;/ 05</span></div>
+
+    <div class="scroll-hint">Scroll for all airport services &darr;</div>
+  </div>
+
+  <!-- SERVICES BAND -->
+  <section class="services-band" id="services">
+    <div class="band-intro">
+      <div>
+        <div class="band-eyebrow">What we do</div>
+        <h2 class="band-title">Airport services for the five gateways to Vietnam.</h2>
+      </div>
+      <p class="band-sub">We handle the arrival, the ride, the stay, and the day-trip. You just land and go.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-tile" style="background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80');">
+        <div class="tile-top">
+          <div class="tile-icon">&#128663;</div>
+          <div class="tile-airports">5 AIRPORTS</div>
+        </div>
+        <div class="tile-bottom">
+          <div class="tile-label">Airport pickup</div>
+          <div class="tile-sub">Private car, SUV or van. Meet &amp; greet. Flight tracked.</div>
+          <div class="tile-price">
+            <div class="amt"><span class="from">from </span>&#8363;450,000</div>
+            <div class="tile-cta">&rarr;</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-tile" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80');">
+        <div class="tile-top">
+          <div class="tile-icon">&#9889;</div>
+          <div class="tile-airports">HAN &middot; SGN &middot; DAD</div>
+        </div>
+        <div class="tile-bottom">
+          <div class="tile-label">Fast-track &amp; VIP</div>
+          <div class="tile-sub">Skip immigration lines. CIP lounge access. Porter service.</div>
+          <div class="tile-price">
+            <div class="amt"><span class="from">from </span>&#8363;380,000</div>
+            <div class="tile-cta">&rarr;</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-tile" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80');">
+        <div class="tile-top">
+          <div class="tile-icon">&#127976;</div>
+          <div class="tile-airports">ALL DESTINATIONS</div>
+        </div>
+        <div class="tile-bottom">
+          <div class="tile-label">Hotels</div>
+          <div class="tile-sub">Curated stays near every airport and every destination.</div>
+          <div class="tile-price">
+            <div class="amt"><span class="from">from </span>&#8363;780,000</div>
+            <div class="tile-cta">&rarr;</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-tile" style="background-image: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80');">
+        <div class="tile-top">
+          <div class="tile-icon">&#127956;</div>
+          <div class="tile-airports">340+ TOURS</div>
+        </div>
+        <div class="tile-bottom">
+          <div class="tile-label">Tours &amp; experiences</div>
+          <div class="tile-sub">Half-day to multi-day, led by locals who know the backstreets.</div>
+          <div class="tile-price">
+            <div class="amt"><span class="from">from </span>&#8363;450,000</div>
+            <div class="tile-cta">&rarr;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAND -->
+  <section class="trust-band">
+    <div class="trust-grid">
+      <div>
+        <div class="stat-num">12,400<span class="unit">+</span></div>
+        <div class="stat-label">verified reviews from travelers like you</div>
+      </div>
+      <div>
+        <div class="stat-num">340<span class="unit">+</span></div>
+        <div class="stat-label">airport services and tours bookable in minutes</div>
+      </div>
+      <div>
+        <div class="stat-num">98<span class="unit">%</span></div>
+        <div class="stat-label">confirmed instantly, no waiting for email replies</div>
+      </div>
+      <div>
+        <div class="stat-num">5<span class="unit">&times;</span></div>
+        <div class="stat-label">airports covered: HAN, SGN, DAD, CXR, PQC</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const DESTINATIONS = [
+      {
+        name: 'HA LONG',
+        airport: 'HAN', airportName: 'Noi Bai, Hanoi',
+        description: "Ha Long Bay's 1,600 limestone islands rise from emerald waters like a scene from another world. Cruise through floating villages, kayak into hidden caves, wake up to mist-draped karsts.",
+        price: '1,850,000', stars: 5,
+        photo: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2400&q=80',
+        services: {
+          pickup:    { icon: '\u{1F697}', label: 'HAN \u2192 Ha Long pickup', price: '950,000' },
+          fastTrack: { icon: '\u26A1',    label: 'Fast-track at HAN',        price: '380,000' },
+          hotels:    { icon: '\u{1F3E8}', label: 'Ha Long hotels',           price: '1,200,000' },
+          tours:     { icon: '\u{1F5FA}', label: 'Day tours',                price: '1,850,000' },
+        },
+      },
+      {
+        name: 'SAPA',
+        airport: 'HAN', airportName: 'Noi Bai, Hanoi',
+        description: "Emerald rice terraces spiral down the slopes of Fansipan, threaded with villages where the Hmong and Dao have lived for centuries. Trek through ancestor paths, stay with a homestay family.",
+        price: '1,420,000', stars: 4,
+        photo: 'https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=2400&q=80',
+        services: {
+          pickup:    { icon: '\u{1F697}', label: 'HAN \u2192 Sapa transfer',  price: '1,400,000' },
+          fastTrack: { icon: '\u26A1',    label: 'Fast-track at HAN',         price: '380,000' },
+          hotels:    { icon: '\u{1F3E8}', label: 'Sapa homestays',            price: '620,000' },
+          tours:     { icon: '\u{1F5FA}', label: 'Trekking tours',            price: '1,420,000' },
+        },
+      },
+      {
+        name: 'HOI AN',
+        airport: 'DAD', airportName: 'Da Nang Intl.',
+        description: "A UNESCO old town where yellow-washed merchant houses meet lantern-lit streets and the scent of lemongrass drifts from every doorway. Sail at dusk, tailor a silk ao dai by morning.",
+        price: '1,100,000', stars: 5,
+        photo: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=2400&q=80',
+        services: {
+          pickup:    { icon: '\u{1F697}', label: 'DAD \u2192 Hoi An pickup',  price: '520,000' },
+          fastTrack: { icon: '\u26A1',    label: 'Fast-track at DAD',         price: '340,000' },
+          hotels:    { icon: '\u{1F3E8}', label: 'Old Town hotels',           price: '980,000' },
+          tours:     { icon: '\u{1F5FA}', label: 'Lantern &amp; food tours',  price: '1,100,000' },
+        },
+      },
+      {
+        name: 'MEKONG',
+        airport: 'SGN', airportName: 'Tan Son Nhat, HCMC',
+        description: "Glide past floating markets and fruit orchards where the nine dragons of the Mekong reach the sea. Wake before dawn for the boats at Cai Rang, share tea with a coconut farmer.",
+        price: '980,000', stars: 4,
+        photo: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=2400&q=80',
+        services: {
+          pickup:    { icon: '\u{1F697}', label: 'SGN \u2192 Ben Tre pickup', price: '820,000' },
+          fastTrack: { icon: '\u26A1',    label: 'Fast-track at SGN',         price: '420,000' },
+          hotels:    { icon: '\u{1F3E8}', label: 'Riverside stays',           price: '780,000' },
+          tours:     { icon: '\u{1F5FA}', label: 'Delta day cruises',         price: '980,000' },
+        },
+      },
+      {
+        name: 'PHU QUOC',
+        airport: 'PQC', airportName: 'Phu Quoc Intl.',
+        description: "Vietnam's southernmost island, ringed by white-sand beaches and pepper plantations. Snorkel over technicolor coral at An Thoi, watch the sunset from a longtail boat.",
+        price: '2,200,000', stars: 5,
+        photo: 'https://images.unsplash.com/photo-1504457047772-27faf1c00561?auto=format&fit=crop&w=2400&q=80',
+        services: {
+          pickup:    { icon: '\u{1F697}', label: 'PQC \u2192 beach resorts',  price: '450,000' },
+          fastTrack: { icon: '\u26A1',    label: 'Fast-track at PQC',         price: '280,000' },
+          hotels:    { icon: '\u{1F3E8}', label: 'Beachfront resorts',        price: '1,800,000' },
+          tours:     { icon: '\u{1F5FA}', label: 'Island-hop boat tours',     price: '1,400,000' },
+        },
+      },
+    ];
+
+    let activeIdx = 0;
+    const bgs = document.querySelectorAll('.hero-bg');
+    bgs.forEach((bg, i) => { bg.style.backgroundImage = `url('${DESTINATIONS[i].photo}')`; });
+
+    function renderCards() {
+      const cardsEl = document.getElementById('cards');
+      cardsEl.innerHTML = '';
+      for (let i = 1; i <= 3; i++) {
+        const idx = (activeIdx + i) % DESTINATIONS.length;
+        const d = DESTINATIONS[idx];
+        const stars = '\u2605'.repeat(d.stars) + '\u2606'.repeat(5 - d.stars);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.backgroundImage = `url('${d.photo}')`;
+        card.innerHTML =
+          '<div class="card-top">' +
+            '<div class="card-name">' + d.name + '</div>' +
+            '<div class="card-save" title="Save">\u2661</div>' +
+          '</div>' +
+          '<div class="card-bottom">' +
+            '<div class="card-stars">' + stars + '</div>' +
+            '<div class="card-price"><span class="from">from </span>\u20ab' + d.price + '</div>' +
+          '</div>';
+        card.addEventListener('click', () => setActive(idx));
+        cardsEl.appendChild(card);
+      }
+    }
+
+    function renderChips() {
+      const chipsEl = document.getElementById('chips');
+      const d = DESTINATIONS[activeIdx];
+      const order = ['pickup', 'fastTrack', 'hotels', 'tours'];
+      chipsEl.innerHTML = order.map(key => {
+        const s = d.services[key];
+        return (
+          '<div class="chip">' +
+            '<div class="chip-icon">' + s.icon + '</div>' +
+            '<div class="chip-body">' +
+              '<div class="chip-label">' + s.label + '</div>' +
+              '<div class="chip-price">from \u20ab' + s.price + '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function setActive(idx) {
+      activeIdx = ((idx % DESTINATIONS.length) + DESTINATIONS.length) % DESTINATIONS.length;
+      const d = DESTINATIONS[activeIdx];
+      bgs.forEach(bg => bg.classList.remove('active'));
+      bgs[activeIdx].classList.add('active');
+      document.getElementById('hero-title').textContent = d.name;
+      document.getElementById('hero-desc').textContent = d.description;
+      document.getElementById('airport-code').textContent = d.airport;
+      document.getElementById('airport-name').textContent = d.airportName;
+      const num = String(activeIdx + 1).padStart(2, '0');
+      document.getElementById('counter-num').textContent = num;
+      renderCards();
+      renderChips();
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', () => setActive(activeIdx - 1));
+    document.getElementById('next-btn').addEventListener('click', () => setActive(activeIdx + 1));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') setActive(activeIdx - 1);
+      if (e.key === 'ArrowRight') setActive(activeIdx + 1);
+    });
+
+    setActive(0);
+  </script>
+</body>
+</html>

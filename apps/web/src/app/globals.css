@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  /* ═══ VOYAGER CLIENT PORTAL TOKENS ═══ */
+  /* Editorial destination-first palette — distinct from Horizon glass/VisionOS */
+  --color-vg-bg: #08090c;
+  --color-vg-surface: #13151a;
+  --color-vg-surface-raised: #1b1e25;
+  --color-vg-border: rgba(255,255,255,0.08);
+  --color-vg-border-strong: rgba(255,255,255,0.16);
+  --color-vg-text: #f5f5f7;
+  --color-vg-text-muted: rgba(245,245,247,0.65);
+  --color-vg-text-subtle: rgba(245,245,247,0.45);
+  --color-vg-accent: #0ea55f;        /* emerald — brand mark, signup, success */
+  --color-vg-accent-hover: #0bb96a;
+  --color-vg-cta: #1d4ed8;           /* blue — primary "Plan my trip" CTA */
+  --color-vg-cta-hover: #2563eb;
+  --color-vg-warm: #f59e0b;          /* amber — price highlights */
+
+  /* Font family tokens — wire next/font CSS variables into Tailwind */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --color-hz-bg: transparent;
+  --color-hz-card: rgba(245,245,245,0.75);
+  --color-hz-border: rgba(232,232,232,0.60);
+  --color-hz-text: #111111;
+  --color-hz-text-secondary: #6b7280;
+  --color-hz-accent: #1e40af;
+  --color-hz-accent-light: #dbeafe;
+
+  --color-hz-on-time: #16a34a;
+  --color-hz-on-time-bg: #dcfce7;
+  --color-hz-delayed: #d97706;
+  --color-hz-delayed-bg: #fef3c7;
+  --color-hz-cancelled: #dc2626;
+  --color-hz-cancelled-bg: #fee2e2;
+  --color-hz-departed: #2563eb;
+  --color-hz-departed-bg: #dbeafe;
+  --color-hz-diverted: #7c3aed;
+  --color-hz-diverted-bg: #f3e8ff;
+  --color-hz-scheduled: #6b7280;
+  --color-hz-scheduled-bg: #f3f4f6;
+
+  /* Dynamic module theming — set via JS in theme-provider.tsx */
+  --color-module-accent: var(--module-accent, #1e40af);
+  --color-module-bg: var(--module-bg, #dbeafe);
+  --color-module-bg-subtle: var(--module-bg-subtle, #eff6ff);
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-hz-bg: transparent;
+  --color-hz-card: rgba(30,30,34,0.80);
+  --color-hz-border: rgba(255, 255, 255, 0.10);
+  --color-hz-text: #f5f5f5;
+  --color-hz-text-secondary: #a1a1aa;
+  --color-hz-accent-light: rgba(30, 64, 175, 0.20);
+
+  --color-hz-on-time-bg: rgba(22, 163, 74, 0.15);
+  --color-hz-delayed-bg: rgba(217, 119, 6, 0.15);
+  --color-hz-cancelled-bg: rgba(220, 38, 38, 0.15);
+  --color-hz-departed-bg: rgba(37, 99, 235, 0.15);
+  --color-hz-diverted-bg: rgba(124, 58, 237, 0.15);
+  --color-hz-scheduled-bg: rgba(107, 114, 128, 0.12);
+}
+
+/*
+ * Dark mode universal desaturation — reduces color vibrancy by 20%.
+ * Applied to the main content area so ALL colored elements (buttons, cards,
+ * toggles, icons, accent dots, badges) are desaturated uniformly.
+ * Images opt out to keep photos/logos looking correct.
+ */
+/* Dark mode saturation is now handled by DisplayProvider via JS filter */
+html.dark main img:not([data-watermark]) {
+  filter: saturate(1.25); /* compensate so images stay vivid */
+}
+
+/* ═══ VISIONOS-STYLE SCROLLBARS ═══ */
+/* Thin, rounded, translucent — appears on hover, fades when idle */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+.dark * {
+  scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
+  border-radius: 100px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.25);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ═══ SMOOTH RANGE SLIDERS ═══ */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.1);
+  transition: background 0.15s;
+}
+.dark input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(255,255,255,0.1);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--module-accent, #1e40af);
+  border: 3px solid white;
+  margin-top: -6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+}
+/* Firefox */
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.1);
+}
+.dark input[type="range"]::-moz-range-track {
+  background: rgba(255,255,255,0.1);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--module-accent, #1e40af);
+  border: 3px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+/* ═══ DOCK COLLAPSE — reclaim bottom space ═══ */
+body.dock-collapsed main {
+  padding-bottom: 0 !important;
+}
+
+/* ═══ STATIC FALLBACK BACKGROUNDS ═══ */
+/* When dynamic theme is off, body has no .anim-bg class — these provide a clean base */
+body:not(.anim-bg) {
+  background: linear-gradient(160deg, #f0f2f5 0%, #e8eaef 50%, #f5f3f0 100%);
+}
+html.dark body:not(.anim-bg) {
+  background: linear-gradient(160deg, #111118 0%, #16161e 50%, #111118 100%);
+}
+
+/* ═══ ANIMATED BACKGROUND — oklch hue rotation ═══ */
+
+@property --anim-hue1 {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --anim-hue2 {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.anim-bg {
+  --anim-l1: 0.970;
+  --anim-c1: 0.025;
+  --anim-l2: 0.960;
+  --anim-c2: 0.035;
+  background:
+    linear-gradient(
+      135deg,
+      oklch(var(--anim-l1) var(--anim-c1) var(--anim-hue1)),
+      oklch(var(--anim-l2) var(--anim-c2) var(--anim-hue2))
+    ),
+    linear-gradient(
+      315deg,
+      oklch(var(--anim-l2) var(--anim-c2) var(--anim-hue2) / 50%),
+      oklch(var(--anim-l1) var(--anim-c1) var(--anim-hue1) / 50%)
+    );
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.dark .anim-bg {
+  --anim-l1: 0.180;
+  --anim-c1: 0.045;
+  --anim-l2: 0.140;
+  --anim-c2: 0.055;
+}
+
+.anim-bg-aurora { animation-name: anim-aurora; animation-duration: 5s; }
+@keyframes anim-aurora {
+  0%   { --anim-hue1: 200deg; --anim-hue2: 260deg; }
+  50%  { --anim-hue1: 260deg; --anim-hue2: 320deg; }
+  100% { --anim-hue1: 200deg; --anim-hue2: 260deg; }
+}
+
+.anim-bg-ember { animation-name: anim-ember; animation-duration: 6s; }
+@keyframes anim-ember {
+  0%   { --anim-hue1: 10deg;  --anim-hue2: 40deg; }
+  50%  { --anim-hue1: 40deg;  --anim-hue2: 65deg; }
+  100% { --anim-hue1: 10deg;  --anim-hue2: 40deg; }
+}
+
+.anim-bg-lagoon { animation-name: anim-lagoon; animation-duration: 7s; }
+@keyframes anim-lagoon {
+  0%   { --anim-hue1: 170deg; --anim-hue2: 210deg; }
+  50%  { --anim-hue1: 210deg; --anim-hue2: 245deg; }
+  100% { --anim-hue1: 170deg; --anim-hue2: 210deg; }
+}
+
+.anim-bg-prism { animation-name: anim-prism; animation-duration: 6s; }
+@keyframes anim-prism {
+  0%   { --anim-hue1: 0deg;   --anim-hue2: 180deg; }
+  100% { --anim-hue1: 360deg; --anim-hue2: 540deg; }
+}
+
+html {
+  height: 100%;
+  --module-accent: #1e40af;
+  --module-bg: #dbeafe;
+  --module-bg-subtle: #eff6ff;
+}
+
+body {
+  min-height: 100%;
+  background: var(--color-hz-bg);
+  color: var(--color-hz-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes skyhub-tooltip-in {
+  from { opacity: 0; transform: translate(-50%, -100%) translateY(4px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -100%) translateY(0) scale(1); }
+}
+
+/* Gantt scrollbar styling */
+.gantt-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.gantt-scroll::-webkit-scrollbar-track { background: transparent; }
+.gantt-scroll::-webkit-scrollbar-thumb { background: rgba(100,100,120,0.3); border-radius: 4px; }
+.gantt-scroll::-webkit-scrollbar-thumb:hover { background: rgba(100,100,120,0.5); }
+.gantt-scroll::-webkit-scrollbar-corner { background: transparent; }
+.dark .gantt-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+.dark .gantt-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* ═══ VOYAGER CLIENT ANIMATIONS ═══ */
+@keyframes vg-kenburns {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+.animate-kenburns {
+  animation: vg-kenburns 16s ease-in-out forwards;
+}
+
+@keyframes vg-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+.animate-bob {
+  animation: vg-bob 2.4s ease-in-out infinite;
+}

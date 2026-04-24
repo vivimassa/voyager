@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Run lint across all workspaces
+        run: npm run lint
+
+  format:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Typecheck server
+        run: cd server && npx tsc --noEmit
+      - name: Typecheck mobile
+        run: cd apps/mobile && npx tsc --noEmit
+      - name: Typecheck packages
+        run: npx turbo typecheck --filter=@skyhub/api --filter=@skyhub/ui --filter=@skyhub/env --filter=@skyhub/types --filter=@skyhub/constants
+
+  # NOTE: Web app + @skyhub/logic typecheck are intentionally not in CI yet.
+  # - Web has pre-existing type errors in slot-detail-dialog, slot-toolbar,
+  #   slot-manager-shell, and global-runway-progress.
+  # - @skyhub/logic has pre-existing errors in tail-assignment-sa.ts (Map
+  #   generic inference) and missing .js extensions in weather/index.ts and
+  #   tail-assignment.ts.
+  # Both are unrelated to the auth/env sprints. Re-enable after a cleanup pass.

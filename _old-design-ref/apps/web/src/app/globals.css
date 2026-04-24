@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+
+  --color-vg-green: #0C9B6A;
+  --color-vg-green-dark: #08805A;
+  --color-vg-green-light: #ECFDF5;
+  --color-vg-green-glow: #34D399;
+  --color-vg-navy: #1E3A5F;
+  --color-vg-navy-dark: #0F1A2A;
+  --color-vg-gold: #F59E0B;
+  --color-vg-gold-light: #FEF3C7;
+  --color-vg-coral: #E8590C;
+  --color-vg-bg: #FFFFFF;
+  --color-vg-bg-off: #F8FAFC;
+  --color-vg-text: #0F172A;
+  --color-vg-text-2: #475569;
+  --color-vg-text-3: #94A3B8;
+  --color-vg-border: #E2E8F0;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); color: var(--color-vg-text); background: #fff; -webkit-font-smoothing: antialiased; }
+.font-display { font-family: var(--font-display); }

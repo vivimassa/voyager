@@ -1,0 +1,35 @@
+# Render.com Infrastructure-as-Code for Voyager server.
+# When you connect the repo on Render, it will auto-detect this file and
+# offer to create the service. Free tier cold-starts after ~15 min of idle.
+#
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: voyager-server
+    runtime: node
+    plan: free
+    # Build from the monorepo root so workspace packages (@skyhub/env, etc.)
+    # resolve. `--workspaces` installs deps for every package.
+    rootDir: .
+    buildCommand: npm install --workspaces --include-workspace-root --include=dev
+    startCommand: npm --workspace server run start
+    # Render will hit this URL periodically to keep the service warm (on paid
+    # plans) and to verify the service started. On free, cold starts happen.
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # set manually in the Render dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Render generates a random value on first create
+      - key: CORS_ORIGIN
+        sync: false  # paste your Vercel URL (e.g. https://voyager.vercel.app) after first web deploy
+      - key: CLIENT_URL
+        sync: false  # same as CORS_ORIGIN — the Vercel URL
+      - key: SMS_PROVIDER
+        value: console
+      - key: BRAND_NAME
+        value: Voyager

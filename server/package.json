@@ -1,0 +1,34 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "echo 'no build step needed when using tsx in production'",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/ --ext .ts --max-warnings 9999",
+    "start": "tsx src/index.ts",
+    "seed:user": "tsx src/seed-user.ts",
+    "seed:voyager": "tsx src/seed-voyager.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.0",
+    "@fastify/jwt": "^9.0.0",
+    "@fastify/multipart": "^9.4.0",
+    "@fastify/static": "^9.0.0",
+    "@skyhub/env": "*",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.0",
+    "mongoose": "^8.9.0",
+    "tsx": "^4.19.0",
+    "twilio": "^5.4.0",
+    "typescript": "^5.7.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@skyhub/eslint-config": "*",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.10.0"
+  }
+}
