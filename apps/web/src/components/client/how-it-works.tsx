@@ -10,7 +10,7 @@ export function HowItWorks() {
     { n: '3', title: t.home.howStep3Title, body: t.home.howStep3Body },
   ]
   return (
-    <section className="bg-vg-bg px-6 md:px-10 py-16 md:py-20">
+    <section id="how-it-works" className="bg-vg-bg px-6 md:px-10 py-16 md:py-20">
       <div className="max-w-[1200px] mx-auto">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-vg-text tracking-tight text-center mb-12">
           {t.home.howHeading}

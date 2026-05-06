@@ -1,12 +1,11 @@
 import mongoose, { Schema } from 'mongoose'
-import type { ProductServiceType } from './Product.js'
+import type { ProductServiceType, ProductSegment } from './Product.js'
 
 /**
- * Booking — a confirmed order by a Client for one or more Products.
+ * Booking — a confirmed order by a Client for one or more Fast-Track packages.
  * State machine: pending → confirmed → fulfilled → closed
- *                                   ↘ cancelled (from pending/confirmed only)
- * Prices always stored in VND; `currency` is the display currency
- * (for surface-level rendering in receipts / emails).
+ *                                    ↘ cancelled (from pending/confirmed only)
+ * USD is canonical for pricing display; VND is cached.
  */
 
 export type BookingStatus =
@@ -16,25 +15,47 @@ export type BookingStatus =
   | 'cancelled'
   | 'closed'
 
-export type PaymentStatus = 'unpaid' | 'paid' | 'refunded' | 'partial_refund'
+export type PaymentStatus = 'unpaid' | 'paid' | 'refunded' | 'partial_refund' | 'pending_transfer'
 
-export type PaymentMethod = 'card' | 'wallet' | 'bank_transfer' | 'cash'
+export type PaymentMethod = 'card' | 'wallet' | 'bank_transfer' | 'cash' | 'vnpay'
+
+export type Tier = 'FIT' | 'GIT'
+
+export type Direction = 'arrival' | 'departure'
+
+export type IdType = 'passport' | 'cccd'
+
+export interface Passenger {
+  firstName: string
+  lastName: string
+  dob: string             // ISO date YYYY-MM-DD
+  nationality: string     // ISO 3166-1 alpha-2 (e.g. 'VN')
+  idType: IdType
+  idNumber: string
+}
 
 export interface BookingItem {
-  productId: string           // e.g. 'ha-long:pickup'
-  destinationSlug: string
-  airportCode: 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'PQC'
+  productId: string                 // 'HAN-international-departure'
+  destinationSlug: string           // legacy, default ''
+  airportCode: 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'PQC' | 'HUI' | 'THD' | 'VII'
+  segment: ProductSegment
+  direction: Direction
+  tier: Tier
   serviceType: ProductServiceType
-  title: string               // denormalized at booking time (price-lock at checkout)
+  title: string
   icon: string
+  unitPriceUsd: number
   unitPriceVnd: number
   qty: number
-  lineTotalVnd: number        // unitPriceVnd * qty (denormalized)
-  travelDate: string          // ISO date (YYYY-MM-DD), may be empty for flexible
-  travelTime: string          // HH:mm 24-hour, may be empty (hotels/tours often don't need a time)
-  adults: number              // number of adult travellers (default 1)
-  children: number            // number of child travellers (default 0)
-  flightNumber: string        // only meaningful for pickup / fastTrack, empty otherwise
+  lineTotalUsd: number
+  lineTotalVnd: number
+  travelDate: string                // ISO YYYY-MM-DD
+  travelTime: string                // HH:mm
+  flightNumber: string
+  passengers: Passenger[]           // length === qty enforced at route layer
+  // legacy
+  adults: number
+  children: number
   meta: Record<string, string>
 }
 
@@ -44,20 +65,28 @@ export interface BookingPayment {
   transactionId: string
   paidAt: string
   refundedAt: string
+  vnpayTxnRef: string               // local correlation id we send to VNPay
+  vnpayResponseCode: string
 }
 
 export interface BookingDoc {
   _id: string
   operatorId: string
-  bookingNumber: string       // human-readable, e.g. 'VG-2026-000001'
-  clientId: string            // '' for anonymous (phone-only) bookings
-  customerName: string        // collected at checkout for anonymous bookings
-  customerPhone: string       // collected at checkout — agent calls this number
+  bookingNumber: string
+  ticketId: string                  // 'FT-XXXXXXXX' issued post-payment, '' before
+  clientId: string
+  customerName: string
+  customerPhone: string
+  phoneCountryCode: string
+  contactEmail: string
   items: BookingItem[]
   currency: 'VND' | 'USD'
+  subtotalUsd: number
   subtotalVnd: number
   discountVnd: number
+  totalUsd: number
   totalVnd: number
+  fxRateUsdVnd: number              // captured at booking time for receipt parity
   status: BookingStatus
   payment: BookingPayment
   notes: string
@@ -65,32 +94,44 @@ export interface BookingDoc {
   updatedAt: string
 }
 
+const PassengerSchema = new Schema<Passenger>(
+  {
+    firstName: { type: String, default: '' },
+    lastName: { type: String, default: '' },
+    dob: { type: String, default: '' },
+    nationality: { type: String, default: '' },
+    idType: { type: String, enum: ['passport', 'cccd'], default: 'passport' },
+    idNumber: { type: String, default: '' },
+  },
+  { _id: false },
+)
+
 const BookingItemSchema = new Schema<BookingItem>(
   {
     productId: { type: String, required: true },
-    destinationSlug: { type: String, required: true },
+    destinationSlug: { type: String, default: '' },
     airportCode: {
       type: String,
       required: true,
-      enum: ['HAN', 'SGN', 'DAD', 'CXR', 'PQC'],
+      enum: ['HAN', 'SGN', 'DAD', 'CXR', 'PQC', 'HUI', 'THD', 'VII'],
     },
-    serviceType: {
-      type: String,
-      required: true,
-      enum: ['pickup', 'fastTrack', 'hotel', 'tour'],
-    },
+    segment: { type: String, required: true, enum: ['domestic', 'international'] },
+    direction: { type: String, required: true, enum: ['arrival', 'departure'] },
+    tier: { type: String, required: true, enum: ['FIT', 'GIT'], default: 'FIT' },
+    serviceType: { type: String, required: true, enum: ['fastTrack'], default: 'fastTrack' },
     title: { type: String, required: true },
-    // NOTE: `required: true` on String fields with `default: ''` fails Mongoose
-    // validation (empty string is treated as missing). Defaults alone are fine.
     icon: { type: String, default: '' },
+    unitPriceUsd: { type: Number, required: true, min: 0, default: 0 },
     unitPriceVnd: { type: Number, required: true, min: 0 },
     qty: { type: Number, required: true, min: 1 },
+    lineTotalUsd: { type: Number, required: true, min: 0, default: 0 },
     lineTotalVnd: { type: Number, required: true, min: 0 },
     travelDate: { type: String, default: '' },
     travelTime: { type: String, default: '' },
+    flightNumber: { type: String, default: '' },
+    passengers: { type: [PassengerSchema], default: [] },
     adults: { type: Number, min: 0, default: 1 },
     children: { type: Number, min: 0, default: 0 },
-    flightNumber: { type: String, default: '' },
     meta: { type: Schema.Types.Mixed, default: {} },
   },
   { _id: false },
@@ -101,18 +142,20 @@ const BookingSchema = new Schema<BookingDoc>(
     _id: { type: String, required: true },
     operatorId: { type: String, required: true, index: true },
     bookingNumber: { type: String, required: true, unique: true },
-    // Anonymous-checkout pivot: bookings no longer require a client account.
-    // `clientId` stays in the schema for when we reintroduce accounts, but we
-    // default it to '' and drop the `required` flag. The agent identifies the
-    // customer via customerName/customerPhone instead.
+    ticketId: { type: String, default: '', index: true },
     clientId: { type: String, default: '', index: true },
     customerName: { type: String, default: '' },
     customerPhone: { type: String, default: '' },
+    phoneCountryCode: { type: String, default: '+84' },
+    contactEmail: { type: String, default: '' },
     items: { type: [BookingItemSchema], required: true, default: [] },
-    currency: { type: String, required: true, enum: ['VND', 'USD'], default: 'VND' },
+    currency: { type: String, required: true, enum: ['VND', 'USD'], default: 'USD' },
+    subtotalUsd: { type: Number, required: true, min: 0, default: 0 },
     subtotalVnd: { type: Number, required: true, min: 0, default: 0 },
     discountVnd: { type: Number, required: true, min: 0, default: 0 },
+    totalUsd: { type: Number, required: true, min: 0, default: 0 },
     totalVnd: { type: Number, required: true, min: 0, default: 0 },
+    fxRateUsdVnd: { type: Number, required: true, min: 0, default: 0 },
     status: {
       type: String,
       required: true,
@@ -121,23 +164,22 @@ const BookingSchema = new Schema<BookingDoc>(
       index: true,
     },
     payment: {
-      // `''` is included in the enum, so `required` technically works here,
-      // but we drop it everywhere in this sub-doc to keep behaviour uniform
-      // with the rest of the schema (Mongoose treats '' as missing under `required`).
       method: {
         type: String,
-        enum: ['card', 'wallet', 'bank_transfer', 'cash', ''],
+        enum: ['card', 'wallet', 'bank_transfer', 'cash', 'vnpay', ''],
         default: '',
       },
       status: {
         type: String,
         required: true,
-        enum: ['unpaid', 'paid', 'refunded', 'partial_refund'],
+        enum: ['unpaid', 'paid', 'refunded', 'partial_refund', 'pending_transfer'],
         default: 'unpaid',
       },
       transactionId: { type: String, default: '' },
       paidAt: { type: String, default: '' },
       refundedAt: { type: String, default: '' },
+      vnpayTxnRef: { type: String, default: '' },
+      vnpayResponseCode: { type: String, default: '' },
     },
     notes: { type: String, default: '' },
     createdAt: { type: String, required: true },
@@ -146,10 +188,8 @@ const BookingSchema = new Schema<BookingDoc>(
   { _id: false, timestamps: false, collection: 'bookings' },
 )
 
-// Reporting indices
 BookingSchema.index({ operatorId: 1, status: 1, createdAt: -1 })
 BookingSchema.index({ clientId: 1, createdAt: -1 })
-// Agent dashboards look up pending bookings by phone to dedupe / follow up.
 BookingSchema.index({ customerPhone: 1, createdAt: -1 })
 
 export const Booking = mongoose.model<BookingDoc>('Booking', BookingSchema)

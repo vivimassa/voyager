@@ -9,6 +9,8 @@ import {
   Calendar,
   ChevronDown,
   ChevronRight,
+  DollarSign,
+  Layers,
   LifeBuoy,
   LogOut,
   Map,
@@ -40,25 +42,26 @@ export function AgentSidebar() {
   const [bookingsOpen, setBookingsOpen] = useState(true)
 
   const nav: NavItem[] = [
-    { key: 'dashboard', label: t.agent.nav.dashboard, href: '/agent', icon: BarChart3 },
+    { key: 'dashboard', label: t.agent.nav.dashboard, href: '/agent/dashboard', icon: BarChart3 },
     {
       key: 'bookings',
       label: t.agent.nav.bookings,
       icon: Calendar,
       children: [
         { key: 'all', label: t.agent.nav.bookingsAll, href: '/agent/bookings' },
-        { key: 'pickup', label: t.agent.nav.bookingsPickup, href: '/agent/bookings?service=pickup' },
-        { key: 'fastTrack', label: t.agent.nav.bookingsFastTrack, href: '/agent/bookings?service=fastTrack' },
-        { key: 'hotel', label: t.agent.nav.bookingsHotel, href: '/agent/bookings?service=hotel' },
-        { key: 'tour', label: t.agent.nav.bookingsTour, href: '/agent/bookings?service=tour' },
+        { key: 'pending', label: t.agent.nav.bookingsPending, href: '/agent/bookings?paymentStatus=pending_transfer' },
+        { key: 'paid', label: t.agent.nav.bookingsPaid, href: '/agent/bookings?paymentStatus=paid' },
       ],
     },
+    { key: 'inventory', label: t.agent.nav.inventory, href: '/agent/inventory', icon: Layers },
+    { key: 'pricing', label: t.agent.nav.pricing, href: '/agent/pricing', icon: DollarSign },
     { key: 'customers', label: t.agent.nav.customers, href: '#', icon: Users },
-    { key: 'products', label: t.agent.nav.products, href: '#', icon: Package },
-    { key: 'destinations', label: t.agent.nav.destinations, href: '#', icon: Map },
     { key: 'reports', label: t.agent.nav.reports, href: '#', icon: BarChart3 },
     { key: 'support', label: t.agent.nav.support, href: '#', icon: LifeBuoy },
   ]
+  // Hint to TS that Map and Package are still imported even after the
+  // pickup/hotel/tour subnav was removed.
+  void Map; void Package
 
   function isActive(href?: string) {
     if (!href || href === '#') return false

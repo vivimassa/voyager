@@ -48,17 +48,20 @@ export function TopNav({ variant = 'solid' }: { variant?: Variant }) {
           onDark ? 'text-white/90' : 'text-vg-text'
         }`}
       >
-        <Link href="/destinations" className="hover:text-vg-cta transition-colors">
-          {t.nav.destinations}
+        <Link href="/#coverage" className="hover:text-vg-cta transition-colors">
+          {t.nav.coverage}
         </Link>
-        <Link href="/services" className="hover:text-vg-cta transition-colors">
-          {t.nav.services}
+        <Link href="/#how-it-works" className="hover:text-vg-cta transition-colors">
+          {t.nav.howItWorks}
         </Link>
-        <Link href="/deals" className="hover:text-vg-cta transition-colors">
-          {t.nav.deals}
+        <Link href="/faq" className="hover:text-vg-cta transition-colors">
+          {t.nav.faq}
         </Link>
-        <Link href="/help" className="hover:text-vg-cta transition-colors">
-          {t.nav.help}
+        <Link href="/about" className="hover:text-vg-cta transition-colors">
+          {t.nav.about}
+        </Link>
+        <Link href="/my-tickets" className="hover:text-vg-cta transition-colors">
+          {t.nav.myTickets}
         </Link>
       </div>
 

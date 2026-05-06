@@ -14,6 +14,22 @@ const serverEnvSchema = z.object({
   CLIENT_URL: z.string().default('http://localhost:3000'),
 
   ML_API_URL: z.string().url().optional(),
+
+  // VNPay (sandbox-friendly defaults so dev boots without real merchant creds)
+  VNPAY_TMN_CODE: z.string().default('VOYAGER1'),
+  VNPAY_HASH_SECRET: z.string().default('VOYAGERLOCALSECRETLOCALSECRETLOC'),
+  VNPAY_PAY_URL: z.string().default('https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+  VNPAY_RETURN_URL: z.string().default('http://localhost:3000/api/payments/vnpay/return'),
+
+  // Bank transfer fallback (display-only — agent confirms manually)
+  BANK_NAME: z.string().default('Vietcombank'),
+  BANK_ACCOUNT_NAME: z.string().default('VIHAT TOUR CO., LTD'),
+  BANK_ACCOUNT_NO: z.string().default('1234567890'),
+  BANK_BIN: z.string().default('970436'),
+
+  // Vietcombank reference rate refresh (USD -> VND)
+  FX_REFRESH_HOURS: z.coerce.number().default(6),
+  FX_FALLBACK_USD_VND: z.coerce.number().default(25500),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>

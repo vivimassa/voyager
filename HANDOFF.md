@@ -6,12 +6,41 @@ into this folder.
 
 ## What Voyager is
 
-Vihat Tour — an **airport travel services platform** for Vietnam's 5 major
-airports (HAN, SGN, DAD, CXR, PQC). Three portals planned:
+Vihat Tour — a **Fast-Track-only airport priority service** at 7 Vietnamese
+airports (HAN, SGN, DAD, CXR, HUI, THD, VII).
 
-- **Client** — consumers booking airport pickup, fast-track, hotels, tours
-- **Supplier** — partners (drivers, hotels, tour operators) accepting bookings
-- **Ops** — Vihat Tour internal staff running operations
+> **Pivot 2026-05-06:** The site was reshaped to mirror airportconnects.vn
+> — Fast Track only (no pickup/hotel/tour). USD canonical pricing from the
+> Vihat 2024 PDF, VND display via Vietcombank reference rate. Payments via
+> VNPay + Vietnamese bank transfer. See `Doc/Function document.docx`,
+> `Doc/Pricing Guide 2024 - USD - Fast track.pdf` and
+> `Doc/Requirements Gathering.pdf` for the brief.
+
+Three portals:
+
+- **Client** — travellers booking Fast Track (anonymous OK; phone OTP for ticket lookup)
+- **Supplier** — Vihat-certified airport greeters (out of scope for v1)
+- **Ops** — Vihat back-office: bookings, inventory, payments, dashboard
+
+### New env vars (server/.env)
+
+```
+# VNPay
+VNPAY_TMN_CODE=...
+VNPAY_HASH_SECRET=...
+VNPAY_PAY_URL=https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+VNPAY_RETURN_URL=http://localhost:3020/api/payments/vnpay/return
+
+# Bank transfer (display)
+BANK_NAME=Vietcombank
+BANK_ACCOUNT_NAME=VIHAT TOUR CO., LTD
+BANK_ACCOUNT_NO=1234567890
+BANK_BIN=970436
+
+# FX (USD→VND)
+FX_REFRESH_HOURS=6
+FX_FALLBACK_USD_VND=25500
+```
 
 The infra is being forked from the user's existing **SkyHub/Horizon** repo
 (`vivimassa/horizon-v2-mono`), which is a Turborepo monorepo:

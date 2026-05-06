@@ -18,22 +18,25 @@ export function SiteFooter() {
             </span>
             <span className="font-display font-semibold text-xl text-white">{brand.name}</span>
           </div>
-          <p className="text-sm text-white/70 max-w-[380px] leading-relaxed">{brand.tagline}</p>
+          <p className="text-sm text-white/70 max-w-[380px] leading-relaxed">{t.footer.tagline}</p>
+          <p className="mt-3 text-xs text-white/50">
+            {t.footer.hotline}: <a href="tel:+842471088888" className="text-white/80 hover:text-white">+84 24 7108 8888</a>
+          </p>
         </div>
         <div>
           <div className="font-semibold text-white mb-3 text-sm">{t.footer.exploreTitle}</div>
           <ul className="space-y-2 text-sm text-white/75">
-            <li><Link href="/destinations" className="hover:text-white">{t.footer.destinations}</Link></li>
-            <li><Link href="/services" className="hover:text-white">{t.footer.services}</Link></li>
-            <li><Link href="/deals" className="hover:text-white">{t.footer.deals}</Link></li>
+            <li><Link href="/#coverage" className="hover:text-white">{t.footer.coverage}</Link></li>
+            <li><Link href="/#how-it-works" className="hover:text-white">{t.footer.howItWorks}</Link></li>
+            <li><Link href="/about" className="hover:text-white">{t.footer.aboutUs}</Link></li>
           </ul>
         </div>
         <div>
           <div className="font-semibold text-white mb-3 text-sm">{t.footer.supportTitle}</div>
           <ul className="space-y-2 text-sm text-white/75">
-            <li><Link href="/help" className="hover:text-white">{t.footer.helpCentre}</Link></li>
-            <li><Link href="/help" className="hover:text-white">{t.footer.faq}</Link></li>
-            <li><Link href="/help" className="hover:text-white">{t.footer.contactUs}</Link></li>
+            <li><Link href="/faq" className="hover:text-white">{t.footer.faq}</Link></li>
+            <li><Link href="/my-tickets" className="hover:text-white">{t.nav.myTickets}</Link></li>
+            <li><Link href="/about" className="hover:text-white">{t.footer.contactUs}</Link></li>
           </ul>
         </div>
       </div>

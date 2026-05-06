@@ -3,14 +3,16 @@
  * Customer-facing UI should ALWAYS show a city, never the 3-letter code.
  */
 
-export type AirportCode = 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'PQC'
+export type AirportCode = 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'HUI' | 'THD' | 'VII'
 
 export const AIRPORT_CITY_EN: Record<AirportCode, string> = {
   HAN: 'Hanoi',
   SGN: 'Ho Chi Minh City',
   DAD: 'Da Nang',
   CXR: 'Nha Trang',
-  PQC: 'Phu Quoc',
+  HUI: 'Hue',
+  THD: 'Thanh Hoa',
+  VII: 'Vinh',
 }
 
 export const AIRPORT_CITY_VI: Record<AirportCode, string> = {
@@ -18,7 +20,9 @@ export const AIRPORT_CITY_VI: Record<AirportCode, string> = {
   SGN: 'TP. Hồ Chí Minh',
   DAD: 'Đà Nẵng',
   CXR: 'Nha Trang',
-  PQC: 'Phú Quốc',
+  HUI: 'Huế',
+  THD: 'Thanh Hóa',
+  VII: 'Vinh',
 }
 
 export function airportCity(code: string, locale: 'en' | 'vi'): string {
@@ -26,4 +30,4 @@ export function airportCity(code: string, locale: 'en' | 'vi'): string {
   return map[code as AirportCode] ?? code
 }
 
-export const AIRPORT_CODES: AirportCode[] = ['HAN', 'SGN', 'DAD', 'CXR', 'PQC']
+export const AIRPORT_CODES: AirportCode[] = ['HAN', 'SGN', 'DAD', 'CXR', 'HUI', 'THD', 'VII']

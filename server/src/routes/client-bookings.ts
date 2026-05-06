@@ -1,55 +1,49 @@
 import type { FastifyInstance } from 'fastify'
 import crypto from 'node:crypto'
-import { Booking, type BookingItem } from '../models/Booking.js'
+import { Booking, type BookingItem, type Direction, type IdType, type Passenger, type Tier } from '../models/Booking.js'
 import { Product } from '../models/Product.js'
+import { Inventory } from '../models/Inventory.js'
+import { FxRate } from '../models/FxRate.js'
 import { VOYAGER_OPERATOR_ID } from '../data/voyager-seed-data.js'
 
 /**
- * Voyager CLIENT bookings — anonymous checkout flow.
+ * Voyager CLIENT bookings — anonymous Fast-Track checkout.
  *
- * Flow (post-auth-pivot):
- *   1. User selects services, fills cart, opens /checkout.
- *   2. User types name + phone + per-line trip details.
- *   3. POST /clients/bookings creates a booking with status:'pending' and
- *      payment.status:'unpaid'. No account, no JWT, no OTP.
- *   4. An agent picks it up on the operator side and phones the customer back
- *      to confirm details and quote payment.
+ * Flow:
+ *   1. Browser submits cart line {productId, qty, direction, passengers[], travelDate, ...}.
+ *   2. We re-read the Product server-side (untrusted client prices), map FIT/GIT
+ *      from qty (≤5 = FIT, ≥6 = GIT), and decrement Inventory atomically.
+ *   3. Booking is created with status='pending', payment.status='unpaid'.
+ *   4. Caller follows up via /payments/vnpay/create or /payments/bank-transfer/start
+ *      to advance the lifecycle and generate a ticket.
  *
  * Endpoints:
- *   POST  /clients/bookings            — create a booking (public)
- *   GET   /clients/bookings/:number    — fetch one booking by number (public,
- *                                        security-by-obscurity: the number is
- *                                        6 base36 chars of crypto noise)
- *
- * Pricing: single flat priceVnd per Product. At booking time we re-read the
- * price from the Products collection — NEVER trust what the browser submits.
- * The browser cart is purely a UI convenience.
- *
- * Re-adding accounts later: this whole file, plus the auth-overlay UI and
- * client-auth routes, can be gated again behind `requireClient`. The Booking
- * schema still carries `clientId` (default '') so both modes coexist.
+ *   POST  /clients/bookings            — create
+ *   GET   /clients/bookings/:number    — fetch by booking number
  */
+
+type IncomingPassenger = Partial<Passenger>
 
 type IncomingItem = {
   productId: string
   qty?: number
+  direction?: Direction
   travelDate?: string
   travelTime?: string
-  adults?: number
-  children?: number
   flightNumber?: string
+  passengers?: IncomingPassenger[]
 }
 
 type CreateBookingBody = {
   customerName?: string
   customerPhone?: string
+  phoneCountryCode?: string
+  contactEmail?: string
+  paymentMethod?: 'vnpay' | 'bank_transfer'
   items: IncomingItem[]
   notes?: string
 }
 
-/** VN phone numbers can be written as +84xxxxxxxxx, 84xxxxxxxxx, or 0xxxxxxxxx.
- *  This normaliser strips spaces/dashes and stores a canonical +84 form so the
- *  agent UI can dedupe regardless of how the customer typed it. */
 function normalisePhone(raw: string): string {
   const cleaned = raw.replace(/[\s\-().]/g, '')
   if (!cleaned) return ''
@@ -60,177 +54,280 @@ function normalisePhone(raw: string): string {
 }
 
 function isPlausiblePhone(phone: string): boolean {
-  // Between 8 and 15 digits after the optional '+'. Lax on purpose — we accept
-  // tourists with foreign numbers too. The agent can always clarify on the call.
   return /^\+?\d{8,15}$/.test(phone)
 }
 
-/**
- * Human-readable booking number. Pattern: VG-YYYY-XXXXXX where XXXXXX is
- * base36-uppercase noise from 4 random bytes (~1 in 1.7B collision within a
- * single year). DB has a unique index on bookingNumber, so we retry on the
- * vanishingly rare duplicate.
- */
 function generateBookingNumber(year: number): string {
   const noise = crypto.randomBytes(4).toString('hex').slice(0, 6).toUpperCase()
   return `VG-${year}-${noise}`
 }
 
+function tierForQty(qty: number): Tier {
+  return qty >= 6 ? 'GIT' : 'FIT'
+}
+
+function sanitisePassenger(idType: IdType | undefined, p: IncomingPassenger): Passenger {
+  return {
+    firstName: (p.firstName ?? '').trim().slice(0, 80),
+    lastName: (p.lastName ?? '').trim().slice(0, 80),
+    dob: (p.dob ?? '').trim().slice(0, 10),
+    nationality: (p.nationality ?? '').trim().toUpperCase().slice(0, 3),
+    idType: (p.idType ?? idType ?? 'passport') as IdType,
+    idNumber: (p.idNumber ?? '').trim().slice(0, 40),
+  }
+}
+
 export async function clientBookingsRoutes(app: FastifyInstance) {
-  // ═══ POST /clients/bookings ═══ (public)
+  // ═══ POST /clients/bookings ═══
   app.post<{ Body: CreateBookingBody }>(
     '/clients/bookings',
     async (req, reply) => {
       const {
         customerName = '',
         customerPhone = '',
+        phoneCountryCode = '+84',
+        contactEmail = '',
+        paymentMethod = 'vnpay',
         items = [],
         notes = '',
       } = req.body ?? {}
 
       const name = customerName.trim()
       const phone = normalisePhone(customerPhone.trim())
+      const email = contactEmail.trim().toLowerCase()
 
-      if (!name) {
-        return reply.code(400).send({ error: 'Please enter your name.' })
-      }
-      if (name.length > 80) {
-        return reply.code(400).send({ error: 'Name is too long (max 80).' })
-      }
+      if (!name) return reply.code(400).send({ error: 'Please enter your name.' })
+      if (name.length > 80) return reply.code(400).send({ error: 'Name is too long (max 80).' })
       if (!phone || !isPlausiblePhone(phone)) {
-        return reply
-          .code(400)
-          .send({ error: 'Please enter a valid phone number we can call back on.' })
+        return reply.code(400).send({ error: 'Please enter a valid phone number.' })
       }
-
+      if (email && !/^.+@.+\..+$/.test(email)) {
+        return reply.code(400).send({ error: 'Please enter a valid email address.' })
+      }
       if (!Array.isArray(items) || items.length === 0) {
         return reply.code(400).send({ error: 'Cart is empty' })
       }
       if (items.length > 20) {
         return reply.code(400).send({ error: 'Too many items (max 20)' })
       }
+      if (!['vnpay', 'bank_transfer'].includes(paymentMethod)) {
+        return reply.code(400).send({ error: 'Unknown payment method' })
+      }
 
-      // Re-hydrate each line from Products. The browser cart is untrusted —
-      // we copy title/icon/price off the server-side doc.
+      // Re-hydrate from Products (canonical pricing).
       const productIds = items.map((i) => i.productId).filter(Boolean)
       if (productIds.length !== items.length) {
         return reply.code(400).send({ error: 'Every item must have a productId' })
       }
-
       const products = await Product.find({ _id: { $in: productIds } }).lean()
       const productById = new Map(products.map((p) => [p._id, p]))
-
       const missing = productIds.filter((id) => !productById.has(id))
       if (missing.length > 0) {
-        return reply
-          .code(400)
-          .send({ error: `Unknown product(s): ${missing.join(', ')}` })
+        return reply.code(400).send({ error: `Unknown product(s): ${missing.join(', ')}` })
       }
 
-      // Single-tenant for now — every Voyager booking belongs to the same
-      // operator (same as the OTP auth path). When we multi-tenant this,
-      // we'll infer operatorId from the destination's subdomain or a header.
-      const operatorId = VOYAGER_OPERATOR_ID
+      // Current FX rate (USD→VND). Snapshot onto the booking for receipt parity.
+      const fx = await FxRate.findById('USD/VND').lean()
+      const fxRateUsdVnd = fx?.rate ?? 25500
 
+      const operatorId = VOYAGER_OPERATOR_ID
       const bookingItems: BookingItem[] = []
+      let subtotalUsd = 0
       let subtotalVnd = 0
+
+      // Reserve inventory per line atomically. We collect rollback handles in
+      // case any later step fails.
+      type Reservation = { productId: string; date: string; qty: number }
+      const reservations: Reservation[] = []
+      const rollback = async () => {
+        for (const r of reservations) {
+          await Inventory.updateOne(
+            { _id: `${r.productId}|${r.date}` },
+            { $inc: { sold: -r.qty }, $set: { updatedAt: new Date().toISOString() } },
+          ).catch(() => {})
+        }
+      }
 
       for (const input of items) {
         const product = productById.get(input.productId)!
         if (!product.isActive) {
-          return reply
-            .code(400)
-            .send({ error: `Product unavailable: ${product.title}` })
+          await rollback()
+          return reply.code(400).send({ error: `Product unavailable: ${product.title}` })
         }
 
         const qty = Number.isFinite(input.qty) && input.qty! > 0 ? Math.floor(input.qty!) : 1
-        const adults = Number.isFinite(input.adults) && input.adults! >= 0
-          ? Math.floor(input.adults!)
-          : 1
-        const children = Number.isFinite(input.children) && input.children! >= 0
-          ? Math.floor(input.children!)
-          : 0
+        const tier = tierForQty(qty)
 
-        const unitPriceVnd = product.priceVnd
+        // Direction can be fixed by the product (e.g. CXR arrival-only) or
+        // chosen by the user (e.g. HAN both → arrival|departure).
+        const requestedDir = input.direction
+        let direction: Direction
+        if (product.direction === 'both') {
+          if (requestedDir !== 'arrival' && requestedDir !== 'departure') {
+            await rollback()
+            return reply.code(400).send({ error: 'Please choose arrival or departure' })
+          }
+          direction = requestedDir
+        } else {
+          direction = product.direction
+        }
+
+        const idType: IdType = product.segment === 'international' ? 'passport' : 'cccd'
+        const incomingPax = Array.isArray(input.passengers) ? input.passengers : []
+        const passengers: Passenger[] = incomingPax.length
+          ? incomingPax.slice(0, qty).map((p) => sanitisePassenger(idType, p))
+          : Array.from({ length: qty }, () => sanitisePassenger(idType, {}))
+
+        const unitPriceUsd = tier === 'GIT' && product.gitPriceUsd > 0 ? product.gitPriceUsd : product.fitPriceUsd
+        const unitPriceVnd = Math.round(unitPriceUsd * fxRateUsdVnd)
+        if (unitPriceUsd <= 0) {
+          await rollback()
+          return reply.code(400).send({ error: `${tier} pricing not available for this lane` })
+        }
+
+        const lineTotalUsd = unitPriceUsd * qty
         const lineTotalVnd = unitPriceVnd * qty
+
+        const travelDate = (input.travelDate ?? '').trim()
+        if (!travelDate || !/^\d{4}-\d{2}-\d{2}$/.test(travelDate)) {
+          await rollback()
+          return reply.code(400).send({ error: 'Please pick a valid travel date' })
+        }
+
+        // Inventory reservation. Atomic: only succeed if capacity allows (or
+        // capacity 0 = unlimited).
+        const invId = `${product._id}|${travelDate}`
+        const nowIso = new Date().toISOString()
+        if (product.inventoryDailyCap > 0) {
+          // Step 1 — ensure the inventory doc exists for this lane+date so the
+          // conditional increment below has a numeric `sold` field to compare
+          // against. Upsert is no-op once the row exists.
+          await Inventory.updateOne(
+            { _id: invId },
+            {
+              $setOnInsert: {
+                _id: invId,
+                productId: product._id,
+                date: travelDate,
+                capacity: product.inventoryDailyCap,
+                sold: 0,
+                createdAt: nowIso,
+                updatedAt: nowIso,
+              },
+            },
+            { upsert: true },
+          )
+          // Step 2 — atomic decrement guarded by remaining capacity.
+          const reserved = await Inventory.findOneAndUpdate(
+            { _id: invId, sold: { $lte: product.inventoryDailyCap - qty } },
+            {
+              $inc: { sold: qty },
+              $set: { capacity: product.inventoryDailyCap, updatedAt: nowIso },
+            },
+            { new: true },
+          ).catch(() => null)
+          if (!reserved) {
+            await rollback()
+            return reply.code(409).send({ error: 'Sold out for the selected date' })
+          }
+        } else {
+          await Inventory.updateOne(
+            { _id: invId },
+            {
+              $inc: { sold: qty },
+              $set: { productId: product._id, date: travelDate, capacity: 0, updatedAt: nowIso },
+              $setOnInsert: { _id: invId, createdAt: nowIso },
+            },
+            { upsert: true },
+          )
+        }
+        reservations.push({ productId: product._id, date: travelDate, qty })
 
         bookingItems.push({
           productId: product._id,
-          destinationSlug: product.destinationSlug,
+          destinationSlug: '',
           airportCode: product.airportCode,
-          serviceType: product.serviceType,
+          segment: product.segment,
+          direction,
+          tier,
+          serviceType: 'fastTrack',
           title: product.title,
-          icon: product.icon ?? '',
+          icon: product.icon ?? '⚡',
+          unitPriceUsd,
           unitPriceVnd,
           qty,
+          lineTotalUsd,
           lineTotalVnd,
-          travelDate: (input.travelDate ?? '').trim(),
+          travelDate,
           travelTime: (input.travelTime ?? '').trim(),
-          adults,
-          children,
           flightNumber: (input.flightNumber ?? '').trim().toUpperCase(),
+          passengers,
+          adults: qty,
+          children: 0,
           meta: {},
         })
 
+        subtotalUsd += lineTotalUsd
         subtotalVnd += lineTotalVnd
       }
 
       const now = new Date().toISOString()
       const year = new Date().getFullYear()
 
-      // Retry-once-on-dup: bookingNumber is unique-indexed. Noise space is big
-      // enough that one retry is overkill, but cheap insurance.
-      let saved: Awaited<ReturnType<typeof Booking.create>> | null = null
+      const initialPaymentStatus = paymentMethod === 'bank_transfer' ? 'pending_transfer' : 'unpaid'
+
+      let saved: InstanceType<typeof Booking> | null = null
       for (let attempt = 0; attempt < 2 && !saved; attempt++) {
         try {
-          saved = await Booking.create({
+          const doc = new Booking({
             _id: crypto.randomUUID(),
             operatorId,
             bookingNumber: generateBookingNumber(year),
-            clientId: '', // anonymous
+            ticketId: '',
+            clientId: '',
             customerName: name,
             customerPhone: phone,
+            phoneCountryCode: phoneCountryCode || '+84',
+            contactEmail: email,
             items: bookingItems,
-            currency: 'VND',
+            currency: 'USD',
+            subtotalUsd,
             subtotalVnd,
             discountVnd: 0,
+            totalUsd: subtotalUsd,
             totalVnd: subtotalVnd,
+            fxRateUsdVnd,
             status: 'pending',
-            payment: { status: 'unpaid' },
+            payment: { method: paymentMethod, status: initialPaymentStatus },
             notes: notes.slice(0, 1000),
             createdAt: now,
             updatedAt: now,
           })
+          saved = await doc.save()
         } catch (err: unknown) {
           const e = err as { code?: number; keyPattern?: Record<string, unknown> }
           if (e.code === 11000 && e.keyPattern?.bookingNumber) continue
+          await rollback()
           throw err
         }
       }
 
       if (!saved) {
+        await rollback()
         return reply.code(500).send({ error: 'Failed to generate a unique booking number' })
       }
 
-      return reply.code(201).send({
-        booking: saved.toObject(),
-      })
+      return reply.code(201).send({ booking: saved.toObject() })
     },
   )
 
-  // ═══ GET /clients/bookings/:bookingNumber ═══ (public)
-  // The booking number is unguessable in practice (~2B possibilities per year),
-  // so we rely on it as a shared secret for the success page. Not intended as
-  // a durable privacy boundary — an agent-side endpoint with proper auth is
-  // the right place to look up by customer.
+  // ═══ GET /clients/bookings/:bookingNumber ═══
   app.get<{ Params: { bookingNumber: string } }>(
     '/clients/bookings/:bookingNumber',
     async (req, reply) => {
       const { bookingNumber } = req.params
       const booking = await Booking.findOne({ bookingNumber }).lean()
-      if (!booking) {
-        return reply.code(404).send({ error: 'Booking not found' })
-      }
+      if (!booking) return reply.code(404).send({ error: 'Booking not found' })
       return reply.send({ booking })
     },
   )

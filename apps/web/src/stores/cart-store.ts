@@ -1,44 +1,80 @@
 /**
- * Voyager cart store — browse-before-login model.
- * Cart lives entirely in the browser (zustand + localStorage) until checkout.
- * At checkout we require auth (phone OTP / Google / Facebook / biometric)
- * and POST the cart contents to create a Booking.
- *
- * All prices in VND — display conversion happens via currency-store.
+ * Voyager cart store — Fast-Track-only.
+ * USD is canonical for prices (mirrors the server). VND is cached at line
+ * creation using the current FX rate; if the rate refreshes mid-session the
+ * line still shows the snapshot until the user re-adds, which keeps display
+ * stable even when the global rate moves.
  */
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import type { AirportCode } from '@/lib/airport-cities'
 
-export type ServiceType = 'pickup' | 'fastTrack' | 'hotel' | 'tour' | 'luggageConcierge'
+export type Segment = 'domestic' | 'international'
+export type Direction = 'arrival' | 'departure'
+export type Tier = 'FIT' | 'GIT'
+export type IdType = 'passport' | 'cccd'
+
+export type Passenger = {
+  firstName: string
+  lastName: string
+  dob: string                 // YYYY-MM-DD
+  nationality: string         // ISO3166-1 alpha-2 (e.g. 'VN')
+  idType: IdType
+  idNumber: string
+}
 
 export type CartItem = {
-  /** Stable id so we can update/remove — combine productId + travelDate + pax hash */
+  /** Stable line id — productId + travelDate + direction. */
   id: string
-  productId: string
-  destinationSlug: string
-  airportCode: string
-  serviceType: ServiceType
+  productId: string           // 'HAN-international-departure'
+  airportCode: AirportCode
+  segment: Segment
+  direction: Direction
+  tier: Tier
   title: string
-  /** Hero image URL shown in the cart drawer */
-  image?: string
-  /** Unit price in VND (source of truth) */
-  unitPriceVnd: number
+  unitPriceUsd: number
+  unitPriceVnd: number        // snapshot
   qty: number
-  /** ISO date string — travel/booking date */
-  travelDate?: string
-  /** Free-form details per service (flight #, room type, pax count, etc.) */
-  meta?: Record<string, string | number | boolean>
+  travelDate: string          // YYYY-MM-DD
+  travelTime: string          // HH:mm
+  flightNumber: string
+  passengers: Passenger[]
+}
+
+export type AddCartLine = Omit<CartItem, 'id' | 'tier' | 'passengers'> & {
+  passengers?: Passenger[]
+}
+
+export const FALLBACK_USD_VND = 25500
+
+function buildId(p: { productId: string; travelDate: string; direction: Direction }): string {
+  return `${p.productId}|${p.travelDate}|${p.direction}`
+}
+
+function tierFor(qty: number): Tier {
+  return qty >= 6 ? 'GIT' : 'FIT'
+}
+
+function blankPassenger(idType: IdType): Passenger {
+  return { firstName: '', lastName: '', dob: '', nationality: '', idType, idNumber: '' }
+}
+
+function paddedPassengers(prev: Passenger[], qty: number, idType: IdType): Passenger[] {
+  if (prev.length === qty) return prev
+  if (prev.length > qty) return prev.slice(0, qty)
+  return [...prev, ...Array.from({ length: qty - prev.length }, () => blankPassenger(idType))]
 }
 
 type CartState = {
   items: CartItem[]
-  add: (item: CartItem) => void
+  addOrReplace: (line: AddCartLine) => void
+  setQty: (id: string, qty: number) => void
+  setPassenger: (id: string, index: number, patch: Partial<Passenger>) => void
+  setLineMeta: (id: string, patch: Partial<Pick<CartItem, 'travelDate' | 'travelTime' | 'flightNumber'>>) => void
   remove: (id: string) => void
-  updateQty: (id: string, qty: number) => void
   clear: () => void
-  /** Total cart value in VND. */
+  totalUsd: () => number
   totalVnd: () => number
-  /** Number of distinct line items (not summed qty). */
   count: () => number
 }
 
@@ -46,34 +82,54 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      add: (item) =>
+      addOrReplace: (line) => {
         set((state) => {
-          const existing = state.items.find((i) => i.id === item.id)
-          if (existing) {
-            return {
-              items: state.items.map((i) =>
-                i.id === item.id ? { ...i, qty: i.qty + item.qty } : i,
-              ),
-            }
+          const id = buildId({ productId: line.productId, travelDate: line.travelDate, direction: line.direction })
+          const tier = tierFor(line.qty)
+          const idType: IdType = line.segment === 'international' ? 'passport' : 'cccd'
+          const seedPassengers = line.passengers ?? []
+          const passengers = paddedPassengers(seedPassengers, line.qty, idType)
+          const next: CartItem = { ...line, id, tier, passengers }
+          const existing = state.items.findIndex((i) => i.id === id)
+          if (existing >= 0) {
+            const updated = [...state.items]
+            updated[existing] = next
+            return { items: updated }
           }
-          return { items: [...state.items, item] }
+          return { items: [...state.items, next] }
+        })
+      },
+      setQty: (id, qty) =>
+        set((state) => {
+          const safeQty = Math.max(1, Math.floor(qty))
+          return {
+            items: state.items.map((i) => {
+              if (i.id !== id) return i
+              const idType: IdType = i.segment === 'international' ? 'passport' : 'cccd'
+              return { ...i, qty: safeQty, tier: tierFor(safeQty), passengers: paddedPassengers(i.passengers, safeQty, idType) }
+            }),
+          }
         }),
-      remove: (id) =>
-        set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
-      updateQty: (id, qty) =>
+      setPassenger: (id, index, patch) =>
         set((state) => ({
-          items:
-            qty <= 0
-              ? state.items.filter((i) => i.id !== id)
-              : state.items.map((i) => (i.id === id ? { ...i, qty } : i)),
+          items: state.items.map((i) => {
+            if (i.id !== id) return i
+            const passengers = i.passengers.map((p, idx) => (idx === index ? { ...p, ...patch } : p))
+            return { ...i, passengers }
+          }),
         })),
+      setLineMeta: (id, patch) =>
+        set((state) => ({
+          items: state.items.map((i) => (i.id === id ? { ...i, ...patch } : i)),
+        })),
+      remove: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
       clear: () => set({ items: [] }),
-      totalVnd: () =>
-        get().items.reduce((sum, i) => sum + i.unitPriceVnd * i.qty, 0),
+      totalUsd: () => get().items.reduce((sum, i) => sum + i.unitPriceUsd * i.qty, 0),
+      totalVnd: () => get().items.reduce((sum, i) => sum + i.unitPriceVnd * i.qty, 0),
       count: () => get().items.length,
     }),
     {
-      name: 'vg-cart',
+      name: 'vg-cart-v2',
       partialize: (s) => ({ items: s.items }),
     },
   ),

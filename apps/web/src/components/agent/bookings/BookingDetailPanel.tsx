@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import { Loader2, Phone, User, X } from 'lucide-react'
 import { useT } from '@/i18n/use-t'
 import { useOperatorBooking } from '@/hooks/use-operator-bookings'
 import { BookingStatusPill, PaymentStatusPill } from './BookingStatusPill'
+import { operatorBookingsApi } from '@/lib/operator-bookings-api'
 import {
   formatMoney,
   formatTravelDate,
@@ -18,9 +20,40 @@ interface Props {
 
 export function BookingDetailPanel({ bookingNumber, onClose }: Props) {
   const t = useT()
-  const { data, isLoading, isError } = useOperatorBooking(bookingNumber)
+  const { data, isLoading, isError, refetch } = useOperatorBooking(bookingNumber)
   const b = data?.booking
   const d = t.agent.bookings.detail
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [actionLoading, setActionLoading] = useState<'paid' | 'cancel' | null>(null)
+
+  async function handleMarkPaid() {
+    if (!b) return
+    setActionLoading('paid')
+    setActionError(null)
+    try {
+      await operatorBookingsApi.markPaid(b.bookingNumber)
+      await refetch()
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Action failed')
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  async function handleCancel() {
+    if (!b) return
+    if (!confirm(`Cancel ${b.bookingNumber}? This rolls back inventory and refunds the line.`)) return
+    setActionLoading('cancel')
+    setActionError(null)
+    try {
+      await operatorBookingsApi.cancel(b.bookingNumber)
+      await refetch()
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Action failed')
+    } finally {
+      setActionLoading(null)
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -142,6 +175,38 @@ export function BookingDetailPanel({ bookingNumber, onClose }: Props) {
               {b.payment.paidAt ? (
                 <Row label="Paid at" value={new Date(b.payment.paidAt).toLocaleString()} mono />
               ) : null}
+              {b.ticketId ? (
+                <Row label="Ticket ID" value={b.ticketId} mono emphasis />
+              ) : null}
+
+              {actionError && (
+                <div className="mt-2 rounded-md bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {b.payment.status !== 'paid' && b.status !== 'cancelled' && (
+                  <button
+                    type="button"
+                    onClick={handleMarkPaid}
+                    disabled={actionLoading !== null}
+                    className="h-9 px-3 rounded-md bg-vg-cta text-white text-[12px] font-bold hover:bg-vg-cta-hover disabled:opacity-40"
+                  >
+                    {actionLoading === 'paid' ? '…' : 'Mark paid + issue ticket'}
+                  </button>
+                )}
+                {b.status !== 'cancelled' && (
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={actionLoading !== null}
+                    className="h-9 px-3 rounded-md border border-red-200 text-red-600 text-[12px] font-semibold hover:bg-red-50 disabled:opacity-40"
+                  >
+                    {actionLoading === 'cancel' ? '…' : 'Cancel booking'}
+                  </button>
+                )}
+              </div>
             </Section>
 
             <Section title={d.notes}>

@@ -1,136 +1,217 @@
 /**
- * Voyager i18n dictionary — en + vi.
- * Keep keys namespaced so we can split files later if this grows.
- * Looked up via the useT() hook with dot-path keys, e.g. t('hero.cta').
+ * Voyager i18n dictionary — Fast-Track-only storefront, en + vi.
+ * Looked up via the useT() hook; consumers index typed properties so TS
+ * catches typos and preserves autocomplete.
  */
 import type { Locale } from '@/stores/locale-store'
 
-type Dict = {
+export type Dictionary = {
   nav: {
+    fastTrack: string
+    coverage: string
+    howItWorks: string
+    faq: string
+    about: string
+    signIn: string
+    myTickets: string
+    deals: string
     destinations: string
     services: string
-    deals: string
     help: string
-    signIn: string
+  }
+  common: {
+    cart: string
+    bookNow: string
+    continue: string
+    back: string
+    cancel: string
+    home: string
+    email: string
+    phone: string
+    name: string
+    save: string
+    edit: string
+    remove: string
+    optional: string
+    required: string
+    learnMore: string
+    seeAll: string
+    yes: string
+    no: string
+    close: string
+    submit: string
+    submitting: string
   }
   hero: {
     eyebrow: string
+    title: string
+    sub: string
     ctaPrimary: string
     ctaSecondary: string
-    airportTag: (code: string) => string
-    scrollHint: string
+    trustline: string
+  }
+  search: {
+    title: string
+    airport: string
+    airportPlaceholder: string
+    segment: string
+    direction: string
+    travelDate: string
+    pax: string
+    paxSuffix: string
+    cta: string
+    helper: string
+  }
+  segment: {
+    domestic: string
+    international: string
+  }
+  direction: {
+    arrival: string
+    departure: string
+  }
+  inclusion: {
+    checkin: string
+    baggage: string
+    security: string
+    immigration: string
+  }
+  airportCard: {
+    fromLabel: string
+    bookCta: string
+    laneSummary: (segments: string) => string
+  }
+  coverage: {
+    eyebrow: string
+    heading: string
+    sub: string
+  }
+  whyFastTrack: {
+    eyebrow: string
+    heading: string
+    sub: string
+    pillarCheckinTitle: string
+    pillarCheckinBody: string
+    pillarBaggageTitle: string
+    pillarBaggageBody: string
+    pillarSecurityTitle: string
+    pillarSecurityBody: string
+    pillarImmigrationTitle: string
+    pillarImmigrationBody: string
+  }
+  home: {
+    howHeading: string
+    howStep1Title: string
+    howStep1Body: string
+    howStep2Title: string
+    howStep2Body: string
+    howStep3Title: string
+    howStep3Body: string
+  }
+  testimonials: {
+    eyebrow: string
+    heading: string
+  }
+  stats: {
+    eyebrow: string
+    heading: string
+    customers: string
+    customersValue: string
+    satisfaction: string
+    satisfactionValue: string
+    repeat: string
+    repeatValue: string
+  }
+  faqTeaser: {
+    eyebrow: string
+    heading: string
+    sub: string
+    cta: string
+  }
+  faqPage: {
+    heading: string
+    sub: string
+  }
+  about: {
+    heading: string
+    sub: string
+    body: string
   }
   service: {
-    pickup: string
     fastTrack: string
+    pickup: string
     hotel: string
     tour: string
     from: string
   }
-  common: {
-    vnd: string
-    usd: string
-    planMyTrip: string
-    saveForLater: string
-    addToCart: string
-    added: string
-    cart: string
-    continue: string
-    total: string
-    bookNow: string
-    home: string
-    keepExploring: string
-    otherDestinations: string
-    viewAll: string
+  booking: {
+    title: string
+    laneTitle: string
+    paxLabel: string
+    addPax: string
+    removePax: string
+    flightLabel: string
+    travelTimeLabel: string
+    proceed: string
+    soldOut: string
+    soldOutNote: string
+    inventoryRemaining: (n: number) => string
   }
-  destination: {
-    whatsIncluded: string
-    availableServices: string
-    startingFrom: string
-    whereToNext: string
-    indexSub: string
-    bundleNote: string
-    from: string
-    home: string
-    pickupBlurb: string
-    fastTrackBlurb: string
-    hotelsBlurb: string
-    toursBlurb: string
+  passenger: {
+    legend: (n: number) => string
+    firstName: string
+    lastName: string
+    dob: string
+    nationality: string
+    nationalityPlaceholder: string
+    idType: string
+    idTypePassport: string
+    idTypeCccd: string
+    idNumber: string
+    idPlaceholderPassport: string
+    idPlaceholderCccd: string
   }
-  services: {
-    heading: string
-    sub: string
-    pickupSub: string
-    fastTrackSub: string
-    hotelsSub: string
-    toursSub: string
-    pickupBullets: string[]
-    fastTrackBullets: string[]
-    hotelsBullets: string[]
-    toursBullets: string[]
+  payment: {
+    title: string
+    methodVnpay: string
+    methodVnpayDesc: string
+    methodBank: string
+    methodBankDesc: string
+    bankName: string
+    bankAccount: string
+    bankHolder: string
+    bankReference: string
+    bankInstructions: string
+    qrAlt: string
+    redirecting: string
+    payNow: string
+    confirmTransfer: string
   }
-  servicesBand: {
-    eyebrow: string
-    heading: string
-    sub: string
-    pickupSub: string
-    fastTrackSub: string
-    hotelsSub: string
-    toursSub: string
-  }
-  trust: {
-    stat1: string
-    stat2: string
-    stat3: string
-    stat4: string
-  }
-  deals: {
-    eyebrow: string
-    heading: string
-    sub: string
-    badgeLimited: string
-    badgeNew: string
-    badgePopular: string
-    ctaBook: string
-    ctaTerms: string
-    expiresLabel: string
-  }
-  help: {
-    eyebrow: string
-    heading: string
-    sub: string
-    howItWorksTitle: string
-    step1Title: string
-    step1Body: string
-    step2Title: string
-    step2Body: string
-    step3Title: string
-    step3Body: string
-    faqTitle: string
-    q1: string
-    a1: string
-    q2: string
-    a2: string
-    q3: string
-    a3: string
-    q4: string
-    a4: string
-    q5: string
-    a5: string
-    contactTitle: string
-    contactBody: string
-    contactCta: string
+  ticket: {
+    lookupTitle: string
+    lookupSub: string
+    ticketIdLabel: string
+    showAtAirport: string
+    flightLabel: string
+    statusPending: string
+    statusConfirmed: string
+    statusCancelled: string
+    cancelCta: string
+    cancelWarning: string
   }
   checkout: {
-    eyebrow: string
     title: string
-    subtitle: string
+    step1: string
+    step2: string
+    step3: string
     contactTitle: string
     contactSubtitle: string
     yourName: string
     namePlaceholder: string
     phoneNumber: string
     phonePlaceholder: string
+    emailLabel: string
+    emailPlaceholder: string
     travelDate: string
     time: string
     checkIn: string
@@ -141,171 +222,67 @@ type Dict = {
     flightPlaceholder: string
     specialRequests: string
     specialRequestsPlaceholder: string
-    summary: string
+    yourPriceSummary: string
     subtotal: string
     total: string
-    callNote: string
     requestBooking: string
     placingBooking: string
-    keepBrowsing: string
     remove: string
-    emptyTitle: string
-    emptyBody: string
-    browseDestinations: string
-    errorName: string
-    errorPhone: string
-    errorDate: string
-    step1: string
-    step2: string
-    step3: string
-    priceDetails: string
-    yourPriceSummary: string
+    keepBrowsing: string
     noPaymentTitle: string
     noPaymentBody: string
     freeCancel: string
     noBookingFees: string
     securePromise: string
-  }
-  search: {
-    tabHotels: string
-    tabTransfers: string
-    tabFastTrack: string
-    tabTours: string
-    destination: string
-    destinationPh: string
-    dates: string
-    datesPh: string
-    travelers: string
-    adults: string
-    children: string
-    search: string
-    heroHeading: string
-    heroSub: string
-    exploreStrip: string
-  }
-  filters: {
-    title: string
-    clearAll: string
-    serviceType: string
-    priceRange: string
-    starRating: string
-    airport: string
-    reviewScore: string
-    sortBy: string
-    sortRecommended: string
-    sortPriceAsc: string
-    sortPriceDesc: string
-    sortRating: string
-    resultsCount: (n: number) => string
-    viewServices: string
-    fromPrice: string
-    verified: string
-    freeCancel: string
-    noPrepayment: string
-  }
-  home: {
-    browseHeading: string
-    browseSub: string
-    whyHeading: string
-    why1Title: string
-    why1Body: string
-    why2Title: string
-    why2Body: string
-    why3Title: string
-    why3Body: string
-    why4Title: string
-    why4Body: string
-    howHeading: string
-    howStep1Title: string
-    howStep1Body: string
-    howStep2Title: string
-    howStep2Body: string
-    howStep3Title: string
-    howStep3Body: string
-    offersHeading: string
-    offersSub: string
-    offersSeeAll: string
+    errorName: string
+    errorPhone: string
+    errorDate: string
+    errorPassengers: string
+    errorEmail: string
+    emptyTitle: string
+    emptyBody: string
+    browseDestinations: string
+    paymentMethod: string
   }
   success: {
     eyebrow: string
     title: string
     subtitle: string
     reference: string
-    status: string
+    ticketLabel: string
     pending: string
-    whatsNext: string
+    contactBlock: string
+    callBack: string
     next1: string
     next2: string
     next3: string
-    details: string
-    contactBlock: string
-    callBack: string
-    total: string
+    flight: string
     notes: string
-    keepBrowsing: string
-    backHome: string
-    errorTitle: string
-    errorBack: string
-    dateTbc: string
+    details: string
+    total: string
     adult: string
     adults: string
     child: string
     children: string
-    flight: string
+    backHome: string
+    keepBrowsing: string
+    dateTbc: string
+    whatsNext: string
     loading: string
-  }
-  footer: {
-    exploreTitle: string
-    destinations: string
-    services: string
-    deals: string
-    supportTitle: string
-    helpCentre: string
-    faq: string
-    contactUs: string
-    rights: string
-    tagline: string
-    agentLogin: string
-  }
-  summary: {
-    title: string
-    hint: string
-    empty: string
-    remove: string
-    reserve: string
-  }
-  goodToKnow: {
-    title: string
-    b1: string
-    b2: string
-    b3: string
-    b4: string
-    b5: string
-    b6: string
-  }
-  offers: {
-    eyebrow: string
-    heading: string
-    sub: string
-    cta: string
-  }
-  listing: {
-    upTo: string
-    reviewsCount: (n: number) => string
-    noResults: string
-    clearFilters: string
+    errorTitle: string
+    errorBack: string
   }
   login: {
     title: string
     sub: string
     email: string
     password: string
-    forgotLink: string
     submit: string
     submitting: string
+    errorMissing: string
+    forgotLink: string
     guestPrompt: string
     guestCta: string
-    errorMissing: string
   }
   forgot: {
     title: string
@@ -315,8 +292,8 @@ type Dict = {
     submitting: string
     sentTitle: string
     sentBody: (email: string) => string
-    back: string
     errorMissing: string
+    back: string
   }
   reset: {
     title: string
@@ -327,134 +304,127 @@ type Dict = {
     submitting: string
     doneTitle: string
     doneBody: string
-    signIn: string
     invalidTitle: string
     invalidBody: string
     requestNew: string
+    signIn: string
     back: string
-    errorShort: string
+    errorMissing: string
     errorMismatch: string
+    errorShort: string
     errorNoToken: string
   }
-  seamless: {
-    eyebrow: string
-    headline: string
-    sub: string
-    ctaPrimary: string
-    ctaSecondary: string
-    peaceHeading: string
-  }
-  bundles: {
-    eyebrow: string
-    heading: string
-    sub: string
-    planCta: string
-    includesLabel: string
-    fromLabel: string
-    businessName: string
-    businessTagline: string
-    familyName: string
-    familyTagline: string
+  profile: {
     firstName: string
-    firstTagline: string
-    svcPickup: string
-    svcFastTrack: string
-    svcLounge: string
-    svcPorter: string
-    svcLuggage: string
-    svcChildSeat: string
-    svcWhiteGlove: string
-    svcItinerary: string
-    svcHotel: string
-    svcVan: string
-    svcSedan: string
-    svcFastTrackFirst: string
-    svcLoungeFirst: string
-    svcLuggageFirst: string
+    lastName: string
+    email: string
+    phone: string
+    avatarUrl: string
   }
-  journeyMap: {
-    eyebrow: string
-    heading: string
-    sub: string
-    addToBundle: string
-    pickVehicle: string
-    seeBundles: string
-    homeLabel: string
-    homeTitle: string
-    homeBody: string
-    transferLabel: string
-    transferTitle: string
-    transferBody: string
-    airportLabel: string
-    airportTitle: string
-    airportBody: string
-    flightLabel: string
-    flightTitle: string
-    flightBody: string
-    destinationLabel: string
-    destinationTitle: string
-    destinationBody: string
+  footer: {
+    tagline: string
+    exploreTitle: string
+    fastTrack: string
+    coverage: string
+    howItWorks: string
+    supportTitle: string
+    helpCentre: string
+    contactUs: string
+    faq: string
+    aboutUs: string
+    agentLogin: string
+    rights: string
+    hotline: string
+    legal: string
   }
-  concierge: {
-    liveLabel: string
-    driverStatus: string
-    bagsStatus: string
-    messageZalo: string
+  legal: {
+    terms: string
+    privacy: string
   }
   agent: {
     brand: string
     brandSub: string
+    searchPlaceholder: string
+    seeAllTransactions: string
+    totalRevenue: string
     nav: {
       dashboard: string
       bookings: string
       bookingsAll: string
-      bookingsPickup: string
       bookingsFastTrack: string
       bookingsHotel: string
+      bookingsPickup: string
       bookingsTour: string
+      bookingsPending: string
+      bookingsPaid: string
+      inventory: string
+      pricing: string
+      airports: string
       customers: string
-      products: string
       destinations: string
+      products: string
       reports: string
       support: string
       settings: string
       logOut: string
     }
-    totalRevenue: string
-    seeAllTransactions: string
-    searchPlaceholder: string
+    inventory: {
+      title: string
+      sub: string
+      capacity: string
+      sold: string
+      remaining: string
+      saveCap: string
+      saved: string
+      saveError: string
+      dateRange: string
+      shiftDays: (n: number) => string
+      lane: string
+      empty: string
+    }
+    pricing: {
+      title: string
+      sub: string
+      laneCol: string
+      airportCol: string
+      segmentCol: string
+      directionCol: string
+      fitCol: string
+      gitCol: string
+      capCol: string
+      saveCta: string
+      savedNote: (n: number) => string
+    }
+    dashboard: {
+      title: string
+      sub: string
+      todayLabel: string
+      weekLabel: string
+      monthLabel: string
+      paidBookings: string
+      totalRevenue: string
+      revenueSub: string
+      bySalesAirport: string
+      airportLabel: string
+      salesLabel: string
+      revenueLabel: string
+    }
     bookings: {
       title: string
-      count: (n: number) => string
-      countFiltered: (filtered: number, total: number) => string
       newBooking: string
-      export: string
       import: string
-      comingSoon: string
-      loading: string
-      loadError: string
+      export: string
       empty: string
       emptyHint: string
+      loading: string
+      loadError: string
       pageSize: string
-      rowsShown: (shown: number, total: number) => string
       prev: string
       next: string
-      page: (n: number) => string
-      filterStatus: {
-        all: string
-        pending: string
-        confirmed: string
-        fulfilled: string
-        cancelled: string
-        closed: string
-      }
-      filterService: {
-        all: string
-        pickup: string
-        fastTrack: string
-        hotel: string
-        tour: string
-      }
+      count: (n: number) => string
+      filterStatus: Record<string, string>
+      filterService: Record<string, string>
+      paymentStatus: Record<string, string>
       col: {
         booking: string
         status: string
@@ -463,1050 +433,967 @@ type Dict = {
         travel: string
         pax: string
         total: string
-        created: string
         payment: string
-      }
-      paymentStatus: {
-        unpaid: string
-        paid: string
-        refunded: string
-        partial_refund: string
+        created: string
       }
       detail: {
         heading: string
+        close: string
         contact: string
         name: string
         phone: string
         items: string
+        flight: string
+        travelDate: string
+        travelTime: string
+        adults: string
+        children: string
+        qty: string
+        unitPrice: string
+        notes: string
+        noNotes: string
         totals: string
         subtotal: string
         discount: string
         total: string
-        notes: string
-        noNotes: string
         payment: string
         method: string
         paymentStatus: string
         createdAt: string
         updatedAt: string
-        travelDate: string
-        travelTime: string
-        adults: string
-        children: string
-        flight: string
-        qty: string
-        unitPrice: string
-        lineTotal: string
-        selectPrompt: string
-        selectHint: string
-        close: string
-        open: string
       }
     }
   }
 }
 
-export const dictionary: Record<Locale, Dict> = {
-  en: {
-    nav: {
-      destinations: 'Destinations',
-      services: 'Services',
-      deals: 'Deals',
-      help: 'Help',
-      signIn: 'Sign in',
-    },
-    hero: {
-      eyebrow: 'Vietnam, your way',
-      ctaPrimary: 'Plan my trip',
-      ctaSecondary: 'Browse services',
-      airportTag: (code) => `Fly into ${code}`,
-      scrollHint: 'Scroll for all airport services ↓',
-    },
-    service: {
-      pickup: 'Airport pickup',
-      fastTrack: 'Fast-track',
-      hotel: 'Hotels',
-      tour: 'Tours',
-      from: 'from',
-    },
-    common: {
-      vnd: 'VND',
-      usd: 'USD',
-      planMyTrip: 'Plan my trip',
-      saveForLater: 'Browse services',
-      addToCart: 'Add to cart',
-      added: 'Added ✓',
-      cart: 'Cart',
-      continue: 'Continue',
-      total: 'Total',
-      bookNow: 'Book now →',
-      home: 'Home',
-      keepExploring: 'Keep exploring',
-      otherDestinations: 'Other destinations',
-      viewAll: 'View all →',
-    },
-    destination: {
-      whatsIncluded: "What's included",
-      availableServices: 'Available services',
-      startingFrom: 'Starting from',
-      whereToNext: 'Where to next',
-      indexSub: 'Five gateways, every corner of Vietnam. Each destination bundles the airport pickup, the fast-track, the stay, and the day-trip.',
-      bundleNote: 'Bundle the pickup, the fast-track, the hotel, and the tour — one cart, one checkout.',
-      from: 'from',
-      home: 'Home',
-      pickupBlurb: 'Private car or van. Meet & greet. Flight tracked.',
-      fastTrackBlurb: 'Skip immigration lines. CIP lounge access. Porter service.',
-      hotelsBlurb: 'Curated stays near the sights — from guesthouses to resorts.',
-      toursBlurb: 'Half-day to multi-day experiences, led by local guides.',
-    },
-    services: {
-      heading: 'Everything from gate to destination.',
-      sub: 'Four services, five airports, one booking. We handle the arrival so you can focus on the trip.',
-      pickupSub: "Private car, SUV or van. Meet & greet in arrivals. Flight tracked so we're there even if you're late.",
-      fastTrackSub: 'Skip the immigration queue. CIP lounge access. Porter service from gate to car.',
-      hotelsSub: 'Curated stays near every airport and every destination. Booked and confirmed before you land.',
-      toursSub: 'Half-day to multi-day experiences led by locals who know the backstreets and the back-stories.',
-      pickupBullets: ['Private vehicle — no shared shuttles', 'Driver meets you in arrivals hall', 'Flight delay tracking included', 'Child seats on request'],
-      fastTrackBullets: ['Priority immigration lane', 'CIP lounge access while you wait', 'Dedicated porter from gate', 'Available for arrivals & departures'],
-      hotelsBullets: ['Hand-picked properties', 'Near airport or city centre', 'Confirmed before arrival', 'All star ratings'],
-      toursBullets: ['Local expert guides', 'Half-day to multi-day', 'Small groups or private', 'Customisable itineraries'],
-    },
-    servicesBand: {
-      eyebrow: 'What we do',
-      heading: 'Airport services for the five gateways to Vietnam.',
-      sub: 'We handle the arrival, the ride, the stay, and the day-trip. You just land and go.',
-      pickupSub: 'Private car, SUV or van. Meet & greet. Flight tracked.',
-      fastTrackSub: 'Skip immigration lines. CIP lounge access. Porter service.',
-      hotelsSub: 'Curated stays near every airport and every destination.',
-      toursSub: 'Half-day to multi-day, led by locals who know the backstreets.',
-    },
-    deals: {
-      eyebrow: 'Special offers',
-      heading: 'Deals built for travellers.',
-      sub: 'Bundle and save. Seasonal rates, group discounts, and last-minute offers — updated as we get them.',
-      badgeLimited: 'Limited',
-      badgeNew: 'New',
-      badgePopular: 'Popular',
-      ctaBook: 'Book this deal →',
-      ctaTerms: 'T&Cs apply',
-      expiresLabel: 'Expires',
-    },
-    trust: {
-      stat1: 'verified reviews from travellers like you',
-      stat2: 'airport services and tours bookable in minutes',
-      stat3: 'confirmed instantly, no waiting for email replies',
-      stat4: 'airports covered: Hanoi, Saigon, Da Nang, Nha Trang, Phu Quoc',
-    },
-    help: {
-      eyebrow: 'Help & FAQ',
-      heading: 'We\'re here before, during, and after your trip.',
-      sub: 'Questions about how it works, what\'s included, or what happens if your flight is delayed? We\'ve got you.',
-      howItWorksTitle: 'How it works',
-      step1Title: 'Browse & add to cart',
-      step1Body: 'Choose your destination, pick the services you need — airport pickup, fast-track, hotel, or tour — and add them to your cart.',
-      step2Title: 'Request your booking',
-      step2Body: 'Tell us your name, phone number, and travel dates. No card needed. We confirm everything before you pay.',
-      step3Title: 'We call you back',
-      step3Body: 'Our local team phones you within a few hours to confirm every detail. Pay on arrival — cash or card at the service point.',
-      faqTitle: 'Common questions',
-      q1: 'Do I need to pay anything today?',
-      a1: 'No. You request the booking today and pay on arrival. There\'s no card required and no charge until your trip.',
-      q2: 'What if my flight is delayed?',
-      a2: 'We track your flight in real time. Your driver or fast-track agent will be updated automatically — no need to call us.',
-      q3: 'Can I book for a group?',
-      a3: 'Yes. When you check out, set the number of adults and children for each service. For large groups, mention it in special requests and we\'ll arrange the right vehicle.',
-      q4: 'What\'s the cancellation policy?',
-      a4: 'You can cancel or change your booking by calling us at least 24 hours before the service. Because you haven\'t paid yet, there\'s nothing to refund.',
-      q5: 'Do you offer child seats?',
-      a5: 'Yes — request one in the special requests field at checkout. Child seats are included at no extra charge.',
-      contactTitle: 'Still have questions?',
-      contactBody: 'Our team speaks English and Vietnamese. Zalo or call us and we\'ll get back to you within the hour.',
-      contactCta: 'Chat on Zalo →',
-    },
-    checkout: {
-      eyebrow: 'Checkout',
-      title: 'Confirm your booking',
-      subtitle: "Tell us how to reach you and when you're travelling. Our team will call you back within a few hours to confirm every detail. Pay on arrival — no card needed today.",
-      contactTitle: 'How to reach you',
-      contactSubtitle: 'Our local team will phone this number to confirm timings and quote the price.',
-      yourName: 'Your name',
-      namePlaceholder: 'e.g. Anh Nguyen',
-      phoneNumber: 'Phone number',
-      phonePlaceholder: 'e.g. 0901 234 567',
-      travelDate: 'Travel date',
-      time: 'Time',
-      checkIn: 'Check-in',
-      checkInNote: 'Standard (2pm+)',
-      adults: 'Adults',
-      children: 'Children',
-      flightNumber: 'Flight number',
-      flightPlaceholder: 'e.g. VN54',
-      specialRequests: 'Special requests',
-      specialRequestsPlaceholder: 'Child seat, vegetarian meal, early check-in — anything we should flag to the local team.',
-      summary: 'Summary',
-      subtotal: 'Subtotal',
-      total: 'Total',
-      callNote: "We'll call you within a few hours to confirm. Pay on arrival — no charge today.",
-      requestBooking: 'Request booking',
-      placingBooking: 'Placing booking…',
-      keepBrowsing: '← Keep browsing',
-      remove: 'Remove',
-      emptyTitle: 'Your cart is empty',
-      emptyBody: 'Pick a destination and add a pickup, fast-track, hotel, or tour to get started.',
-      browseDestinations: 'Browse destinations',
-      errorName: 'Please enter your name so we know who to ask for.',
-      errorPhone: 'Please enter a phone number we can call you back on.',
-      errorDate: 'Please pick a travel date for every service in your cart.',
-      step1: 'Your selection',
-      step2: 'Your details',
-      step3: 'Finish',
-      priceDetails: 'Price details',
-      yourPriceSummary: 'Your price summary',
-      noPaymentTitle: 'No payment today',
-      noPaymentBody: 'A Voyager agent will call you within a few hours to confirm and arrange payment on arrival. No card required now.',
-      freeCancel: 'Free cancellation up to 24h before',
-      noBookingFees: 'No booking fees',
-      securePromise: 'Price confirmed before you pay',
-    },
-    search: {
-      tabHotels: 'Hotels',
-      tabTransfers: 'Transfers',
-      tabFastTrack: 'Fast-track',
-      tabTours: 'Tours',
-      destination: 'Destination',
-      destinationPh: 'Where are you going?',
-      dates: 'Check-in → Check-out',
-      datesPh: 'Select dates',
-      travelers: 'Travellers',
-      adults: 'Adults',
-      children: 'Children',
-      search: 'Search',
-      heroHeading: 'Find hotels, transfers & tours across Vietnam',
-      heroSub: 'From airport pickup to island-hopping — bundle everything in one booking. A real agent confirms before you pay.',
-      exploreStrip: 'Explore destinations',
-    },
-    filters: {
-      title: 'Filter by',
-      clearAll: 'Clear all',
-      serviceType: 'Service type',
-      priceRange: 'Price range',
-      starRating: 'Star rating',
-      airport: 'Airport',
-      reviewScore: 'Review score',
-      sortBy: 'Sort by',
-      sortRecommended: 'Our top picks',
-      sortPriceAsc: 'Price (lowest first)',
-      sortPriceDesc: 'Price (highest first)',
-      sortRating: 'Top reviewed',
-      resultsCount: (n) => `${n} destination${n === 1 ? '' : 's'} found`,
-      viewServices: 'View services',
-      fromPrice: 'From',
-      verified: 'Verified by Voyager',
-      freeCancel: 'Free cancellation',
-      noPrepayment: 'No prepayment',
-    },
-    home: {
-      browseHeading: 'Browse by destination',
-      browseSub: 'Five gateways, every corner of Vietnam.',
-      whyHeading: 'Peace of mind, built into every kilometre.',
-      why1Title: 'Zero logistics on you',
-      why1Body: 'No queues to plan, no transfers to time. We sequence every handover so you never touch a detail.',
-      why2Title: 'One number, end to end',
-      why2Body: 'Your concierge on Zalo or WhatsApp — from home pickup to hotel key, one conversation covers the whole trip.',
-      why3Title: 'Flight-aware, hands-free',
-      why3Body: 'Delays, gate changes, late arrivals — our team re-syncs your driver, your fast-track, your check-in. You just walk.',
-      why4Title: 'Carried, not queued',
-      why4Body: 'Luggage collected at home, bags appearing in your room. Staff waiting at the car door, not a sign at a barrier.',
-      howHeading: 'How booking works',
-      howStep1Title: 'Search & add to cart',
-      howStep1Body: 'Pick a destination, add the services you need.',
-      howStep2Title: 'Give us your details',
-      howStep2Body: 'Name, phone, travel dates. No card required.',
-      howStep3Title: 'Agent confirms, you travel',
-      howStep3Body: 'We call to finalise and quote. Pay on arrival.',
-      offersHeading: 'Deals of the week',
-      offersSub: 'Bundles, group rates and early-bird offers.',
-      offersSeeAll: 'See all deals →',
-    },
-    success: {
-      eyebrow: 'Booking confirmed',
-      title: "You're all set",
-      subtitle: "Thanks! Your request is with our team — we'll call to confirm the details shortly.",
-      reference: 'Reference',
-      status: 'Status',
-      pending: 'Pending confirmation',
-      whatsNext: 'What happens next',
-      next1: 'A Voyager agent calls within a few hours to confirm every detail.',
-      next2: "We lock your prices and send a confirmation summary to your phone.",
-      next3: 'Pay on arrival — cash or card, at the service point. No charge today.',
-      details: 'Booking details',
-      contactBlock: 'Contact',
-      callBack: "We'll call",
-      total: 'Total',
-      notes: 'Notes',
-      keepBrowsing: 'Keep browsing',
-      backHome: 'Back to home',
-      errorTitle: "We couldn't load this booking",
-      errorBack: 'Back to destinations',
-      dateTbc: 'Date TBC',
-      adult: 'adult',
-      adults: 'adults',
-      child: 'child',
-      children: 'children',
-      flight: 'Flight',
-      loading: 'Loading booking…',
-    },
-    footer: {
-      exploreTitle: 'Explore',
-      destinations: 'Destinations',
-      services: 'Services',
-      deals: 'Deals',
-      supportTitle: 'Support',
-      helpCentre: 'Help centre',
-      faq: 'FAQ',
-      contactUs: 'Contact us',
-      rights: 'All rights reserved.',
-      tagline: 'Built for travellers to Vietnam.',
-      agentLogin: 'Agent sign in',
-    },
-    summary: {
-      title: 'Your selection',
-      hint: 'Add the services you need. An agent calls to confirm.',
-      empty: 'Nothing added yet',
-      remove: 'Remove',
-      reserve: 'Reserve →',
-    },
-    goodToKnow: {
-      title: 'Good to know',
-      b1: 'Free cancellation up to 24h before your travel date',
-      b2: 'Pay on arrival — no card needed today',
-      b3: 'English- and Vietnamese-speaking agents',
-      b4: 'Flight tracking included for pickups',
-      b5: 'Child seats available on request',
-      b6: 'Zalo / WhatsApp support after booking',
-    },
-    offers: {
-      eyebrow: 'Deals of the week',
-      heading: 'Save on bundles, groups & early birds',
-      sub: 'Up to 30% off when you pair airport pickup with fast-track, or book a hotel 30 days ahead.',
-      cta: 'See all deals →',
-    },
-    listing: {
-      upTo: 'Up to',
-      reviewsCount: (n) => `${n} reviews`,
-      noResults: 'No destinations match your filters.',
-      clearFilters: 'Clear filters',
-    },
-    login: {
-      title: 'Sign in',
-      sub: 'Access your Voyager account',
-      email: 'Email',
-      password: 'Password',
-      forgotLink: 'Forgot password?',
-      submit: 'Sign in',
-      submitting: 'Signing in…',
-      guestPrompt: 'Just booking?',
-      guestCta: 'Browse as guest →',
-      errorMissing: 'Enter your email and password.',
-    },
-    forgot: {
-      title: 'Forgot password?',
-      sub: "Enter your email and we'll send a reset link.",
-      email: 'Email',
-      submit: 'Send reset link',
-      submitting: 'Sending…',
-      sentTitle: 'Check your email',
-      sentBody: (email) => `If an account exists for ${email}, we've sent a password reset link. It expires in 1 hour.`,
-      back: '← Back to sign in',
-      errorMissing: 'Enter your email address.',
-    },
-    reset: {
-      title: 'Set new password',
-      sub: 'Must be at least 8 characters.',
-      newPassword: 'New password',
-      confirmPassword: 'Confirm password',
-      submit: 'Reset password',
-      submitting: 'Resetting…',
-      doneTitle: 'Password reset',
-      doneBody: 'You can now sign in with your new password.',
-      signIn: 'Sign in',
-      invalidTitle: 'Invalid link',
-      invalidBody: 'This reset link is missing or malformed.',
-      requestNew: 'Request new link',
-      back: '← Back to sign in',
-      errorShort: 'Password must be at least 8 characters.',
-      errorMismatch: 'Passwords do not match.',
-      errorNoToken: 'Missing reset token.',
-    },
-    seamless: {
-      eyebrow: 'Doorstep to destination',
-      headline: 'Your journey, our care.',
-      sub: 'From the moment you close your front door to the moment you unpack — we carry the logistics, you keep the calm.',
-      ctaPrimary: 'Plan my seamless journey →',
-      ctaSecondary: 'See how we carry you',
-      peaceHeading: 'Peace of mind, built into every kilometre.',
-    },
-    bundles: {
-      eyebrow: 'Lifestyle bundles',
-      heading: 'Three ways to be carried.',
-      sub: 'Bundles shaped around how you travel — not a pile of SKUs to assemble. One tap, the whole journey is queued up.',
-      planCta: 'Plan my trip →',
-      includesLabel: 'Includes',
-      fromLabel: 'from',
-      businessName: 'The Business Elite',
-      businessTagline: 'House-to-gate private car, airport fast-track, CIP lounge, destination transfer. For travellers whose calendar starts the moment they land.',
-      familyName: 'The Family Care',
-      familyTagline: '7-seater van, luggage concierge, child seats, porter, family-friendly itineraries shaped around nap times and small appetites.',
-      firstName: 'The First-Class Experience',
-      firstTagline: 'Luxury sedan at your door, private fast-track, premium lounge, luggage concierge, white-glove check-in at a curated stay. Begin to end, no seam.',
-      svcPickup: 'House-to-gate private car',
-      svcFastTrack: 'Airport fast-track',
-      svcLounge: 'CIP / premium lounge',
-      svcPorter: 'Porter from gate to car',
-      svcLuggage: 'Luggage concierge',
-      svcChildSeat: 'Child seats included',
-      svcWhiteGlove: 'White-glove hotel check-in',
-      svcItinerary: 'Family-friendly itinerary',
-      svcHotel: 'Curated stay',
-      svcVan: '7-seater van',
-      svcSedan: 'Luxury sedan to your door',
-      svcFastTrackFirst: 'Private fast-track lane',
-      svcLoungeFirst: 'Business-class lounge privilege',
-      svcLuggageFirst: 'Full-service luggage handling',
-    },
-    journeyMap: {
-      eyebrow: 'The seamless journey',
-      heading: 'From doorstep to destination — we carry every step.',
-      sub: 'Tap any touchpoint to see what we handle so you never have to.',
-      addToBundle: 'Add to bundle →',
-      pickVehicle: 'Pick your vehicle →',
-      seeBundles: 'See the bundles →',
-      homeLabel: 'Home',
-      homeTitle: 'Luggage concierge',
-      homeBody: 'Bags collected at your door, tagged, and reappearing in your hotel room — without ever passing through your hands.',
-      transferLabel: 'Private transfer',
-      transferTitle: 'Door-to-gate',
-      transferBody: 'Sedan, SUV or 7-seat van. Driver greets by name at your front door, tracks your flight, meets you at the exact column.',
-      airportLabel: 'Airport',
-      airportTitle: 'Fast-track + CIP lounge',
-      airportBody: 'Priority immigration lane, porter from gate, lounge seating for your party while your paperwork moves in the background.',
-      flightLabel: 'Flight',
-      flightTitle: 'Flight-aware concierge',
-      flightBody: 'Delay, gate change, late arrival — we re-sync your driver, fast-track agent and hotel check-in automatically.',
-      destinationLabel: 'Destination',
-      destinationTitle: 'Arrival & check-in',
-      destinationBody: 'Transfer waits at arrivals, bags are already in your room, keys on the pillow — you walk in and exhale.',
-    },
-    concierge: {
-      liveLabel: 'Live with you',
-      driverStatus: 'Your driver is at Column 5',
-      bagsStatus: 'Bags collected — next stop, your room',
-      messageZalo: 'Message us on Zalo / WhatsApp',
-    },
-    agent: {
-      brand: 'Voyager Agent',
-      brandSub: 'Concierge operations',
-      nav: {
-        dashboard: 'Dashboard',
-        bookings: 'Bookings',
-        bookingsAll: 'All bookings',
-        bookingsPickup: 'Airport pickup',
-        bookingsFastTrack: 'Fast-track',
-        bookingsHotel: 'Hotels',
-        bookingsTour: 'Tours',
-        customers: 'Customers',
-        products: 'Products',
-        destinations: 'Destinations',
-        reports: 'Reports',
-        support: 'Support',
-        settings: 'Settings',
-        logOut: 'Log out',
-      },
-      totalRevenue: 'Total revenue',
-      seeAllTransactions: 'See all transactions',
-      searchPlaceholder: 'ex. Booking No / Name / Phone',
-      bookings: {
-        title: 'Bookings',
-        count: (n) => `${n} bookings`,
-        countFiltered: (f, t) => `${f} of ${t} bookings`,
-        newBooking: 'New booking',
-        export: 'Export',
-        import: 'Import',
-        comingSoon: 'Coming soon',
-        loading: 'Loading bookings…',
-        loadError: 'Could not load bookings.',
-        empty: 'No bookings yet',
-        emptyHint: 'Customer bookings appear here as soon as they come in.',
-        pageSize: 'Rows',
-        rowsShown: (s, t) => `${s} of ${t}`,
-        prev: 'Previous',
-        next: 'Next',
-        page: (n) => `Page ${n}`,
-        filterStatus: {
-          all: 'All',
-          pending: 'Pending',
-          confirmed: 'Confirmed',
-          fulfilled: 'Fulfilled',
-          cancelled: 'Cancelled',
-          closed: 'Closed',
-        },
-        filterService: {
-          all: 'Any service',
-          pickup: 'Pickup',
-          fastTrack: 'Fast-track',
-          hotel: 'Hotel',
-          tour: 'Tour',
-        },
-        col: {
-          booking: 'Booking',
-          status: 'Status',
-          customer: 'Customer',
-          service: 'Service',
-          travel: 'Travel date',
-          pax: 'Pax',
-          total: 'Total',
-          created: 'Created',
-          payment: 'Payment',
-        },
-        paymentStatus: {
-          unpaid: 'Unpaid',
-          paid: 'Paid',
-          refunded: 'Refunded',
-          partial_refund: 'Partial refund',
-        },
-        detail: {
-          heading: 'Booking details',
-          contact: 'Contact',
-          name: 'Name',
-          phone: 'Phone',
-          items: 'Items',
-          totals: 'Totals',
-          subtotal: 'Subtotal',
-          discount: 'Discount',
-          total: 'Total',
-          notes: 'Notes',
-          noNotes: 'No notes from customer.',
-          payment: 'Payment',
-          method: 'Method',
-          paymentStatus: 'Status',
-          createdAt: 'Created',
-          updatedAt: 'Updated',
-          travelDate: 'Travel date',
-          travelTime: 'Time',
-          adults: 'Adults',
-          children: 'Children',
-          flight: 'Flight',
-          qty: 'Qty',
-          unitPrice: 'Unit price',
-          lineTotal: 'Line total',
-          selectPrompt: 'Select a booking',
-          selectHint: 'Click a row on the left to see details here.',
-          close: 'Close',
-          open: 'Open',
-        },
-      },
-    },
+const en: Dictionary = {
+  nav: {
+    fastTrack: 'Fast Track',
+    coverage: 'Airports',
+    howItWorks: 'How it works',
+    faq: 'FAQ',
+    about: 'About',
+    signIn: 'Sign in',
+    myTickets: 'My tickets',
+    deals: 'Deals',
+    destinations: 'Airports',
+    services: 'Fast Track',
+    help: 'Support',
   },
-  vi: {
+  common: {
+    cart: 'Cart',
+    bookNow: 'Book now',
+    continue: 'Continue',
+    back: 'Back',
+    cancel: 'Cancel',
+    home: 'Home',
+    email: 'Email',
+    phone: 'Phone',
+    name: 'Name',
+    save: 'Save',
+    edit: 'Edit',
+    remove: 'Remove',
+    optional: 'optional',
+    required: 'required',
+    learnMore: 'Learn more',
+    seeAll: 'See all',
+    yes: 'Yes',
+    no: 'No',
+    close: 'Close',
+    submit: 'Submit',
+    submitting: 'Submitting…',
+  },
+  hero: {
+    eyebrow: 'Voyager Fast Track',
+    title: 'Skip the queues. Walk straight through.',
+    sub: 'Priority check-in, baggage, security and immigration at every major Vietnamese airport — booked in under a minute.',
+    ctaPrimary: 'Book Fast Track',
+    ctaSecondary: 'See how it works',
+    trustline: 'Trusted by 10,000+ travellers · 24/7 hotline',
+  },
+  search: {
+    title: 'Where are you flying?',
+    airport: 'Airport',
+    airportPlaceholder: 'Pick an airport',
+    segment: 'Flight type',
+    direction: 'Direction',
+    travelDate: 'Travel date',
+    pax: 'Passengers',
+    paxSuffix: 'pax',
+    cta: 'Find Fast Track',
+    helper: 'Groups of 6+ get GIT pricing automatically.',
+  },
+  segment: { domestic: 'Domestic', international: 'International' },
+  direction: { arrival: 'Arrival', departure: 'Departure' },
+  inclusion: {
+    checkin: 'Priority check-in',
+    baggage: 'Priority baggage',
+    security: 'Priority security',
+    immigration: 'Priority immigration',
+  },
+  airportCard: {
+    fromLabel: 'From',
+    bookCta: 'Book Fast Track',
+    laneSummary: (segments) => `Domestic & international: ${segments}`,
+  },
+  coverage: {
+    eyebrow: 'Coverage',
+    heading: 'Every major Vietnamese airport',
+    sub: 'Same trusted Fast Track service across the network — book once, walk through anywhere.',
+  },
+  whyFastTrack: {
+    eyebrow: 'Why Fast Track',
+    heading: 'Designed for travellers who value time',
+    sub: 'Four priority lanes worked end-to-end by Vihat-certified airport staff.',
+    pillarCheckinTitle: 'Priority check-in',
+    pillarCheckinBody: 'Skip the airline queue with a dedicated counter and direct hand-off.',
+    pillarBaggageTitle: 'Priority baggage',
+    pillarBaggageBody: 'Bags tagged first — onto the belt before the rest of the flight.',
+    pillarSecurityTitle: 'Priority security',
+    pillarSecurityBody: 'Fast lane through screening with a host walking you through.',
+    pillarImmigrationTitle: 'Priority immigration',
+    pillarImmigrationBody: 'For international flights — straight to a dedicated officer.',
+  },
+  home: {
+    howHeading: 'How Fast Track works',
+    howStep1Title: 'Pick your airport',
+    howStep1Body: 'Choose airport, direction and date. Pricing is shown upfront in USD or VND.',
+    howStep2Title: 'Pay securely',
+    howStep2Body: 'Card via VNPay or Vietnamese bank transfer with QR. Confirmation in seconds.',
+    howStep3Title: 'Receive your ticket',
+    howStep3Body: 'Get a Fast Track ID instantly. Show it to our greeter at the airport — done.',
+  },
+  testimonials: {
+    eyebrow: 'Travellers say',
+    heading: 'A smoother way through every Vietnamese airport',
+  },
+  stats: {
+    eyebrow: 'Trusted by travellers',
+    heading: 'The numbers',
+    customers: 'Travellers served',
+    customersValue: '10,000+',
+    satisfaction: 'Customer satisfaction',
+    satisfactionValue: '93%',
+    repeat: 'Repeat-customer rate',
+    repeatValue: '90%',
+  },
+  faqTeaser: {
+    eyebrow: 'Need a hand?',
+    heading: 'Common questions',
+    sub: 'How much luggage is covered, when do I get my ticket, what if my flight changes — answered.',
+    cta: 'Read the FAQ',
+  },
+  faqPage: {
+    heading: 'Frequently asked questions',
+    sub: 'Everything you might need before booking Fast Track.',
+  },
+  about: {
+    heading: 'About Voyager',
+    sub: 'Fast Track at every Vietnamese airport, powered by Vihat.',
+    body: 'Voyager is the consumer brand for Vihat’s airport priority service network — operating Fast Track lanes at HAN, SGN, DAD, CXR, HUI, THD and VII. We’re here to make every flight in and out of Vietnam smoother.',
+  },
+  service: { fastTrack: 'Fast Track', pickup: 'Airport pickup', hotel: 'Hotel', tour: 'Tour', from: 'from' },
+  booking: {
+    title: 'Confirm your Fast Track',
+    laneTitle: 'Selected service',
+    paxLabel: 'Number of passengers',
+    addPax: 'Add passenger',
+    removePax: 'Remove',
+    flightLabel: 'Flight number',
+    travelTimeLabel: 'Flight time',
+    proceed: 'Continue to checkout',
+    soldOut: 'Sold out for this date',
+    soldOutNote: 'Try a different date or airport.',
+    inventoryRemaining: (n) => `Only ${n} slots left for this date`,
+  },
+  passenger: {
+    legend: (n) => `Passenger ${n}`,
+    firstName: 'First name',
+    lastName: 'Last name',
+    dob: 'Date of birth',
+    nationality: 'Nationality',
+    nationalityPlaceholder: 'e.g. VN, US, JP',
+    idType: 'ID type',
+    idTypePassport: 'Passport',
+    idTypeCccd: 'Vietnamese ID (CCCD)',
+    idNumber: 'ID number',
+    idPlaceholderPassport: 'Passport number',
+    idPlaceholderCccd: 'CCCD number (12 digits)',
+  },
+  payment: {
+    title: 'Payment',
+    methodVnpay: 'Card / VNPay',
+    methodVnpayDesc: 'Visa, Mastercard, JCB, ATM and QR via VNPay.',
+    methodBank: 'Bank transfer',
+    methodBankDesc: 'Vietnamese bank transfer — agent confirms within minutes.',
+    bankName: 'Bank',
+    bankAccount: 'Account number',
+    bankHolder: 'Account holder',
+    bankReference: 'Reference',
+    bankInstructions: 'Send the exact amount to the account below using the reference. Your ticket is issued the moment we confirm the deposit.',
+    qrAlt: 'VietQR for bank transfer',
+    redirecting: 'Redirecting to VNPay…',
+    payNow: 'Pay now',
+    confirmTransfer: 'I’ve made the transfer',
+  },
+  ticket: {
+    lookupTitle: 'Find my ticket',
+    lookupSub: 'Enter your phone number — we’ll send a verification code.',
+    ticketIdLabel: 'Fast Track ID',
+    showAtAirport: 'Show this ID at the Voyager desk at the airport.',
+    flightLabel: 'Flight',
+    statusPending: 'Pending payment',
+    statusConfirmed: 'Confirmed',
+    statusCancelled: 'Cancelled',
+    cancelCta: 'Cancel booking',
+    cancelWarning: 'Cancellations are allowed up to 24 hours before travel.',
+  },
+  checkout: {
+    title: 'Checkout',
+    step1: 'Cart',
+    step2: 'Details',
+    step3: 'Payment',
+    contactTitle: 'Contact details',
+    contactSubtitle: 'We’ll send the Fast Track ticket here.',
+    yourName: 'Full name',
+    namePlaceholder: 'As on your passport / ID',
+    phoneNumber: 'Phone number',
+    phonePlaceholder: '+84 ...',
+    emailLabel: 'Email',
+    emailPlaceholder: 'you@email.com',
+    travelDate: 'Travel date',
+    time: 'Flight time',
+    checkIn: 'Check-in',
+    checkInNote: 'Hotel will confirm time',
+    adults: 'Adults',
+    children: 'Children',
+    flightNumber: 'Flight number',
+    flightPlaceholder: 'e.g. VN123',
+    specialRequests: 'Special requests',
+    specialRequestsPlaceholder: 'Stroller, wheelchair, dietary needs…',
+    yourPriceSummary: 'Order summary',
+    subtotal: 'Subtotal',
+    total: 'Total',
+    requestBooking: 'Pay & book',
+    placingBooking: 'Placing booking…',
+    remove: 'Remove',
+    keepBrowsing: 'Keep browsing',
+    noPaymentTitle: 'Secure payment',
+    noPaymentBody: 'You’ll be redirected to VNPay or shown a VietQR depending on the method picked above.',
+    freeCancel: 'Free cancellation up to 24h before travel',
+    noBookingFees: 'No booking fees',
+    securePromise: 'Encrypted payments via VNPay',
+    errorName: 'Please enter your name.',
+    errorPhone: 'Please enter a valid phone number.',
+    errorDate: 'Please pick a travel date for every line.',
+    errorPassengers: 'Please fill in details for every passenger.',
+    errorEmail: 'Please enter a valid email.',
+    emptyTitle: 'Your cart is empty',
+    emptyBody: 'Pick an airport on the home page to add a Fast Track package.',
+    browseDestinations: 'Browse airports',
+    paymentMethod: 'Payment method',
+  },
+  success: {
+    eyebrow: 'Booking received',
+    title: 'You’re on the Fast Track',
+    subtitle: 'Show your Fast Track ID at the Voyager desk at the airport.',
+    reference: 'Booking reference',
+    ticketLabel: 'Fast Track ID',
+    pending: 'Awaiting payment confirmation',
+    contactBlock: 'Contact',
+    callBack: 'We’ll call you if anything is unclear.',
+    next1: 'A confirmation has been sent to your phone and email.',
+    next2: 'Arrive at the airport at least 90 minutes before international, 60 minutes domestic.',
+    next3: 'Look for the Voyager greeter at the entrance — they’ll find you with your Fast Track ID.',
+    flight: 'Flight',
+    notes: 'Notes',
+    details: 'Booking details',
+    total: 'Total',
+    adult: 'adult',
+    adults: 'adults',
+    child: 'child',
+    children: 'children',
+    backHome: 'Back to home',
+    keepBrowsing: 'Book another lane',
+    dateTbc: 'Date TBC',
+    whatsNext: 'What’s next',
+    loading: 'Loading your booking…',
+    errorTitle: 'We couldn’t find that booking.',
+    errorBack: 'Back to home',
+  },
+  login: {
+    title: 'Sign in',
+    sub: 'Sign in to view your tickets and bookings.',
+    email: 'Email',
+    password: 'Password',
+    submit: 'Sign in',
+    submitting: 'Signing in…',
+    errorMissing: 'Email and password are required.',
+    forgotLink: 'Forgot password?',
+    guestPrompt: 'No account?',
+    guestCta: 'Continue as guest',
+  },
+  forgot: {
+    title: 'Reset password',
+    sub: 'Enter your email and we’ll send a reset link.',
+    email: 'Email',
+    submit: 'Send reset link',
+    submitting: 'Sending…',
+    sentTitle: 'Check your inbox',
+    sentBody: (email) => `If ${email} is on file, a reset link is on its way.`,
+    errorMissing: 'Please enter your email.',
+    back: 'Back to sign in',
+  },
+  reset: {
+    title: 'Set a new password',
+    sub: 'Enter and confirm your new password.',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm password',
+    submit: 'Update password',
+    submitting: 'Saving…',
+    doneTitle: 'Password updated',
+    doneBody: 'You can now sign in with your new password.',
+    invalidTitle: 'Reset link is invalid or expired',
+    invalidBody: 'Please request a fresh reset link to continue.',
+    requestNew: 'Request a new link',
+    signIn: 'Sign in',
+    back: 'Back to sign in',
+    errorMissing: 'Please fill in both password fields.',
+    errorMismatch: 'Passwords do not match.',
+    errorShort: 'Password must be at least 8 characters.',
+    errorNoToken: 'Reset token missing.',
+  },
+  profile: {
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email',
+    phone: 'Phone',
+    avatarUrl: 'Avatar URL',
+  },
+  footer: {
+    tagline: 'Fast Track at every Vietnamese airport — powered by Vihat.',
+    exploreTitle: 'Explore',
+    fastTrack: 'Fast Track',
+    coverage: 'Airport coverage',
+    howItWorks: 'How it works',
+    supportTitle: 'Support',
+    helpCentre: 'Help centre',
+    contactUs: 'Contact us',
+    faq: 'FAQ',
+    aboutUs: 'About',
+    agentLogin: 'Agent login',
+    rights: 'All rights reserved.',
+    hotline: '24/7 hotline',
+    legal: 'Legal',
+  },
+  legal: { terms: 'Terms of service', privacy: 'Privacy policy' },
+  agent: {
+    brand: 'Voyager Agent',
+    brandSub: 'Operations console',
+    searchPlaceholder: 'Search bookings, customers, ticket IDs…',
+    seeAllTransactions: 'See all bookings',
+    totalRevenue: 'Total revenue',
     nav: {
-      destinations: 'Điểm đến',
-      services: 'Dịch vụ',
-      deals: 'Ưu đãi',
-      help: 'Trợ giúp',
-      signIn: 'Đăng nhập',
+      dashboard: 'Dashboard',
+      bookings: 'Bookings',
+      bookingsAll: 'All bookings',
+      bookingsFastTrack: 'Fast Track',
+      bookingsHotel: 'Hotel',
+      bookingsPickup: 'Pickup',
+      bookingsTour: 'Tour',
+      bookingsPending: 'Pending payment',
+      bookingsPaid: 'Paid',
+      inventory: 'Inventory',
+      pricing: 'Pricing',
+      airports: 'Airports',
+      customers: 'Customers',
+      destinations: 'Airports',
+      products: 'Products',
+      reports: 'Reports',
+      support: 'Support',
+      settings: 'Settings',
+      logOut: 'Log out',
     },
-    hero: {
-      eyebrow: 'Một hành trình trọn vẹn khắp Việt Nam',
-      ctaPrimary: 'Thiết kế hành trình',
-      ctaSecondary: 'Khám phá dịch vụ',
-      airportTag: (code) => `Bay đến ${code}`,
-      scrollHint: 'Cuộn xuống để xem các dịch vụ sân bay ↓',
+    inventory: {
+      title: 'Inventory',
+      sub: 'Daily Fast Track capacity per airport lane.',
+      capacity: 'Capacity',
+      sold: 'Sold',
+      remaining: 'Left',
+      saveCap: 'Save cap',
+      saved: 'Saved',
+      saveError: 'Save failed',
+      dateRange: 'Date range',
+      shiftDays: (n) => (n > 0 ? `+${n}d` : `${n}d`),
+      lane: 'Lane',
+      empty: 'No data for this range',
     },
-    service: {
-      pickup: 'Đón sân bay',
-      fastTrack: 'Fast-track',
-      hotel: 'Khách sạn',
-      tour: 'Tour',
-      from: 'từ',
+    pricing: {
+      title: 'Pricing',
+      sub: 'USD prices from the Vihat 2024 guide. Edit FIT/GIT and the daily cap inline.',
+      laneCol: 'Lane',
+      airportCol: 'Airport',
+      segmentCol: 'Segment',
+      directionCol: 'Direction',
+      fitCol: 'FIT (USD)',
+      gitCol: 'GIT (USD)',
+      capCol: 'Daily cap',
+      saveCta: 'Save changes',
+      savedNote: (n) => `${n} lane${n === 1 ? '' : 's'} updated`,
     },
-    common: {
-      vnd: 'VND',
-      usd: 'USD',
-      planMyTrip: 'Lên kế hoạch chuyến đi',
-      saveForLater: 'Xem dịch vụ',
-      addToCart: 'Thêm vào giỏ',
-      added: 'Đã thêm ✓',
-      cart: 'Giỏ hàng của bạn',
-      continue: 'Tiếp tục',
-      total: 'Tổng',
-      bookNow: 'Đặt ngay →',
-      home: 'Trang chủ',
-      keepExploring: 'Khám phá thêm',
-      otherDestinations: 'Điểm đến khác',
-      viewAll: 'Xem tất cả →',
+    dashboard: {
+      title: 'Dashboard',
+      sub: 'Snapshot of bookings and revenue.',
+      todayLabel: 'Today',
+      weekLabel: 'Last 7 days',
+      monthLabel: 'Last 30 days',
+      paidBookings: 'Paid bookings',
+      totalRevenue: 'Lifetime revenue',
+      revenueSub: 'Paid bookings only',
+      bySalesAirport: 'Sales by airport',
+      airportLabel: 'Airport',
+      salesLabel: 'Sold',
+      revenueLabel: 'Revenue (USD)',
     },
-    destination: {
-      whatsIncluded: 'Gói này bao gồm',
-      availableServices: 'Dịch vụ có sẵn',
-      startingFrom: 'Chỉ từ',
-      whereToNext: 'Bạn muốn đi đâu tiếp theo?',
-      indexSub: 'Từ 5 sân bay lớn, bạn có thể nối chuyến mượt mà đến khắp Việt Nam với xe đưa đón, fast-track, chỗ nghỉ và tour khám phá.',
-      bundleNote: 'Gộp xe đưa đón, fast-track, chỗ nghỉ và tour trong một đơn để thanh toán gọn một lần.',
-      from: 'từ',
-      home: 'Trang chủ',
-      pickupBlurb: 'Xe riêng hoặc van đón tận sảnh đến. Chúng tôi theo dõi chuyến bay liên tục để đón đúng giờ.',
-      fastTrackBlurb: 'Bỏ qua hàng chờ nhập cảnh. Phòng chờ VIP. Có nhân viên khuân vác riêng.',
-      hotelsBlurb: 'Chỗ nghỉ tuyển chọn kỹ — từ homestay ấm cúng đến resort ven biển.',
-      toursBlurb: 'Tour nửa ngày đến nhiều ngày, hướng dẫn viên bản địa am hiểu từng cung đường.',
-    },
-    services: {
-      heading: 'Từ cửa nhà đến điểm đến, Voyager lo trọn từng chặng.',
-      sub: '4 dịch vụ tại 5 sân bay trong một đơn đặt. Voyager lo hậu cần, bạn chỉ việc tận hưởng chuyến đi.',
-      pickupSub: 'Xe riêng, SUV hoặc van đón tận sảnh đến. Chuyến bay trễ cũng không lo vì đã có hệ thống theo dõi tự động.',
-      fastTrackSub: 'Đi lối ưu tiên nhập cảnh, nghỉ tại phòng chờ CIP và có nhân viên hỗ trợ hành lý từ cổng ra xe.',
-      hotelsSub: 'Chỗ nghỉ được tuyển chọn gần sân bay và khu trung tâm, xác nhận trước khi bạn hạ cánh.',
-      toursSub: 'Tour nửa ngày đến nhiều ngày với hướng dẫn viên bản địa am hiểu điểm đến.',
-      pickupBullets: ['Xe riêng — không đi ghép', 'Đón tận khu vực lấy hành lý', 'Tự động theo dõi chuyến bay', 'Ghế trẻ em khi cần'],
-      fastTrackBullets: ['Làn ưu tiên nhập cảnh', 'Phòng chờ CIP trong lúc chờ', 'Nhân viên khuân vác riêng từ cổng', 'Áp dụng cả chiều đến lẫn đi'],
-      hotelsBullets: ['Tuyển chọn kỹ từng chỗ', 'Gần sân bay hoặc trung tâm', 'Xác nhận trước khi bạn đến', 'Đủ hạng từ 2–5 sao'],
-      toursBullets: ['Hướng dẫn viên bản địa', 'Nửa ngày đến nhiều ngày', 'Nhóm nhỏ hoặc riêng tư', 'Lịch trình tùy chỉnh'],
-    },
-    servicesBand: {
-      eyebrow: 'Voyager lo gì',
-      heading: 'Dịch vụ sân bay tại 5 cửa ngõ lớn của Việt Nam.',
-      sub: 'Từ lúc máy bay chạm đất đến khi bạn vào phòng, Voyager lo trọn.',
-      pickupSub: 'Xe riêng, SUV hoặc van đón tận sảnh, theo dõi chuyến bay theo thời gian thực.',
-      fastTrackSub: 'Qua nhanh cửa nhập cảnh. Phòng chờ VIP. Có nhân viên khuân vác.',
-      hotelsSub: 'Chỗ nghỉ tuyển chọn, cạnh mọi sân bay và điểm đến.',
-      toursSub: 'Nửa ngày đến nhiều ngày, hướng dẫn viên bản địa am hiểu từng con phố.',
-    },
-    deals: {
-      eyebrow: 'Ưu đãi đặc biệt',
-      heading: 'Ưu đãi dành cho người hay di chuyển.',
-      sub: 'Đặt gói để tiết kiệm hơn với giá theo mùa, giảm giá nhóm và ưu đãi phút chót được cập nhật liên tục.',
-      badgeLimited: 'Giới hạn',
-      badgeNew: 'Mới',
-      badgePopular: 'Được yêu thích',
-      ctaBook: 'Đặt ngay →',
-      ctaTerms: 'Áp dụng điều kiện',
-      expiresLabel: 'Hết hạn',
-    },
-    trust: {
-      stat1: 'đánh giá thật từ khách đã sử dụng dịch vụ',
-      stat2: 'dịch vụ sân bay và tour có thể đặt trong vài phút',
-      stat3: 'xác nhận nhanh, không cần trao đổi email qua lại',
-      stat4: 'phục vụ tại: Hà Nội, TP.HCM, Đà Nẵng, Nha Trang, Phú Quốc',
-    },
-    help: {
-      eyebrow: 'Hỗ trợ & câu hỏi thường gặp',
-      heading: 'Voyager đồng hành cùng bạn trước, trong và sau chuyến đi.',
-      sub: 'Bạn thắc mắc cách đặt dịch vụ, quyền lợi đi kèm hoặc xử lý khi chuyến bay trễ? Tất cả đều có câu trả lời ở đây.',
-      howItWorksTitle: 'Cách Voyager đồng hành cùng bạn',
-      step1Title: 'Chọn dịch vụ',
-      step1Body: 'Chọn điểm đến và dịch vụ bạn cần — đón sân bay, fast-track, khách sạn hoặc tour — Voyager lo phần còn lại.',
-      step2Title: 'Để lại thông tin liên hệ',
-      step2Body: 'Chỉ cần để lại tên, số điện thoại và ngày đi. Bạn chưa cần thanh toán ngay.',
-      step3Title: 'Voyager gọi xác nhận',
-      step3Body: 'Trong vài giờ, Voyager sẽ gọi lại để chốt chi tiết. Bạn thanh toán khi đến nơi bằng tiền mặt hoặc thẻ.',
-      faqTitle: 'Câu hỏi thường gặp',
-      q1: 'Tôi có phải thanh toán ngay hôm nay không?',
-      a1: 'Không. Bạn có thể đặt trước hôm nay và thanh toán khi đến nơi. Không cần thẻ, không mất phí trước.',
-      q2: 'Chuyến bay bị trễ thì sao?',
-      a2: 'Chúng tôi theo dõi chuyến bay theo thời gian thực. Tài xế và nhân viên fast-track được cập nhật tự động, bạn ra đến nơi là có người đón.',
-      q3: 'Tôi đặt cho cả nhóm được không?',
-      a3: 'Được. Khi đặt, bạn nhập số người lớn và trẻ em cho từng dịch vụ. Nếu đi nhóm đông, hãy ghi thêm ở mục "Yêu cầu thêm" để chúng tôi bố trí xe phù hợp.',
-      q4: 'Chính sách huỷ thế nào?',
-      a4: 'Bạn có thể huỷ hoặc đổi lịch qua Zalo/điện thoại trước giờ sử dụng ít nhất 24 tiếng. Vì chưa thanh toán trước nên không phát sinh hoàn tiền.',
-      q5: 'Có ghế trẻ em không?',
-      a5: 'Có — ghi yêu cầu ở mục "Yêu cầu thêm" khi đặt. Ghế trẻ em miễn phí.',
-      contactTitle: 'Còn thắc mắc khác?',
-      contactBody: 'Đội ngũ Voyager hỗ trợ cả tiếng Việt và tiếng Anh. Nhắn Zalo hoặc gọi trực tiếp, chúng tôi phản hồi trong khoảng một giờ.',
-      contactCta: 'Nhắn Zalo ngay →',
-    },
-    checkout: {
-      eyebrow: 'Xác nhận đặt chỗ',
-      title: 'Hoàn tất chuyến đi của bạn',
-      subtitle: 'Để lại thông tin liên hệ và ngày đi. Voyager sẽ gọi lại trong vài giờ để chốt chi tiết. Bạn thanh toán khi đến nơi.',
-      contactTitle: 'Thông tin liên hệ',
-      contactSubtitle: 'Voyager sẽ gọi vào số này để chốt lịch và báo giá chi tiết cho bạn.',
-      yourName: 'Họ và tên',
-      namePlaceholder: 'VD: Nguyễn Văn A',
-      phoneNumber: 'Số điện thoại',
-      phonePlaceholder: 'VD: 0901 234 567',
-      travelDate: 'Ngày khởi hành',
-      time: 'Giờ xuất phát',
-      checkIn: 'Nhận phòng',
-      checkInNote: 'Tiêu chuẩn (từ 14:00)',
-      adults: 'Người lớn',
-      children: 'Trẻ em',
-      flightNumber: 'Số hiệu chuyến bay',
-      flightPlaceholder: 'VD: VN54',
-      specialRequests: 'Yêu cầu thêm',
-      specialRequestsPlaceholder: 'Ví dụ: ghế trẻ em, suất ăn chay, nhận phòng sớm... Hãy chia sẻ để chúng tôi chuẩn bị trước cho bạn.',
-      summary: 'Chi tiết chuyến đi',
-      subtotal: 'Tạm tính',
-      total: 'Tổng cộng',
-      callNote: 'Voyager sẽ gọi lại trong vài giờ để xác nhận. Bạn chưa cần thanh toán ngay, chỉ thanh toán khi đến nơi.',
-      requestBooking: 'Gửi yêu cầu đặt chỗ',
-      placingBooking: 'Đang gửi yêu cầu…',
-      keepBrowsing: '← Tiếp tục khám phá',
-      remove: 'Bỏ',
-      emptyTitle: 'Giỏ của bạn đang trống',
-      emptyBody: 'Hãy chọn điểm đến và thêm dịch vụ đón sân bay, fast-track, khách sạn hoặc tour để bắt đầu.',
-      browseDestinations: 'Khám phá ngay',
-      errorName: 'Vui lòng nhập họ tên để chúng tôi tiện xưng hô khi liên hệ.',
-      errorPhone: 'Vui lòng nhập số điện thoại để chúng tôi liên hệ.',
-      errorDate: 'Vui lòng chọn ngày sử dụng cho từng dịch vụ trong giỏ.',
-      step1: 'Lựa chọn',
-      step2: 'Thông tin',
-      step3: 'Hoàn tất',
-      priceDetails: 'Chi tiết giá',
-      yourPriceSummary: 'Tóm tắt giá',
-      noPaymentTitle: 'Không cần thanh toán ngay',
-      noPaymentBody: 'Voyager sẽ gọi lại trong vài giờ để xác nhận và sắp xếp thanh toán khi bạn đến nơi.',
-      freeCancel: 'Huỷ miễn phí trước 24h',
-      noBookingFees: 'Không phí đặt chỗ',
-      securePromise: 'Giá chốt trước, minh bạch trước khi thanh toán',
-    },
-    search: {
-      tabHotels: 'Khách sạn',
-      tabTransfers: 'Đưa đón',
-      tabFastTrack: 'Fast-track',
-      tabTours: 'Tour',
-      destination: 'Điểm đến',
-      destinationPh: 'Bạn muốn đến đâu?',
-      dates: 'Nhận phòng - Trả phòng',
-      datesPh: 'Chọn ngày',
-      travelers: 'Khách',
-      adults: 'Người lớn',
-      children: 'Trẻ em',
-      search: 'Tìm',
-      heroHeading: 'Khách sạn, đưa đón & tour khắp Việt Nam',
-      heroSub: 'Từ đón sân bay đến tour khám phá, bạn có thể đặt trọn gói chỉ trong một lần. Voyager xác nhận trước, bạn thanh toán khi đến nơi.',
-      exploreStrip: 'Khám phá điểm đến',
-    },
-    filters: {
-      title: 'Lọc theo',
-      clearAll: 'Xoá bộ lọc',
-      serviceType: 'Loại dịch vụ',
-      priceRange: 'Khoảng giá',
-      starRating: 'Hạng sao',
-      airport: 'Sân bay',
-      reviewScore: 'Điểm đánh giá',
-      sortBy: 'Sắp xếp',
-      sortRecommended: 'Voyager gợi ý',
-      sortPriceAsc: 'Giá thấp đến cao',
-      sortPriceDesc: 'Giá cao đến thấp',
-      sortRating: 'Đánh giá cao nhất',
-      resultsCount: (n) => `${n} điểm đến phù hợp`,
-      viewServices: 'Xem dịch vụ',
-      fromPrice: 'Chỉ từ',
-      verified: 'Voyager kiểm định',
-      freeCancel: 'Huỷ miễn phí',
-      noPrepayment: 'Không cần trả trước',
-    },
-    home: {
-      browseHeading: 'Khám phá theo điểm đến',
-      browseSub: 'Từ 5 cửa ngõ hàng không, bạn có thể đi khắp mọi miền Việt Nam.',
-      whyHeading: 'An tâm trọn chuyến — từng cây số.',
-      why1Title: 'Tạm biệt nỗi lo hậu cần',
-      why1Body: 'Chẳng còn cảnh xếp hàng hay chờ đợi mệt mỏi. Voyager kết nối mọi chặng hành trình, giúp bạn tận hưởng trọn vẹn từng khoảnh khắc mà không cần bận tâm chi tiết.',
-      why2Title: 'Một điểm chạm, vạn tiện nghi',
-      why2Body: 'Voyager đồng hành cùng bạn trên mọi nền tảng (Zalo/WhatsApp). Từ lúc khởi hành tại gia cho đến khi nhận phòng, mọi yêu cầu của bạn đều được xử lý nhanh chóng trong một kênh duy nhất.',
-      why3Title: 'An tâm bay, rảnh tay tận hưởng',
-      why3Body: 'Dù chuyến bay trễ giờ, đổi cổng hay hạ cánh muộn, chúng tôi sẽ chủ động điều phối lại xe đưa đón, thủ tục fast-track và khách sạn. Việc của bạn chỉ là thư giãn và đi theo lộ trình mới.',
-      why4Title: 'Đưa đón tận nơi, ưu tiên hàng đầu',
-      why4Body: 'Hành lý của bạn sẽ được vận chuyển thẳng từ nhà đến phòng khách sạn. Đội ngũ nhân viên luôn túc trực đón tiếp trực tiếp tại điểm hẹn, đảm bảo bạn không bao giờ phải tự xoay xở một mình.',
-      howHeading: 'Đặt chỗ trong ba bước',
-      howStep1Title: 'Chọn dịch vụ',
-      howStep1Body: 'Chọn điểm đến và dịch vụ bạn cần.',
-      howStep2Title: 'Để lại thông tin',
-      howStep2Body: 'Tên, số điện thoại, ngày đi — không cần thanh toán ngay.',
-      howStep3Title: 'Voyager xác nhận, bạn yên tâm lên đường',
-      howStep3Body: 'Chúng tôi gọi lại chốt chi tiết và báo giá. Thanh toán khi đến nơi.',
-      offersHeading: 'Ưu đãi trong tuần',
-      offersSub: 'Gói trọn, giá nhóm và ưu đãi đặt sớm.',
-      offersSeeAll: 'Xem tất cả ưu đãi →',
-    },
-    success: {
-      eyebrow: 'Đã nhận yêu cầu',
-      title: 'Voyager đã bắt đầu lo chuyến đi cho bạn',
-      subtitle: 'Chúng tôi đang chuẩn bị từng chi tiết và sẽ gọi lại để xác nhận đầy đủ trong vài giờ tới.',
-      reference: 'Mã đặt chỗ',
-      status: 'Trạng thái',
-      pending: 'Đang chuẩn bị',
-      whatsNext: 'Điều tiếp theo',
-      next1: 'Voyager sẽ gọi lại trong vài giờ để xác nhận toàn bộ chi tiết.',
-      next2: 'Chúng tôi giữ giá và gửi tóm tắt chuyến đi qua tin nhắn.',
-      next3: 'Bạn thanh toán khi đến nơi bằng tiền mặt hoặc thẻ tại điểm dịch vụ.',
-      details: 'Chi tiết đặt chỗ',
-      contactBlock: 'Liên hệ',
-      callBack: 'Gọi lại số',
-      total: 'Tổng cộng',
-      notes: 'Ghi chú',
-      keepBrowsing: 'Tiếp tục khám phá',
-      backHome: 'Về Trang chủ',
-      errorTitle: 'Không tải được đặt chỗ này',
-      errorBack: 'Quay lại điểm đến',
-      dateTbc: 'Chưa chọn ngày',
-      adult: 'người lớn',
-      adults: 'người lớn',
-      child: 'trẻ em',
-      children: 'trẻ em',
-      flight: 'Chuyến bay',
-      loading: 'Đang tải…',
-    },
-    footer: {
-      exploreTitle: 'Khám phá',
-      destinations: 'Điểm đến',
-      services: 'Dịch vụ',
-      deals: 'Ưu đãi',
-      supportTitle: 'Hỗ trợ',
-      helpCentre: 'Trung tâm hỗ trợ',
-      faq: 'Câu hỏi thường gặp',
-      contactUs: 'Liên hệ',
-      rights: 'Đã đăng ký bản quyền.',
-      tagline: 'Đồng hành cùng bạn khám phá Việt Nam.',
-      agentLogin: 'Đăng nhập nhân viên',
-    },
-    summary: {
-      title: 'Lựa chọn của bạn',
-      hint: 'Thêm dịch vụ bạn cần. Voyager sẽ gọi lại chốt lịch cùng bạn.',
-      empty: 'Giỏ trống',
-      remove: 'Bỏ',
-      reserve: 'Đặt chỗ →',
-    },
-    goodToKnow: {
-      title: 'Điều bạn yên tâm',
-      b1: 'Huỷ miễn phí trước giờ sử dụng 24 tiếng',
-      b2: 'Không cần thanh toán trước - trả khi đến nơi',
-      b3: 'Đội ngũ Voyager nói cả tiếng Việt và tiếng Anh',
-      b4: 'Dịch vụ đón sân bay tự theo dõi chuyến bay của bạn',
-      b5: 'Ghế trẻ em miễn phí khi bạn yêu cầu',
-      b6: 'Hỗ trợ 24/7 qua Zalo / WhatsApp',
-    },
-    offers: {
-      eyebrow: 'Ưu đãi trong tuần',
-      heading: 'Tiết kiệm hơn khi đặt trọn gói, đi nhóm đông hoặc đặt sớm',
-      sub: 'Tiết kiệm đến 30% khi gộp đón sân bay với fast-track hoặc đặt khách sạn trước 30 ngày.',
-      cta: 'Xem tất cả ưu đãi →',
-    },
-    listing: {
-      upTo: 'Tối đa',
-      reviewsCount: (n) => `${n} đánh giá`,
-      noResults: 'Chưa có điểm đến phù hợp với bộ lọc.',
-      clearFilters: 'Xoá bộ lọc',
-    },
-    login: {
-      title: 'Đăng nhập',
-      sub: 'Đăng nhập vào tài khoản Voyager',
-      email: 'Email',
-      password: 'Mật khẩu',
-      forgotLink: 'Quên mật khẩu?',
-      submit: 'Đăng nhập',
-      submitting: 'Đang đăng nhập…',
-      guestPrompt: 'Chỉ muốn đặt chỗ?',
-      guestCta: 'Tiếp tục với tư cách khách →',
-      errorMissing: 'Vui lòng nhập email và mật khẩu.',
-    },
-    forgot: {
-      title: 'Quên mật khẩu?',
-      sub: 'Nhập email để nhận liên kết đặt lại mật khẩu ngay.',
-      email: 'Email',
-      submit: 'Gửi link đặt lại',
-      submitting: 'Đang gửi…',
-      sentTitle: 'Kiểm tra hộp thư',
-      sentBody: (email) => `Nếu ${email} đã đăng ký tài khoản, chúng tôi đã gửi liên kết đặt lại mật khẩu. Liên kết có hiệu lực trong 1 giờ.`,
-      back: '← Quay lại đăng nhập',
-      errorMissing: 'Vui lòng nhập địa chỉ email.',
-    },
-    reset: {
-      title: 'Đặt mật khẩu mới',
-      sub: 'Mật khẩu cần ít nhất 8 ký tự.',
-      newPassword: 'Mật khẩu mới',
-      confirmPassword: 'Xác nhận mật khẩu',
-      submit: 'Đặt lại mật khẩu',
-      submitting: 'Đang xử lý…',
-      doneTitle: 'Đã đặt lại mật khẩu',
-      doneBody: 'Bây giờ bạn có thể đăng nhập bằng mật khẩu mới.',
-      signIn: 'Đăng nhập',
-      invalidTitle: 'Link không hợp lệ',
-      invalidBody: 'Link đặt lại mật khẩu này đã hỏng hoặc hết hạn.',
-      requestNew: 'Yêu cầu link mới',
-      back: '← Quay lại đăng nhập',
-      errorShort: 'Mật khẩu cần ít nhất 8 ký tự.',
-      errorMismatch: 'Mật khẩu nhập lại không khớp.',
-      errorNoToken: 'Thiếu mã đặt lại mật khẩu.',
-    },
-    seamless: {
-      eyebrow: 'Từ cửa nhà đến điểm đến',
-      headline: 'Hành trình của bạn, tâm giao của Voyager.',
-      sub: 'Từ lúc khép lại cánh cửa nhà đến khi mở vali tại điểm đến — chúng tôi lo toan mọi nẻo đường, để bạn trọn vẹn từng khoảnh khắc.',
-      ctaPrimary: 'Đặt gói trọn chuyến →',
-      ctaSecondary: 'Xem cách Voyager đồng hành',
-      peaceHeading: 'An tâm trọn chuyến — từng cây số.',
-    },
-    bundles: {
-      eyebrow: 'Gói trải nghiệm',
-      heading: 'Ba phong cách đồng hành, trọn vẹn theo cách bạn đi.',
-      sub: 'Hành trình được thiết kế đồng bộ theo từng cá tính, không phải những mảnh ghép rời rạc chờ bạn tự lắp ráp. Chỉ một chạm, cả hệ sinh thái trải nghiệm đã sẵn sàng đón lối.',
-      planCta: 'Trải nghiệm ngay →',
-      includesLabel: 'Bao gồm',
-      fromLabel: 'từ',
-      businessName: 'Doanh nhân',
-      businessTagline: 'Xe riêng đưa đón tận cửa, thủ tục ưu tiên và phòng chờ CIP đẳng cấp. Dành riêng cho lịch trình bận rộn — để hành trình của bạn bắt đầu đầy cảm hứng ngay khi vừa chạm đất.',
-      familyName: 'Gia đình',
-      familyTagline: 'Không gian rộng rãi cho cả nhà, hỗ trợ hành lý tận tay và sự thấu hiểu dành cho bé. Một hành trình thong dong, uốn lượn nhịp nhàng theo từng giấc ngủ và tiếng cười của trẻ thơ.',
-      firstName: 'First-Class',
-      firstTagline: 'Đặc quyền xe hạng sang, lối đi riêng biệt và dịch vụ "white-glove" tận tâm. Mọi chi tiết được mài giũa để chạm đến sự hoàn hảo, mang lại cảm giác mượt mà tuyệt đối từ đầu chí cuối.',
-      svcPickup: 'Xe riêng đưa đón hai chiều',
-      svcFastTrack: 'Thủ tục Fast-track ưu tiên',
-      svcLounge: 'Phòng chờ CIP cao cấp',
-      svcPorter: 'Hỗ trợ khuân vác trọn gói',
-      svcLuggage: 'Hỗ trợ hành lý tận nơi',
-      svcChildSeat: 'Ghế trẻ em an toàn (miễn phí)',
-      svcWhiteGlove: 'Check-in "white-glove" tinh tế',
-      svcItinerary: 'Lịch trình thiết kế riêng cho gia đình',
-      svcHotel: 'Điểm đến được chọn lọc kỹ lưỡng',
-      svcVan: 'Xe 7 chỗ sang trọng & riêng tư',
-      svcSedan: 'Sedan hạng sang đưa đón tận nhà',
-      svcFastTrackFirst: 'Lối ưu tiên Fast-track riêng biệt',
-      svcLoungeFirst: 'Phòng chờ thương gia đặc quyền',
-      svcLuggageFirst: 'Dịch vụ hành lý trọn gói',
-    },
-    journeyMap: {
-      eyebrow: 'Chuyến đi trọn vẹn',
-      heading: 'Từ ngưỡng cửa đến vạn nẻo đường — chúng tôi nâng niu từng bước chân bạn.',
-      sub: 'Chọn để cảm nhận sự tận tâm trong từng bước, để mỗi chuyến đi chỉ còn lại niềm vui.',
-      addToBundle: 'Thêm vào gói →',
-      pickVehicle: 'Chọn xe →',
-      seeBundles: 'Xem các gói →',
-      homeLabel: 'Tại nhà',
-      homeTitle: 'Lấy hành lý tận nhà',
-      homeBody: 'Hành lý được nhận ngay tại cửa nhà, gắn thẻ đầy đủ và chuyển thẳng đến phòng khách sạn. Bạn không cần tự mang theo suốt hành trình.',
-      transferLabel: 'Xe đưa đón',
-      transferTitle: 'Từ nhà đến cổng',
-      transferBody: 'Có sedan, SUV hoặc van 7 chỗ. Tài xế đón tận cửa nhà, theo dõi chuyến bay liên tục và đón đúng điểm hẹn tại sân bay.',
-      airportLabel: 'Tại sân bay',
-      airportTitle: 'Fast-track + phòng chờ CIP',
-      airportBody: 'Làm thủ tục qua làn ưu tiên nhập cảnh, có nhân viên hỗ trợ hành lý từ cổng và phòng chờ cho cả đoàn trong lúc chờ xử lý.',
-      flightLabel: 'Chuyến bay',
-      flightTitle: 'Theo sát chuyến bay',
-      flightBody: 'Trễ giờ, đổi cổng, đáp muộn — chúng tôi tự cập nhật lại tài xế, nhân viên fast-track và lễ tân khách sạn.',
-      destinationLabel: 'Điểm đến',
-      destinationTitle: 'Đưa đón & nhận phòng',
-      destinationBody: 'Xe đã chờ sẵn tại sảnh đến, hành lý được chuyển vào phòng trước. Bạn chỉ việc nhận phòng và nghỉ ngơi.',
-    },
-    concierge: {
-      liveLabel: 'Đang theo bạn',
-      driverStatus: 'Tài xế đang đợi tại Cột số 5',
-      bagsStatus: 'Đã nhận hành lý - điểm đến tiếp theo: phòng của bạn',
-      messageZalo: 'Nhắn Zalo / WhatsApp',
-    },
-    agent: {
-      brand: 'Voyager Agent',
-      brandSub: 'Vận hành concierge',
-      nav: {
-        dashboard: 'Bảng điều khiển',
-        bookings: 'Đơn đặt',
-        bookingsAll: 'Tất cả đơn',
-        bookingsPickup: 'Đón sân bay',
-        bookingsFastTrack: 'Fast-track',
-        bookingsHotel: 'Khách sạn',
-        bookingsTour: 'Tour',
-        customers: 'Khách hàng',
-        products: 'Dịch vụ',
-        destinations: 'Điểm đến',
-        reports: 'Báo cáo',
-        support: 'Hỗ trợ',
-        settings: 'Cài đặt',
-        logOut: 'Đăng xuất',
+    bookings: {
+      title: 'All bookings',
+      newBooking: 'New booking',
+      import: 'Import',
+      export: 'Export',
+      empty: 'No bookings yet',
+      emptyHint: 'Customer bookings will appear here once travellers complete checkout.',
+      loading: 'Loading bookings…',
+      loadError: 'Could not load bookings',
+      pageSize: 'Per page',
+      prev: 'Prev',
+      next: 'Next',
+      count: (n) => `${n} booking${n === 1 ? '' : 's'}`,
+      filterStatus: {
+        all: 'All',
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        fulfilled: 'Fulfilled',
+        cancelled: 'Cancelled',
+        closed: 'Closed',
       },
-      totalRevenue: 'Tổng doanh thu',
-      seeAllTransactions: 'Xem tất cả giao dịch',
-      searchPlaceholder: 'vd. Mã đơn / Tên / SĐT',
-      bookings: {
-        title: 'Đơn đặt',
-        count: (n) => `${n} đơn`,
-        countFiltered: (f, t) => `${f} trên ${t} đơn`,
-        newBooking: 'Tạo đơn mới',
-        export: 'Xuất',
-        import: 'Nhập',
-        comingSoon: 'Sắp ra mắt',
-        loading: 'Đang tải đơn…',
-        loadError: 'Không tải được đơn.',
-        empty: 'Chưa có đơn nào',
-        emptyHint: 'Đơn khách đặt sẽ hiện ở đây ngay khi được gửi.',
-        pageSize: 'Số dòng',
-        rowsShown: (s, t) => `${s}/${t}`,
-        prev: 'Trước',
-        next: 'Tiếp',
-        page: (n) => `Trang ${n}`,
-        filterStatus: {
-          all: 'Tất cả',
-          pending: 'Chờ xử lý',
-          confirmed: 'Đã xác nhận',
-          fulfilled: 'Đã hoàn thành',
-          cancelled: 'Đã hủy',
-          closed: 'Đã đóng',
-        },
-        filterService: {
-          all: 'Tất cả dịch vụ',
-          pickup: 'Đón sân bay',
-          fastTrack: 'Fast-track',
-          hotel: 'Khách sạn',
-          tour: 'Tour',
-        },
-        col: {
-          booking: 'Mã đơn',
-          status: 'Trạng thái',
-          customer: 'Khách hàng',
-          service: 'Dịch vụ',
-          travel: 'Ngày đi',
-          pax: 'Khách',
-          total: 'Tổng',
-          created: 'Ngày tạo',
-          payment: 'Thanh toán',
-        },
-        paymentStatus: {
-          unpaid: 'Chưa thanh toán',
-          paid: 'Đã thanh toán',
-          refunded: 'Đã hoàn tiền',
-          partial_refund: 'Hoàn một phần',
-        },
-        detail: {
-          heading: 'Chi tiết đơn',
-          contact: 'Liên hệ',
-          name: 'Họ tên',
-          phone: 'Số điện thoại',
-          items: 'Dịch vụ đã đặt',
-          totals: 'Tổng cộng',
-          subtotal: 'Tạm tính',
-          discount: 'Giảm giá',
-          total: 'Tổng',
-          notes: 'Ghi chú',
-          noNotes: 'Khách không để lại ghi chú.',
-          payment: 'Thanh toán',
-          method: 'Phương thức',
-          paymentStatus: 'Trạng thái',
-          createdAt: 'Tạo lúc',
-          updatedAt: 'Cập nhật',
-          travelDate: 'Ngày đi',
-          travelTime: 'Giờ',
-          adults: 'Người lớn',
-          children: 'Trẻ em',
-          flight: 'Chuyến bay',
-          qty: 'SL',
-          unitPrice: 'Đơn giá',
-          lineTotal: 'Thành tiền',
-          selectPrompt: 'Chọn một đơn',
-          selectHint: 'Nhấn vào đơn bên trái để xem chi tiết tại đây.',
-          close: 'Đóng',
-          open: 'Mở',
-        },
+      filterService: {
+        all: 'All services',
+        fastTrack: 'Fast Track',
+        pickup: 'Pickup',
+        hotel: 'Hotel',
+        tour: 'Tour',
+      },
+      paymentStatus: {
+        unpaid: 'Unpaid',
+        paid: 'Paid',
+        pending_transfer: 'Pending transfer',
+        refunded: 'Refunded',
+        partial_refund: 'Partial refund',
+      },
+      col: {
+        booking: 'Booking',
+        status: 'Status',
+        customer: 'Customer',
+        service: 'Service',
+        travel: 'Travel',
+        pax: 'Pax',
+        total: 'Total',
+        payment: 'Payment',
+        created: 'Created',
+      },
+      detail: {
+        heading: 'Booking details',
+        close: 'Close',
+        contact: 'Contact',
+        name: 'Name',
+        phone: 'Phone',
+        items: 'Items',
+        flight: 'Flight',
+        travelDate: 'Travel date',
+        travelTime: 'Travel time',
+        adults: 'Adults',
+        children: 'Children',
+        qty: 'Qty',
+        unitPrice: 'Unit price',
+        notes: 'Notes',
+        noNotes: 'No notes provided.',
+        totals: 'Totals',
+        subtotal: 'Subtotal',
+        discount: 'Discount',
+        total: 'Total',
+        payment: 'Payment',
+        method: 'Method',
+        paymentStatus: 'Status',
+        createdAt: 'Created',
+        updatedAt: 'Updated',
       },
     },
   },
 }
 
-export type Dictionary = Dict
+const vi: Dictionary = {
+  nav: {
+    fastTrack: 'Fast Track',
+    coverage: 'Sân bay',
+    howItWorks: 'Quy trình',
+    faq: 'Câu hỏi',
+    about: 'Về chúng tôi',
+    signIn: 'Đăng nhập',
+    myTickets: 'Vé của tôi',
+    deals: 'Ưu đãi',
+    destinations: 'Sân bay',
+    services: 'Fast Track',
+    help: 'Hỗ trợ',
+  },
+  common: {
+    cart: 'Giỏ hàng',
+    bookNow: 'Đặt ngay',
+    continue: 'Tiếp tục',
+    back: 'Quay lại',
+    cancel: 'Huỷ',
+    home: 'Trang chủ',
+    email: 'Email',
+    phone: 'Điện thoại',
+    name: 'Họ tên',
+    save: 'Lưu',
+    edit: 'Sửa',
+    remove: 'Xoá',
+    optional: 'tuỳ chọn',
+    required: 'bắt buộc',
+    learnMore: 'Tìm hiểu',
+    seeAll: 'Xem tất cả',
+    yes: 'Có',
+    no: 'Không',
+    close: 'Đóng',
+    submit: 'Gửi',
+    submitting: 'Đang gửi…',
+  },
+  hero: {
+    eyebrow: 'Voyager Fast Track',
+    title: 'Bỏ qua hàng đợi. Đi thẳng vào cổng.',
+    sub: 'Ưu tiên check-in, hành lý, an ninh và xuất nhập cảnh tại mọi sân bay lớn ở Việt Nam — đặt trong chưa đầy một phút.',
+    ctaPrimary: 'Đặt Fast Track',
+    ctaSecondary: 'Xem cách hoạt động',
+    trustline: 'Hơn 10.000 khách tin dùng · Hotline 24/7',
+  },
+  search: {
+    title: 'Bạn sẽ bay từ đâu?',
+    airport: 'Sân bay',
+    airportPlaceholder: 'Chọn sân bay',
+    segment: 'Loại chuyến bay',
+    direction: 'Chiều',
+    travelDate: 'Ngày bay',
+    pax: 'Số khách',
+    paxSuffix: 'khách',
+    cta: 'Tìm Fast Track',
+    helper: 'Đoàn từ 6 khách trở lên áp dụng giá GIT.',
+  },
+  segment: { domestic: 'Nội địa', international: 'Quốc tế' },
+  direction: { arrival: 'Đến', departure: 'Đi' },
+  inclusion: {
+    checkin: 'Ưu tiên check-in',
+    baggage: 'Ưu tiên hành lý',
+    security: 'Ưu tiên an ninh',
+    immigration: 'Ưu tiên xuất nhập cảnh',
+  },
+  airportCard: {
+    fromLabel: 'Từ',
+    bookCta: 'Đặt Fast Track',
+    laneSummary: (segments) => `Nội địa & quốc tế: ${segments}`,
+  },
+  coverage: {
+    eyebrow: 'Mạng lưới',
+    heading: 'Mọi sân bay lớn tại Việt Nam',
+    sub: 'Cùng một dịch vụ Fast Track đáng tin cậy trên cả mạng lưới — đặt một lần, đi đâu cũng nhanh.',
+  },
+  whyFastTrack: {
+    eyebrow: 'Vì sao Fast Track',
+    heading: 'Dành cho hành khách trân trọng thời gian',
+    sub: 'Bốn làn ưu tiên do đội ngũ Vihat tại sân bay đồng hành từ đầu đến cuối.',
+    pillarCheckinTitle: 'Ưu tiên check-in',
+    pillarCheckinBody: 'Bỏ qua hàng đợi của hãng bay với quầy riêng và bàn giao trực tiếp.',
+    pillarBaggageTitle: 'Ưu tiên hành lý',
+    pillarBaggageBody: 'Hành lý được đánh dấu ưu tiên — lên băng chuyền trước cả chuyến bay.',
+    pillarSecurityTitle: 'Ưu tiên an ninh',
+    pillarSecurityBody: 'Đi qua làn an ninh nhanh có nhân viên đồng hành.',
+    pillarImmigrationTitle: 'Ưu tiên xuất nhập cảnh',
+    pillarImmigrationBody: 'Áp dụng cho chuyến quốc tế — vào thẳng quầy xuất nhập cảnh chuyên biệt.',
+  },
+  home: {
+    howHeading: 'Cách Fast Track hoạt động',
+    howStep1Title: 'Chọn sân bay',
+    howStep1Body: 'Chọn sân bay, chiều và ngày bay. Giá hiển thị USD hoặc VND minh bạch.',
+    howStep2Title: 'Thanh toán an toàn',
+    howStep2Body: 'Thẻ qua VNPay hoặc chuyển khoản ngân hàng có VietQR. Xác nhận trong vài giây.',
+    howStep3Title: 'Nhận vé Fast Track',
+    howStep3Body: 'Mã Fast Track gửi ngay lập tức. Đưa cho đại diện Voyager tại sân bay là xong.',
+  },
+  testimonials: {
+    eyebrow: 'Khách nói gì',
+    heading: 'Hành trình mượt mà tại mọi sân bay',
+  },
+  stats: {
+    eyebrow: 'Khách hàng tin tưởng',
+    heading: 'Con số nói lên tất cả',
+    customers: 'Khách đã phục vụ',
+    customersValue: '10.000+',
+    satisfaction: 'Mức hài lòng',
+    satisfactionValue: '93%',
+    repeat: 'Quay lại sử dụng',
+    repeatValue: '90%',
+  },
+  faqTeaser: {
+    eyebrow: 'Cần hỗ trợ?',
+    heading: 'Câu hỏi thường gặp',
+    sub: 'Bao nhiêu hành lý được ưu tiên, khi nào nhận vé, đổi chuyến thì sao — đều có lời giải.',
+    cta: 'Xem câu hỏi thường gặp',
+  },
+  faqPage: {
+    heading: 'Câu hỏi thường gặp',
+    sub: 'Mọi điều bạn cần biết trước khi đặt Fast Track.',
+  },
+  about: {
+    heading: 'Về Voyager',
+    sub: 'Fast Track tại mọi sân bay Việt Nam, vận hành bởi Vihat.',
+    body: 'Voyager là thương hiệu tiêu dùng cho mạng lưới dịch vụ ưu tiên sân bay của Vihat — vận hành các làn Fast Track tại HAN, SGN, DAD, CXR, HUI, THD và VII. Chúng tôi giúp mọi chuyến bay đến và đi Việt Nam trở nên thuận tiện hơn.',
+  },
+  service: { fastTrack: 'Fast Track', pickup: 'Đưa đón sân bay', hotel: 'Khách sạn', tour: 'Tour', from: 'từ' },
+  booking: {
+    title: 'Xác nhận Fast Track',
+    laneTitle: 'Dịch vụ đã chọn',
+    paxLabel: 'Số khách',
+    addPax: 'Thêm khách',
+    removePax: 'Xoá',
+    flightLabel: 'Số hiệu chuyến bay',
+    travelTimeLabel: 'Giờ bay',
+    proceed: 'Tiếp tục thanh toán',
+    soldOut: 'Hết chỗ cho ngày này',
+    soldOutNote: 'Hãy thử ngày khác hoặc sân bay khác.',
+    inventoryRemaining: (n) => `Chỉ còn ${n} suất cho ngày này`,
+  },
+  passenger: {
+    legend: (n) => `Khách ${n}`,
+    firstName: 'Tên',
+    lastName: 'Họ',
+    dob: 'Ngày sinh',
+    nationality: 'Quốc tịch',
+    nationalityPlaceholder: 'VD: VN, US, JP',
+    idType: 'Loại giấy tờ',
+    idTypePassport: 'Hộ chiếu',
+    idTypeCccd: 'CCCD',
+    idNumber: 'Số giấy tờ',
+    idPlaceholderPassport: 'Số hộ chiếu',
+    idPlaceholderCccd: 'Số CCCD (12 chữ số)',
+  },
+  payment: {
+    title: 'Thanh toán',
+    methodVnpay: 'Thẻ / VNPay',
+    methodVnpayDesc: 'Visa, Mastercard, JCB, ATM và mã QR qua VNPay.',
+    methodBank: 'Chuyển khoản',
+    methodBankDesc: 'Chuyển khoản ngân hàng — đại lý xác nhận trong vài phút.',
+    bankName: 'Ngân hàng',
+    bankAccount: 'Số tài khoản',
+    bankHolder: 'Chủ tài khoản',
+    bankReference: 'Nội dung',
+    bankInstructions: 'Vui lòng chuyển đúng số tiền tới tài khoản dưới đây kèm nội dung đã ghi. Vé sẽ được phát hành ngay khi chúng tôi xác nhận khoản chuyển.',
+    qrAlt: 'VietQR cho chuyển khoản',
+    redirecting: 'Đang chuyển sang VNPay…',
+    payNow: 'Thanh toán',
+    confirmTransfer: 'Tôi đã chuyển khoản',
+  },
+  ticket: {
+    lookupTitle: 'Tra cứu vé',
+    lookupSub: 'Nhập số điện thoại — chúng tôi sẽ gửi mã xác thực.',
+    ticketIdLabel: 'Mã Fast Track',
+    showAtAirport: 'Đưa mã này cho quầy Voyager tại sân bay.',
+    flightLabel: 'Chuyến bay',
+    statusPending: 'Chờ thanh toán',
+    statusConfirmed: 'Đã xác nhận',
+    statusCancelled: 'Đã huỷ',
+    cancelCta: 'Huỷ vé',
+    cancelWarning: 'Cho phép huỷ trước giờ bay 24 giờ.',
+  },
+  checkout: {
+    title: 'Thanh toán',
+    step1: 'Giỏ',
+    step2: 'Thông tin',
+    step3: 'Thanh toán',
+    contactTitle: 'Thông tin liên hệ',
+    contactSubtitle: 'Chúng tôi sẽ gửi vé Fast Track đến đây.',
+    yourName: 'Họ và tên',
+    namePlaceholder: 'Đúng như trên hộ chiếu / CCCD',
+    phoneNumber: 'Số điện thoại',
+    phonePlaceholder: '+84 ...',
+    emailLabel: 'Email',
+    emailPlaceholder: 'ban@email.com',
+    travelDate: 'Ngày bay',
+    time: 'Giờ bay',
+    checkIn: 'Nhận phòng',
+    checkInNote: 'Khách sạn xác nhận giờ',
+    adults: 'Người lớn',
+    children: 'Trẻ em',
+    flightNumber: 'Số hiệu chuyến bay',
+    flightPlaceholder: 'VD: VN123',
+    specialRequests: 'Yêu cầu thêm',
+    specialRequestsPlaceholder: 'Xe đẩy, xe lăn, suất ăn đặc biệt…',
+    yourPriceSummary: 'Tóm tắt đơn',
+    subtotal: 'Tạm tính',
+    total: 'Tổng',
+    requestBooking: 'Thanh toán & đặt',
+    placingBooking: 'Đang đặt vé…',
+    remove: 'Xoá',
+    keepBrowsing: 'Tiếp tục xem',
+    noPaymentTitle: 'Thanh toán an toàn',
+    noPaymentBody: 'Bạn sẽ được chuyển sang VNPay hoặc nhận VietQR tuỳ phương thức đã chọn.',
+    freeCancel: 'Huỷ miễn phí trước 24 giờ',
+    noBookingFees: 'Không phí đặt chỗ',
+    securePromise: 'Thanh toán mã hoá qua VNPay',
+    errorName: 'Vui lòng nhập họ tên.',
+    errorPhone: 'Vui lòng nhập số điện thoại hợp lệ.',
+    errorDate: 'Vui lòng chọn ngày bay cho từng dịch vụ.',
+    errorPassengers: 'Vui lòng nhập đầy đủ thông tin từng khách.',
+    errorEmail: 'Vui lòng nhập email hợp lệ.',
+    emptyTitle: 'Giỏ hàng trống',
+    emptyBody: 'Hãy chọn sân bay ở trang chủ để thêm gói Fast Track.',
+    browseDestinations: 'Xem sân bay',
+    paymentMethod: 'Phương thức thanh toán',
+  },
+  success: {
+    eyebrow: 'Đã nhận đơn',
+    title: 'Bạn đã có Fast Track',
+    subtitle: 'Đưa mã Fast Track cho quầy Voyager tại sân bay là xong.',
+    reference: 'Mã đơn',
+    ticketLabel: 'Mã Fast Track',
+    pending: 'Đang chờ xác nhận thanh toán',
+    contactBlock: 'Liên hệ',
+    callBack: 'Chúng tôi sẽ gọi nếu cần làm rõ thêm.',
+    next1: 'Xác nhận đã được gửi tới điện thoại và email của bạn.',
+    next2: 'Có mặt tại sân bay trước giờ bay quốc tế 90 phút, nội địa 60 phút.',
+    next3: 'Tìm đại diện Voyager tại lối vào — họ sẽ nhận diện qua mã Fast Track của bạn.',
+    flight: 'Chuyến bay',
+    notes: 'Ghi chú',
+    details: 'Chi tiết đơn',
+    total: 'Tổng',
+    adult: 'người lớn',
+    adults: 'người lớn',
+    child: 'trẻ em',
+    children: 'trẻ em',
+    backHome: 'Về trang chủ',
+    keepBrowsing: 'Đặt chuyến tiếp theo',
+    dateTbc: 'Ngày sẽ xác nhận',
+    whatsNext: 'Tiếp theo',
+    loading: 'Đang tải đơn…',
+    errorTitle: 'Không tìm thấy đơn này.',
+    errorBack: 'Về trang chủ',
+  },
+  login: {
+    title: 'Đăng nhập',
+    sub: 'Đăng nhập để xem vé và lịch sử đặt.',
+    email: 'Email',
+    password: 'Mật khẩu',
+    submit: 'Đăng nhập',
+    submitting: 'Đang đăng nhập…',
+    errorMissing: 'Vui lòng nhập email và mật khẩu.',
+    forgotLink: 'Quên mật khẩu?',
+    guestPrompt: 'Chưa có tài khoản?',
+    guestCta: 'Tiếp tục với tư cách khách',
+  },
+  forgot: {
+    title: 'Đặt lại mật khẩu',
+    sub: 'Nhập email — chúng tôi sẽ gửi liên kết đặt lại.',
+    email: 'Email',
+    submit: 'Gửi liên kết',
+    submitting: 'Đang gửi…',
+    sentTitle: 'Hãy kiểm tra hộp thư',
+    sentBody: (email) => `Nếu ${email} có trong hệ thống, liên kết đặt lại đang được gửi.`,
+    errorMissing: 'Vui lòng nhập email.',
+    back: 'Quay lại đăng nhập',
+  },
+  reset: {
+    title: 'Đặt mật khẩu mới',
+    sub: 'Nhập và xác nhận mật khẩu mới.',
+    newPassword: 'Mật khẩu mới',
+    confirmPassword: 'Xác nhận mật khẩu',
+    submit: 'Cập nhật',
+    submitting: 'Đang lưu…',
+    doneTitle: 'Đã cập nhật mật khẩu',
+    doneBody: 'Bạn có thể đăng nhập với mật khẩu mới.',
+    invalidTitle: 'Liên kết không hợp lệ hoặc đã hết hạn',
+    invalidBody: 'Vui lòng yêu cầu liên kết mới để tiếp tục.',
+    requestNew: 'Yêu cầu liên kết mới',
+    signIn: 'Đăng nhập',
+    back: 'Quay lại đăng nhập',
+    errorMissing: 'Vui lòng nhập đủ hai mật khẩu.',
+    errorMismatch: 'Mật khẩu không khớp.',
+    errorShort: 'Mật khẩu cần tối thiểu 8 ký tự.',
+    errorNoToken: 'Thiếu mã đặt lại.',
+  },
+  profile: {
+    firstName: 'Tên',
+    lastName: 'Họ',
+    email: 'Email',
+    phone: 'Số điện thoại',
+    avatarUrl: 'Ảnh đại diện',
+  },
+  footer: {
+    tagline: 'Fast Track tại mọi sân bay Việt Nam — vận hành bởi Vihat.',
+    exploreTitle: 'Khám phá',
+    fastTrack: 'Fast Track',
+    coverage: 'Mạng lưới sân bay',
+    howItWorks: 'Quy trình',
+    supportTitle: 'Hỗ trợ',
+    helpCentre: 'Trung tâm hỗ trợ',
+    contactUs: 'Liên hệ',
+    faq: 'Câu hỏi thường gặp',
+    aboutUs: 'Về chúng tôi',
+    agentLogin: 'Đăng nhập đại lý',
+    rights: 'Tất cả các quyền được bảo lưu.',
+    hotline: 'Hotline 24/7',
+    legal: 'Pháp lý',
+  },
+  legal: { terms: 'Điều khoản dịch vụ', privacy: 'Chính sách bảo mật' },
+  agent: {
+    brand: 'Voyager Agent',
+    brandSub: 'Trang vận hành',
+    searchPlaceholder: 'Tìm theo đơn, khách, mã vé…',
+    seeAllTransactions: 'Xem tất cả đơn',
+    totalRevenue: 'Tổng doanh thu',
+    nav: {
+      dashboard: 'Tổng quan',
+      bookings: 'Đơn đặt',
+      bookingsAll: 'Tất cả đơn',
+      bookingsFastTrack: 'Fast Track',
+      bookingsHotel: 'Khách sạn',
+      bookingsPickup: 'Đưa đón',
+      bookingsTour: 'Tour',
+      bookingsPending: 'Chờ thanh toán',
+      bookingsPaid: 'Đã thanh toán',
+      inventory: 'Tồn kho',
+      pricing: 'Giá bán',
+      airports: 'Sân bay',
+      customers: 'Khách hàng',
+      destinations: 'Sân bay',
+      products: 'Sản phẩm',
+      reports: 'Báo cáo',
+      support: 'Hỗ trợ',
+      settings: 'Cài đặt',
+      logOut: 'Đăng xuất',
+    },
+    inventory: {
+      title: 'Tồn kho',
+      sub: 'Sức chứa Fast Track theo ngày cho từng làn.',
+      capacity: 'Sức chứa',
+      sold: 'Đã bán',
+      remaining: 'Còn',
+      saveCap: 'Lưu',
+      saved: 'Đã lưu',
+      saveError: 'Lưu thất bại',
+      dateRange: 'Khoảng ngày',
+      shiftDays: (n) => (n > 0 ? `+${n} ngày` : `${n} ngày`),
+      lane: 'Làn',
+      empty: 'Không có dữ liệu cho khoảng này',
+    },
+    pricing: {
+      title: 'Giá bán',
+      sub: 'Giá USD theo bảng Vihat 2024. Chỉnh FIT/GIT và sức chứa ngày tại đây.',
+      laneCol: 'Làn',
+      airportCol: 'Sân bay',
+      segmentCol: 'Loại chuyến',
+      directionCol: 'Chiều',
+      fitCol: 'FIT (USD)',
+      gitCol: 'GIT (USD)',
+      capCol: 'Sức chứa/ngày',
+      saveCta: 'Lưu thay đổi',
+      savedNote: (n) => `Đã cập nhật ${n} làn`,
+    },
+    dashboard: {
+      title: 'Tổng quan',
+      sub: 'Tóm tắt đơn và doanh thu.',
+      todayLabel: 'Hôm nay',
+      weekLabel: '7 ngày qua',
+      monthLabel: '30 ngày qua',
+      paidBookings: 'Đơn đã thanh toán',
+      totalRevenue: 'Doanh thu',
+      revenueSub: 'Chỉ tính đơn đã thanh toán',
+      bySalesAirport: 'Doanh số theo sân bay',
+      airportLabel: 'Sân bay',
+      salesLabel: 'Đã bán',
+      revenueLabel: 'Doanh thu (USD)',
+    },
+    bookings: {
+      title: 'Tất cả đơn',
+      newBooking: 'Đơn mới',
+      import: 'Nhập',
+      export: 'Xuất',
+      empty: 'Chưa có đơn nào',
+      emptyHint: 'Đơn của khách sẽ hiển thị ở đây sau khi hoàn tất thanh toán.',
+      loading: 'Đang tải đơn…',
+      loadError: 'Không tải được đơn',
+      pageSize: 'Mỗi trang',
+      prev: 'Trước',
+      next: 'Sau',
+      count: (n) => `${n} đơn`,
+      filterStatus: {
+        all: 'Tất cả',
+        pending: 'Chờ xử lý',
+        confirmed: 'Đã xác nhận',
+        fulfilled: 'Đã thực hiện',
+        cancelled: 'Đã huỷ',
+        closed: 'Đã đóng',
+      },
+      filterService: {
+        all: 'Tất cả dịch vụ',
+        fastTrack: 'Fast Track',
+        pickup: 'Đưa đón',
+        hotel: 'Khách sạn',
+        tour: 'Tour',
+      },
+      paymentStatus: {
+        unpaid: 'Chưa thanh toán',
+        paid: 'Đã thanh toán',
+        pending_transfer: 'Chờ chuyển khoản',
+        refunded: 'Đã hoàn tiền',
+        partial_refund: 'Hoàn một phần',
+      },
+      col: {
+        booking: 'Đơn',
+        status: 'Trạng thái',
+        customer: 'Khách',
+        service: 'Dịch vụ',
+        travel: 'Lịch bay',
+        pax: 'Số khách',
+        total: 'Tổng',
+        payment: 'Thanh toán',
+        created: 'Tạo lúc',
+      },
+      detail: {
+        heading: 'Chi tiết đơn',
+        close: 'Đóng',
+        contact: 'Liên hệ',
+        name: 'Họ tên',
+        phone: 'Điện thoại',
+        items: 'Dịch vụ',
+        flight: 'Chuyến bay',
+        travelDate: 'Ngày bay',
+        travelTime: 'Giờ bay',
+        adults: 'Người lớn',
+        children: 'Trẻ em',
+        qty: 'SL',
+        unitPrice: 'Đơn giá',
+        notes: 'Ghi chú',
+        noNotes: 'Không có ghi chú.',
+        totals: 'Tổng',
+        subtotal: 'Tạm tính',
+        discount: 'Giảm giá',
+        total: 'Tổng',
+        payment: 'Thanh toán',
+        method: 'Phương thức',
+        paymentStatus: 'Trạng thái',
+        createdAt: 'Tạo lúc',
+        updatedAt: 'Cập nhật',
+      },
+    },
+  },
+}
+
+export const dictionary: Record<Locale, Dictionary> = { en, vi }

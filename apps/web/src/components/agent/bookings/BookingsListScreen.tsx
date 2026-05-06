@@ -16,7 +16,8 @@ import { useT } from '@/i18n/use-t'
 import { useOperatorBookings } from '@/hooks/use-operator-bookings'
 import type {
   BookingStatusFilter,
-  ServiceTypeFilter,
+  PaymentStatusFilter,
+  AirportFilter,
 } from '@/lib/operator-bookings-api'
 import { BookingFilterChips } from './BookingFilterChips'
 import { BookingsTable } from './BookingsTable'
@@ -33,15 +34,16 @@ export function BookingsListScreen({ selectedBookingNumber }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const serviceParam = (searchParams.get('service') ?? 'all') as ServiceTypeFilter
+  const paymentStatusParam = (searchParams.get('paymentStatus') ?? 'all') as PaymentStatusFilter
+  const airportParam = (searchParams.get('airport') ?? 'all') as AirportFilter
   const [status, setStatus] = useState<BookingStatusFilter>('all')
   const [q, setQ] = useState('')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(25)
 
   const params = useMemo(
-    () => ({ status, serviceType: serviceParam, q, page, pageSize }),
-    [status, serviceParam, q, page, pageSize],
+    () => ({ status, paymentStatus: paymentStatusParam, airport: airportParam, q, page, pageSize }),
+    [status, paymentStatusParam, airportParam, q, page, pageSize],
   )
 
   const { data, isLoading, isError, isFetching } = useOperatorBookings(params)
@@ -99,7 +101,7 @@ export function BookingsListScreen({ selectedBookingNumber }: Props) {
                 type="search"
                 value={q}
                 onChange={(e) => { setQ(e.target.value); setPage(1) }}
-                placeholder="#VG / name / phone"
+                placeholder="#VG, FT-..., name, phone, email"
                 className="h-9 pl-8 pr-3 rounded-lg bg-white border border-hz-border text-[13px] text-hz-text placeholder:text-hz-text-secondary focus:outline-none focus:ring-2 focus:ring-[#3E7BFA]/40 w-56"
               />
             </div>

@@ -1,7 +1,56 @@
 # Voyager — Deploy to a free URL
 
-Goal: get Voyager on a public URL so a client can run the flow
-**see service → choose → checkout → done**.
+Goal: get Voyager on a public URL so a client can run the Fast-Track flow
+**pick airport → fill passengers → pay → receive Fast Track ID**.
+
+> **2026-05-06 pivot:** site is now Fast-Track-only. New env vars are
+> required for VNPay, Vietnamese bank transfer, and the USD/VND FX cache —
+> see the section "Server env vars" below.
+
+## Server env vars (server/.env or Render dashboard)
+
+```
+# Mongo + JWT (existing)
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=at-least-32-chars
+PORT=3010
+NODE_ENV=production
+CORS_ORIGIN=https://your-vercel-domain.vercel.app
+CLIENT_URL=https://your-vercel-domain.vercel.app
+
+# VNPay (production credentials from VNPay merchant portal)
+VNPAY_TMN_CODE=__from_vnpay__
+VNPAY_HASH_SECRET=__from_vnpay__
+VNPAY_PAY_URL=https://pay.vnpay.vn/vpcpay.html
+VNPAY_RETURN_URL=https://your-vercel-domain.vercel.app/api/payments/vnpay/return
+
+# Vietnamese bank transfer (display only — agent confirms manually)
+BANK_NAME=Vietcombank
+BANK_ACCOUNT_NAME=VIHAT TOUR CO., LTD
+BANK_ACCOUNT_NO=__vihat_account__
+BANK_BIN=970436
+
+# USD→VND FX cache (Vietcombank reference rate)
+FX_REFRESH_HOURS=6
+FX_FALLBACK_USD_VND=25500
+
+# SMS / OTP (existing)
+SMS_PROVIDER=twilio  # or esms
+TWILIO_ACCOUNT_SID=...
+TWILIO_AUTH_TOKEN=...
+TWILIO_FROM_NUMBER=+...
+```
+
+After changing any of these on Render, reseed once:
+
+```bash
+npm run seed:voyager
+```
+
+(Idempotent — wipes legacy pickup/hotel/tour products and inserts the
+10 Fast-Track products with the Vihat 2024 USD prices.)
+
+---
 
 Architecture for this deploy:
 

@@ -1,28 +1,28 @@
 import { TopNav } from '@/components/client/top-nav'
-import { HomeSearchHero } from '@/components/client/home-search-hero'
-import { JourneyMap } from '@/components/client/journey-map'
-import { ConciergeStrip } from '@/components/client/concierge-strip'
-import { LifestyleBundles } from '@/components/client/lifestyle-bundles'
-import { BrowseDestinations } from '@/components/client/browse-destinations'
-import { PeaceOfMind } from '@/components/client/peace-of-mind'
+import { FastTrackHero } from '@/components/client/fast-track-hero'
+import { AirportCoverage } from '@/components/client/airport-coverage'
+import { WhyFastTrack } from '@/components/client/why-fast-track'
 import { HowItWorks } from '@/components/client/how-it-works'
-import { OffersTeaser } from '@/components/client/offers-teaser'
+import { Testimonials } from '@/components/client/testimonials'
+import { StatsBand } from '@/components/client/stats-band'
+import { FaqTeaser } from '@/components/client/faq-teaser'
 import { SiteFooter } from '@/components/client/site-footer'
+import { FxBootstrap } from '@/components/client/fx-bootstrap'
 
 export default function HomePage() {
   return (
     <div className="bg-vg-bg text-vg-text min-h-screen">
+      <FxBootstrap />
       <div className="relative">
         <TopNav variant="transparent" />
-        <HomeSearchHero />
+        <FastTrackHero />
       </div>
-      <JourneyMap />
-      <ConciergeStrip />
-      <LifestyleBundles />
-      <BrowseDestinations />
-      <PeaceOfMind />
+      <AirportCoverage />
+      <WhyFastTrack />
       <HowItWorks />
-      <OffersTeaser />
+      <Testimonials />
+      <StatsBand />
+      <FaqTeaser />
       <SiteFooter />
     </div>
   )

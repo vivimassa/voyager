@@ -5,7 +5,7 @@ import mongoose, { Schema } from 'mongoose'
  * _id is the lowercase IATA code (e.g. 'han', 'sgn').
  */
 
-export type AirportIata = 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'PQC'
+export type AirportIata = 'HAN' | 'SGN' | 'DAD' | 'CXR' | 'PQC' | 'HUI' | 'THD' | 'VII'
 
 export interface AirportDoc {
   _id: string
@@ -24,7 +24,7 @@ export interface AirportDoc {
 const AirportSchema = new Schema<AirportDoc>(
   {
     _id: { type: String, required: true },
-    iataCode: { type: String, required: true, unique: true, enum: ['HAN', 'SGN', 'DAD', 'CXR', 'PQC'] },
+    iataCode: { type: String, required: true, unique: true, enum: ['HAN', 'SGN', 'DAD', 'CXR', 'PQC', 'HUI', 'THD', 'VII'] },
     icaoCode: { type: String, required: true },
     name: { type: String, required: true },
     city: { type: String, required: true },

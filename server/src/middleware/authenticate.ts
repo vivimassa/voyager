@@ -22,7 +22,7 @@ const PUBLIC_PATHS = [
 // Whitelisting the whole prefix lets each /clients/* handler run its own
 // `jwtVerify<ClientJwtPayload>()` check (or skip it entirely for the fully
 // public auth endpoints under /clients/auth/).
-const PUBLIC_PREFIXES = ['/uploads/', '/clients/']
+const PUBLIC_PREFIXES = ['/uploads/', '/clients/', '/catalog/', '/inventory', '/payments/']
 
 const INTERNAL_PATHS = ['/gantt/seed-oooi']
 

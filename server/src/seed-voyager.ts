@@ -3,19 +3,22 @@ import { validateServerEnv } from '@skyhub/env/server'
 const env = validateServerEnv()
 import { connectDB } from './db/connection.js'
 import { Airport } from './models/Airport.js'
-import { Destination } from './models/Destination.js'
 import { Product } from './models/Product.js'
+import { FxRate } from './models/FxRate.js'
 import { Client } from './models/Client.js'
 import {
   SEED_AIRPORTS,
-  SEED_DESTINATIONS,
+  SEED_FAST_TRACK_PRODUCTS,
   VOYAGER_OPERATOR_ID,
+  fastTrackProductId,
+  fastTrackTitle,
 } from './data/voyager-seed-data.js'
 
 /**
  * Idempotent seed: safe to run repeatedly. Each entity is upserted by its
- * deterministic _id, so running this again will update existing docs with the
- * latest seed content rather than duplicating.
+ * deterministic _id. Voyager pivoted to Fast-Track-only on 2026-05-06; this
+ * seed deletes legacy destination/multi-service product docs so the new model
+ * is the single source of truth.
  *
  * Run: npm run seed:voyager
  */
@@ -25,8 +28,19 @@ async function seedVoyager(): Promise<void> {
 
   const now = new Date().toISOString()
   let airportCount = 0
-  let destinationCount = 0
   let productCount = 0
+
+  // ═══ 0. FX rate (must exist before products so VND can derive) ═══
+  const usdVnd = env.FX_FALLBACK_USD_VND
+  await FxRate.findByIdAndUpdate(
+    'USD/VND',
+    {
+      $set: { pair: 'USD/VND', rate: usdVnd, source: 'seed-fallback', fetchedAt: now, updatedAt: now },
+      $setOnInsert: { _id: 'USD/VND' },
+    },
+    { upsert: true, new: true },
+  )
+  console.log(`✓ FX rate USD/VND seeded at ${usdVnd}`)
 
   // ═══ 1. Airports ═══
   for (const a of SEED_AIRPORTS) {
@@ -42,7 +56,7 @@ async function seedVoyager(): Promise<void> {
           country: 'Vietnam',
           countryIso2: 'VN',
           timezone: 'Asia/Ho_Chi_Minh',
-          isActive: true,
+          isActive: a.isActive,
           updatedAt: now,
         },
         $setOnInsert: { _id: id, createdAt: now },
@@ -52,55 +66,46 @@ async function seedVoyager(): Promise<void> {
     airportCount += 1
   }
 
-  // ═══ 2. Destinations ═══
-  for (const d of SEED_DESTINATIONS) {
-    await Destination.findByIdAndUpdate(
-      d.slug,
+  // ═══ 2. Wipe legacy products (anything not in the Fast-Track-only set) ═══
+  const liveIds = SEED_FAST_TRACK_PRODUCTS.map((p) => fastTrackProductId(p))
+  const removed = await Product.deleteMany({ _id: { $nin: liveIds } })
+  if (removed.deletedCount) console.log(`✓ Removed ${removed.deletedCount} legacy products`)
+
+  // ═══ 3. Fast-Track products ═══
+  for (const p of SEED_FAST_TRACK_PRODUCTS) {
+    const id = fastTrackProductId(p)
+    const fitPriceVnd = Math.round(p.fitPriceUsd * usdVnd)
+    const gitPriceVnd = Math.round(p.gitPriceUsd * usdVnd)
+    await Product.findByIdAndUpdate(
+      id,
       {
         $set: {
-          slug: d.slug,
-          name: d.name,
-          airportCode: d.airportCode,
-          airportName: d.airportName,
-          description: d.description,
-          headlinePriceVnd: d.headlinePriceVnd,
-          stars: d.stars,
-          photo: d.photo,
+          airportCode: p.airportCode,
+          segment: p.segment,
+          direction: p.direction,
+          serviceType: 'fastTrack',
+          title: fastTrackTitle(p),
+          icon: '⚡',
+          fitPriceUsd: p.fitPriceUsd,
+          gitPriceUsd: p.gitPriceUsd,
+          fitPriceVnd,
+          gitPriceVnd,
+          priceVnd: fitPriceVnd,
+          description: '',
+          inclusions: p.inclusions,
+          inventoryDailyCap: p.inventoryDailyCap,
           isActive: true,
+          destinationSlug: '',
           updatedAt: now,
         },
-        $setOnInsert: { _id: d.slug, createdAt: now },
+        $setOnInsert: { _id: id, createdAt: now },
       },
       { upsert: true, new: true },
     )
-    destinationCount += 1
-
-    // ═══ 3. Products (4 per destination) ═══
-    for (const s of d.services) {
-      const productId = `${d.slug}:${s.serviceType}`
-      await Product.findByIdAndUpdate(
-        productId,
-        {
-          $set: {
-            destinationSlug: d.slug,
-            airportCode: d.airportCode,
-            serviceType: s.serviceType,
-            title: s.title,
-            icon: s.icon,
-            priceVnd: s.priceVnd,
-            description: '',
-            isActive: true,
-            updatedAt: now,
-          },
-          $setOnInsert: { _id: productId, createdAt: now },
-        },
-        { upsert: true, new: true },
-      )
-      productCount += 1
-    }
+    productCount += 1
   }
 
-  // ═══ 4. Demo client (only on first run — not updated on reseed) ═══
+  // ═══ 4. Demo client ═══
   const demoClientId = 'voyager-demo-client-001'
   const existingDemo = await Client.findById(demoClientId)
   if (!existingDemo) {
@@ -133,15 +138,14 @@ async function seedVoyager(): Promise<void> {
       createdAt: now,
       updatedAt: now,
     })
-    console.log('\u2713 Created demo client: demo@voyager.vn')
+    console.log('✓ Created demo client: demo@voyager.vn')
   } else {
-    console.log('\u2713 Demo client already exists, skipping')
+    console.log('✓ Demo client already exists, skipping')
   }
 
-  console.log(`\u2713 Upserted ${airportCount} airports`)
-  console.log(`\u2713 Upserted ${destinationCount} destinations`)
-  console.log(`\u2713 Upserted ${productCount} products`)
-  console.log('\u2713 Voyager seed complete')
+  console.log(`✓ Upserted ${airportCount} airports`)
+  console.log(`✓ Upserted ${productCount} Fast-Track products`)
+  console.log('✓ Voyager seed complete')
   process.exit(0)
 }
 

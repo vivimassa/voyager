@@ -30,6 +30,7 @@ const PAY_TONE: Record<BookingDto['payment']['status'], string> = {
   paid: 'bg-[rgba(6,194,112,0.14)] text-[#06853F]',
   refunded: 'bg-[rgba(128,128,140,0.15)] text-[#475467]',
   partial_refund: 'bg-[rgba(255,136,0,0.12)] text-[#B56200]',
+  pending_transfer: 'bg-[rgba(255,136,0,0.12)] text-[#B56200]',
 }
 
 export function PaymentStatusPill({ status }: { status: BookingDto['payment']['status'] }) {
