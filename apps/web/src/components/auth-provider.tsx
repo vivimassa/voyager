@@ -68,25 +68,12 @@ function clearTokens() {
   } catch {}
 }
 
-// Client portal: let visitors browse destinations and services before login.
-// Auth is only required for /account, /booking, /checkout-confirm.
-// Exact '/' is listed because a startsWith('/') check would match everything.
-const PUBLIC_EXACT = new Set(['/'])
-const PUBLIC_PREFIX = [
-  '/login',
-  '/destinations',
-  '/services',
-  '/help',
-  '/deals',
-  '/cart',
-  '/checkout',
-  '/signup',
-  '/auth',
-]
-function isPublicPath(pathname: string | null | undefined): boolean {
-  if (!pathname) return false
-  if (PUBLIC_EXACT.has(pathname)) return true
-  return PUBLIC_PREFIX.some((p) => pathname.startsWith(p))
+// Customer-facing site is fully public — anonymous checkout is the default
+// flow per the Vihat Fast-Track spec. The agent dashboard at /agent/* runs
+// its own auth gate (see apps/web/src/app/agent/layout.tsx), so this provider
+// no longer redirects to /login for any path.
+function isPublicPath(_pathname: string | null | undefined): boolean {
+  return true
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -187,24 +174,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })()
   }, [loadMe])
 
-  // Redirect unauthenticated users to /login (unless already on a public path)
+  // Customer-facing site is anonymous-by-default. We still redirect already
+  // authed users away from /login so they don't see the form on every visit;
+  // the agent dashboard runs its own gate and is unaffected.
   useEffect(() => {
     if (isLoading) return
-    const onPublic = isPublicPath(pathname)
-    if (!isAuthenticated && !onPublic) {
-      router.replace('/login')
-    }
     if (isAuthenticated && pathname === '/login') {
       router.replace('/')
     }
   }, [isLoading, isAuthenticated, pathname, router])
-
-  const onPublicPath = isPublicPath(pathname)
+  void isPublicPath
 
   if (isLoading) {
-    return <div className="h-screen w-screen bg-hz-bg" />
-  }
-  if (!isAuthenticated && !onPublicPath) {
     return <div className="h-screen w-screen bg-hz-bg" />
   }
 
